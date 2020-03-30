@@ -1,0 +1,63 @@
+name: ParkourAddon
+main: fr.prodrivers.bukkit.parkouraddon.ParkourAddonPlugin
+version: ${project.version}
+description: ${project.description}
+depend: [ProdriversCommons,Parkour,InventoryGUIAPI]
+database: true
+api-version: 1.13
+
+commands:
+    paddon:
+        description: Base command for ParkourAddonPlugin.
+
+    paddon reload:
+        description: Reload ParkourAddonPlugin's configuration.
+
+permissions:
+    parkouraddon.help:
+        description: Allows to get the help message
+        default: op
+
+    parkouraddon.reload:
+        description: Allows to reload the plugin
+        default: op
+
+    parkouraddon.category.add:
+        description: Allows to add a category
+        default: op
+
+    parkouraddon.category.list:
+        description: Allows to list categories
+        default: op
+
+    parkouraddon.category.setnext:
+        description: Allows to set a category's next category
+        default: op
+
+    parkouraddon.category.setprevious:
+        description: Allows to set a category's previous category
+        default: op
+
+    parkouraddon.category.setparkoinsreward:
+        description: Allows to set a category's parkoins reward amount
+        default: op
+
+    parkouraddon.parkour.setcategory:
+        description: Allows to set a parkour's category
+        default: op
+
+    parkouraddon.parkour.setdisplayname:
+        description: Allows to ste a parkour's display name
+        default: op
+
+    parkouraddon.setlevel:
+        description: Allows to set a player's level
+        default: op
+
+    parkouraddon.parkoins.add:
+        description: Allows to add parkoins to a player
+        default: op
+
+    parkouraddon.parkoins.deduct:
+        description: Allows to deduct parkoins to a player
+        default: op
