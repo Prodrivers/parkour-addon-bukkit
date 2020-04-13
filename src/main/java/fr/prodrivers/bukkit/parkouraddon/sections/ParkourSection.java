@@ -37,7 +37,7 @@ public class ParkourSection implements IProdriversSection {
 	@Override
 	public boolean join( Player player, String subSection, String leavedSection ) {
 		if( PlayerMethods.getParkourSession( player.getName() ) == null ) {
-			ParkourAddonPlugin.logger.info( "[ParkourAddon] Player is already in a parkour session, wants to join " + subSection );
+			ParkourAddonPlugin.logger.info( "[ParkourAddon] Player is not in a parkour session, wants to join " + subSection );
 			if(subSection == null) {
 				ParkourAddonPlugin.logger.info( "[ParkourAddon] Refused because name is null" );
 				return false;

@@ -1,6 +1,6 @@
 # ParkourAddon
 
-Integration and additionnal functionnalities for Parkour plugin :
+Integration and additional functionalities for Parkour plugin :
 * Integration with ProdriversCommons section management
 * Parkour categories with progression tree :
 	* Each parkour is sorted in categories of increasing difficulty and/or specific themes
@@ -12,7 +12,7 @@ Integration and additionnal functionnalities for Parkour plugin :
 
 ## Overview
 
-The following video explains the plugin's main functinnalities (in French).
+The following video explains the plugin's main functionalities (in French).
 [![Overview video link](https://img.youtube.com/vi/XT3lxEB3zVw/0.jpg)](https://youtu.be/XT3lxEB3zVw)
 
 
