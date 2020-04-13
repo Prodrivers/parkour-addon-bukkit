@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 class ParkourShopConverterUI implements Listener {
 	private static ParkourShopConverterUI instance;
@@ -34,17 +35,22 @@ class ParkourShopConverterUI implements Listener {
 		prepare();
 	}
 
-	private ItemStack prepareItem( int amount, int price, Material material, byte materialData, String name, String lore1, String lore2 ) {
+	private ItemStack prepareItem( int amount, int price, Material material, byte materialData, String name, String... lores ) {
 		ItemStack item = new ItemStack( material, 1, materialData );
 		ItemMeta meta = item.getItemMeta();
+
 		meta.setDisplayName( name.replace( "%AMOUNT%", String.valueOf( amount ) ).replace( "%PRICE%", String.valueOf( price ) ) );
-		String[] lores = {
-				lore1.replace( "%AMOUNT%", String.valueOf( amount ) ).replace( "%PRICE%", String.valueOf( price ) ),
-				lore2.replace( "%AMOUNT%", String.valueOf( amount ) ).replace( "%PRICE%", String.valueOf( price ) )
-		};
-		ArrayList<String> lore = new ArrayList<>( Arrays.asList( lores ) );
-		meta.setLore( lore );
+
+		List<String> loreList = List.of( lores )
+				.stream()
+				.map( lore -> lore
+						.replace( "%AMOUNT%", String.valueOf( amount ) )
+						.replace( "%PRICE%", String.valueOf( price ) ) )
+				.collect( Collectors.toList() );
+		meta.setLore( loreList );
+
 		item.setItemMeta( meta );
+
 		return item;
 	}
 
@@ -80,8 +86,7 @@ class ParkourShopConverterUI implements Listener {
 							ParkourAddonPlugin.configuration.shops_converters_to_material,
 							ParkourAddonPlugin.configuration.shops_converters_to_materialData,
 							ParkourAddonPlugin.messages.parkourshopui_converters_to_name,
-							ParkourAddonPlugin.messages.parkourshopui_converters_to_lore1,
-							ParkourAddonPlugin.messages.parkourshopui_converters_to_lore2
+							ParkourAddonPlugin.messages.parkourshopui_converters_to_lore.toArray(String[]::new)
 					)
 			);
 
@@ -93,8 +98,7 @@ class ParkourShopConverterUI implements Listener {
 							ParkourAddonPlugin.configuration.shops_converters_from_material,
 							ParkourAddonPlugin.configuration.shops_converters_from_materialData,
 							ParkourAddonPlugin.messages.parkourshopui_converters_from_name,
-							ParkourAddonPlugin.messages.parkourshopui_converters_from_lore1,
-							ParkourAddonPlugin.messages.parkourshopui_converters_from_lore2
+							ParkourAddonPlugin.messages.parkourshopui_converters_from_lore.toArray(String[]::new)
 					)
 			);
 		}

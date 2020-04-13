@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 class ParkourShopRankUI implements Listener {
 	private static ParkourShopRankUI instance;
@@ -70,17 +71,26 @@ class ParkourShopRankUI implements Listener {
 		return prepareItem( rankItem, material, rankName, rankLore1, rankLore2, null );
 	}
 
-	private RankItem prepareItem( RankItem rankItem, Material material, String rankName, String rankLore1, String rankLore2, String rankLore3 ) {
+	private RankItem prepareItem( RankItem rankItem, Material material, String rankName, String... lores ) {
 		rankItem.item = new ItemStack( material, 1 );
 		ItemMeta meta = rankItem.item.getItemMeta();
+
 		meta.setDisplayName( rankName.replace( "%CATEGORYCOLOR%", rankItem.chatColor.toString() ).replace( "%CATEGORY%", rankItem.name ).replace( "%PRICE%", String.valueOf( rankItem.price ) ).replace( "%TARGETLEVEL%", String.valueOf( rankItem.targetLevel ) ) );
-		ArrayList<String> lore = new ArrayList<>();
-		lore.add( rankLore1.replace( "%CATEGORYCOLOR%", rankItem.chatColor.toString() ).replace( "%CATEGORY%", rankItem.name ).replace( "%PRICE%", String.valueOf( rankItem.price ) ).replace( "%TARGETLEVEL%", String.valueOf( rankItem.targetLevel ) ).replace( "%MINLEVEL%", String.valueOf( rankItem.minLevel ) ) );
-		lore.add( rankLore2.replace( "%CATEGORYCOLOR%", rankItem.chatColor.toString() ).replace( "%CATEGORY%", rankItem.name ).replace( "%PRICE%", String.valueOf( rankItem.price ) ).replace( "%TARGETLEVEL%", String.valueOf( rankItem.targetLevel ) ).replace( "%MINLEVEL%", String.valueOf( rankItem.minLevel ) ) );
-		if( rankLore3 != null )
-			lore.add( rankLore3.replace( "%CATEGORYCOLOR%", rankItem.chatColor.toString() ).replace( "%CATEGORY%", rankItem.name ).replace( "%PRICE%", String.valueOf( rankItem.price ) ).replace( "%TARGETLEVEL%", String.valueOf( rankItem.targetLevel ) ).replace( "%MINLEVEL%", String.valueOf( rankItem.minLevel ) ) );
-		meta.setLore( lore );
+
+		List<String> loreList = List.of( lores )
+				.stream()
+				.map( lore -> lore
+						.replace( "%CATEGORYCOLOR%", rankItem.chatColor.toString() )
+						.replace( "%CATEGORY%", rankItem.name )
+						.replace( "%PRICE%", String.valueOf( rankItem.price ) )
+						.replace( "%TARGETLEVEL%", String.valueOf( rankItem.targetLevel ) )
+						.replace( "%MINLEVEL%", String.valueOf( rankItem.minLevel ) ) )
+				.collect( Collectors.toList() );
+
+		meta.setLore( loreList );
+
 		rankItem.item.setItemMeta( meta );
+
 		return rankItem;
 	}
 
@@ -89,8 +99,7 @@ class ParkourShopRankUI implements Listener {
 				rankItem,
 				rankItem.material,
 				ParkourAddonPlugin.messages.parkourshopui_ranks_rankitemname,
-				ParkourAddonPlugin.messages.parkourshopui_ranks_rankitemlore1,
-				ParkourAddonPlugin.messages.parkourshopui_ranks_rankitemlore2
+				ParkourAddonPlugin.messages.parkourshopui_ranks_rankitemlore.toArray(String[]::new)
 		);
 	}
 
@@ -99,8 +108,7 @@ class ParkourShopRankUI implements Listener {
 				rankItem,
 				ParkourAddonPlugin.configuration.shops_ranks_alreadyBought_material,
 				ParkourAddonPlugin.messages.parkourshopui_ranks_boughtrankitemname,
-				ParkourAddonPlugin.messages.parkourshopui_ranks_boughtrankitemlore1,
-				ParkourAddonPlugin.messages.parkourshopui_ranks_boughtrankitemlore2
+				ParkourAddonPlugin.messages.parkourshopui_ranks_boughtrankitemlore.toArray(String[]::new)
 		);
 	}
 
@@ -109,9 +117,7 @@ class ParkourShopRankUI implements Listener {
 				rankItem,
 				ParkourAddonPlugin.configuration.shops_ranks_notBuyable_material,
 				ParkourAddonPlugin.messages.parkourshopui_ranks_notbuyablerankitemname,
-				ParkourAddonPlugin.messages.parkourshopui_ranks_notbuyablerankitemlore1,
-				ParkourAddonPlugin.messages.parkourshopui_ranks_notbuyablerankitemlore2,
-				ParkourAddonPlugin.messages.parkourshopui_ranks_notbuyablerankitemlore3
+				ParkourAddonPlugin.messages.parkourshopui_ranks_notbuyablerankitemlore.toArray(String[]::new)
 		);
 	}
 
