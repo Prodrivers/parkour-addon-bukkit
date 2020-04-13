@@ -25,8 +25,8 @@ class ParkourShopUI implements Listener {
 		prepare();
 	}
 
-	private ItemStack prepareItem( Material material, byte materialData, String shopName ) {
-		ItemStack item = new ItemStack( material, 1, materialData );
+	private ItemStack prepareItem( Material material, String shopName ) {
+		ItemStack item = new ItemStack( material, 1 );
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName( shopName );
 		item.setItemMeta( meta );
@@ -41,7 +41,6 @@ class ParkourShopUI implements Listener {
 					12,
 					prepareItem(
 							ParkourAddonPlugin.configuration.shops_ranks_material,
-							ParkourAddonPlugin.configuration.shops_ranks_materialData,
 							ParkourAddonPlugin.messages.parkourshopui_general_rankname
 					)
 			);
@@ -50,7 +49,6 @@ class ParkourShopUI implements Listener {
 					14,
 					prepareItem(
 							ParkourAddonPlugin.configuration.shops_converters_material,
-							ParkourAddonPlugin.configuration.shops_converters_materialData,
 							ParkourAddonPlugin.messages.parkourshopui_general_convertername
 					)
 			);
@@ -59,7 +57,6 @@ class ParkourShopUI implements Listener {
 					13,
 					prepareItem(
 							ParkourAddonPlugin.configuration.shops_ranks_material,
-							ParkourAddonPlugin.configuration.shops_ranks_materialData,
 							ParkourAddonPlugin.messages.parkourshopui_general_rankname
 					)
 			);

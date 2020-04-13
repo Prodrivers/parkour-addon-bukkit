@@ -77,11 +77,7 @@ public class Utils {
 	}
 
 	public static ItemStack getCloseItem() {
-		ItemStack item = new ItemStack(
-				ParkourAddonPlugin.configuration.shops_close_material,
-				1,
-				ParkourAddonPlugin.configuration.shops_close_materialData
-		);
+		ItemStack item = new ItemStack( ParkourAddonPlugin.configuration.shops_close_material, 1 );
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName( ParkourAddonPlugin.messages.parkourshopui_close_title );
 		item.setItemMeta( meta );

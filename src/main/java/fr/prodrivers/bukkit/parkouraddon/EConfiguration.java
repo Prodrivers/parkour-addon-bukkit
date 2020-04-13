@@ -11,19 +11,12 @@ import java.util.Map;
 
 public class EConfiguration extends Configuration {
 	public Material shops_close_material = Material.BARRIER;
-	public byte shops_close_materialData = 0;
 	public Material shops_ranks_material = Material.EMERALD;
-	public byte shops_ranks_materialData = 0;
 	public Material shops_ranks_alreadyBought_material = Material.EMERALD_BLOCK;
-	public byte shops_ranks_alreadyBought_materialData = 0;
 	public Material shops_ranks_notBuyable_material = Material.BEDROCK;
-	public byte shops_ranks_notBuyable_materialData = 0;
 	public Material shops_converters_material = Material.GOLD_INGOT;
-	public byte shops_converters_materialData = 0;
 	public Material shops_converters_to_material = Material.GOLD_INGOT;
-	public byte shops_converters_to_materialData = 0;
 	public Material shops_converters_from_material = Material.IRON_INGOT;
-	public byte shops_converters_from_materialData = 0;
 	public Map<String, Integer> shops_converters_amounts = new LinkedHashMap<>();
 
 	{

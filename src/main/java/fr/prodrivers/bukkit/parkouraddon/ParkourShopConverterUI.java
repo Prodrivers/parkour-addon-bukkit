@@ -35,8 +35,8 @@ class ParkourShopConverterUI implements Listener {
 		prepare();
 	}
 
-	private ItemStack prepareItem( int amount, int price, Material material, byte materialData, String name, String... lores ) {
-		ItemStack item = new ItemStack( material, 1, materialData );
+	private ItemStack prepareItem( int amount, int price, Material material, String name, String... lores ) {
+		ItemStack item = new ItemStack( material, 1 );
 		ItemMeta meta = item.getItemMeta();
 
 		meta.setDisplayName( name.replace( "%AMOUNT%", String.valueOf( amount ) ).replace( "%PRICE%", String.valueOf( price ) ) );
@@ -84,7 +84,6 @@ class ParkourShopConverterUI implements Listener {
 							amounts.get( i ),
 							prices.get( i ),
 							ParkourAddonPlugin.configuration.shops_converters_to_material,
-							ParkourAddonPlugin.configuration.shops_converters_to_materialData,
 							ParkourAddonPlugin.messages.parkourshopui_converters_to_name,
 							ParkourAddonPlugin.messages.parkourshopui_converters_to_lore.toArray(String[]::new)
 					)
@@ -96,7 +95,6 @@ class ParkourShopConverterUI implements Listener {
 							prices.get( i ),
 							amounts.get( i ),
 							ParkourAddonPlugin.configuration.shops_converters_from_material,
-							ParkourAddonPlugin.configuration.shops_converters_from_materialData,
 							ParkourAddonPlugin.messages.parkourshopui_converters_from_name,
 							ParkourAddonPlugin.messages.parkourshopui_converters_from_lore.toArray(String[]::new)
 					)
