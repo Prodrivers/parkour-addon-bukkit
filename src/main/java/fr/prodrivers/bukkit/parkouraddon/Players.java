@@ -101,15 +101,12 @@ class Players {
 		final int playerLevel = ParkourLevel.getLevel( player );
 
 		// Run the whole thing asynchronously
-		Bukkit.getScheduler().runTaskAsynchronously( ParkourAddonPlugin.plugin, new Runnable() {
-			@Override
-			public void run() {
-				// Get the associated course
-				ParkourCourse course = ParkourCourse.retrieveFromName( ParkourAddonPlugin.database, courseName );
+		Bukkit.getScheduler().runTaskAsynchronously( ParkourAddonPlugin.plugin, () -> {
+			// Get the associated course
+			ParkourCourse course = ParkourCourse.retrieveFromName( ParkourAddonPlugin.database, courseName );
 
-				insertCompletion( player, course );
-				rankPlayer( player, course, playerLevel );
-			}
+			insertCompletion( player, course );
+			rankPlayer( player, course, playerLevel );
 		});
 	}
 

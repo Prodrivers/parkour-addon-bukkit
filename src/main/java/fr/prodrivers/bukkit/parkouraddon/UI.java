@@ -1,12 +1,12 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
 class UI {
 	static private void spawnFirework( Location loc, Color color, Color fadeColor, float yOffset ) {
@@ -16,12 +16,8 @@ class UI {
 		meta.addEffect( effect );
 		meta.setPower( 0 );
 		fw.setFireworkMeta( meta );
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				fw.detonate();
-			}
-		}.runTaskLater( ParkourAddonPlugin.plugin, 2L );
+
+		Bukkit.getScheduler().runTaskLater( ParkourAddonPlugin.plugin, fw::detonate, 2L );
 	}
 
 	static void rankUp( Player player, int level ) {
