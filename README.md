@@ -10,6 +10,8 @@ Integration and additional functionalities for Parkour plugin :
 * Category UI showing all parkours of a category and the player's progression in it
 * Shop UI to buy access to categories and exchange Parkoins with the server's economy through VaultAPI
 
+This plugin only supports servers with 1.14+ API.
+
 ## Overview
 
 The following video explains the plugin's main functionalities (in French).
