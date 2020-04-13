@@ -38,7 +38,9 @@ public class Utils {
 			"alter table course add constraint fk_course_category_2 foreign key (categoryId) references parkourcategory (categoryId) on delete restrict on update restrict;\n" +
 			"create index ix_course_category_2 on course (categoryId);\n" +
 			"alter table parkourplayercompletion add constraint fk_parkourplayercompletion_course_3 foreign key (courseId) references course (courseId) on delete restrict on update restrict;\n" +
-			"alter table parkourplayercompletion add constraint pk_parkourplayercompletion primary key (playeruuid, courseId);";
+			"alter table parkourplayercompletion add constraint pk_parkourplayercompletion primary key (playeruuid, courseId);\n" +
+			"alter table `course` add index `course_idx_categoryid_courseid` (`categoryId`,`courseId`);\n" +
+			"alter table `time` add index `time_idx_courseid_time` (`courseId`,`time`);";
 
 	public static String GET_PARKOURS_WITH_COMPLETION_QUERY = "SELECT *\n" +
 			"FROM parkourcategory\n" +
