@@ -20,16 +20,6 @@ class Categories {
 				.setParameter( "categoryid", category.getCategoryId() )
 				.findOne();
 		return row.getInteger( "count( courseid )" );
-
-		/*// Retrieve player's completed courses
-		ParkourPlayerCompletion present = ParkourPlayerCompletion.retrieve( ParkourAddonPlugin.database, Utils.getBytesFromUniqueId( playerUniqueId ), category );
-		if( present != null ) { // If the player has already completed courses in this category
-			// Return the number of completed courses
-			return present.getNumber();
-		} else {
-			// Return 0 as the player hasn't completed any courses in this category
-			return 0;
-		}*/
 	}
 
 	static int getNumberOfCoursesInCategory( ParkourCategory category ) {

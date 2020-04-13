@@ -88,32 +88,7 @@ class ParkourSelectionUI {
 		String lore_completed = ParkourAddonPlugin.messages.parkourselectionuilorecompleted;
 		List<GUIElement> contents = new ArrayList<>();
 
-		/*ParkourCategory completeCoursesCategory = ParkourAddonPlugin.database.find( ParkourCategory.class )
-				.select( "categoryId" )
-				.fetch( "courses" )
-				.orderBy( "courses.name" )
-				.where()
-				.eq( "categoryId", category.getCategoryId() )
-				.findOne();
-
-		try {
-			for( ParkourCourse course : completeCoursesCategory.getCourses() ) {
-				String name = ChatColor.valueOf( category.getChatColor() ) + course.getDisplayName();
-				contents.add( createJoinParkourElement(
-						course.getName(),
-						name,
-						Material.valueOf( category.getMaterial() ),
-						category.getMaterialData(),
-						lore.replace( "%COURSE%", name )
-				) );
-			}
-		} catch( NullPointerException ex ) {
-			ParkourAddonPlugin.logger.severe( "[ParkourAddon] Error while getting courses: " + ex.getLocalizedMessage() );
-			ex.printStackTrace();
-		}
-		return contents;*/
-
-		PreparedStatement query = null;
+		PreparedStatement query;
 		try {
 			query = SQLProvider.getConnection().prepareStatement( Utils.GET_PARKOURS_WITH_COMPLETION_QUERY );
 			query.setBytes( 1, Utils.getBytesFromUniqueId( player.getUniqueId() ) );

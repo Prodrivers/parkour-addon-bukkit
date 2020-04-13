@@ -101,7 +101,6 @@ class Players {
 		final int playerLevel = ParkourLevel.getLevel( player );
 
 		// Run the whole thing asynchronously
-		//( new CompletionRankThread( player, playerLevel, courseName, playerRewarded ) ).start();
 		Bukkit.getScheduler().runTaskAsynchronously( ParkourAddonPlugin.plugin, new Runnable() {
 			@Override
 			public void run() {
