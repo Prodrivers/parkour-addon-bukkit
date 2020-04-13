@@ -52,8 +52,7 @@ class ParkourSelectionUI {
 			}
 		} catch( NullPointerException e ) {
 			ParkourAddonPlugin.chat.internalError( player );
-			ParkourAddonPlugin.logger.severe( "Error while trying to show parkour ui: " + e.getLocalizedMessage() );
-			e.printStackTrace();
+			Log.severe( "Cannot show selection UI to player " + player.getName() + " .", e );
 		}
 	}
 
@@ -145,9 +144,8 @@ class ParkourSelectionUI {
 				}
 				contents.add( element );
 			}
-		} catch( SQLException ex ) {
-			ParkourAddonPlugin.logger.severe( "[ParkourAddon] Error while getting courses: " + ex.getLocalizedMessage() );
-			ex.printStackTrace();
+		} catch( SQLException e ) {
+			Log.severe( "Cannot get courses to show selection UI.", e );
 		}
 
 		return contents;

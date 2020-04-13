@@ -146,8 +146,7 @@ class ParkourShopRankUI implements Listener {
 					count++;
 				}
 			} catch( Exception e ) {
-				ParkourAddonPlugin.logger.warning( "Rank '" + category.getName() + "' configuration lacks required values: " + e.getLocalizedMessage() );
-				e.printStackTrace();
+				Log.warning( "Rank '" + category.getName() + "' configuration lacks required values.", e );
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 package fr.prodrivers.bukkit.parkouraddon.adaptation;
 
 import fr.prodrivers.bukkit.commons.storage.SQLProvider;
-import fr.prodrivers.bukkit.parkouraddon.ParkourAddonPlugin;
+import fr.prodrivers.bukkit.parkouraddon.Log;
 import fr.prodrivers.bukkit.parkouraddon.Utils;
 import me.A5H73Y.parkour.player.PlayerInfo;
 import me.A5H73Y.parkour.player.PlayerMethods;
@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.logging.Level;
 
 public class Parkoins {
 	private static class ParkoinsSetThread extends Thread {
@@ -29,7 +28,7 @@ public class Parkoins {
 				query.setBytes( 2, Utils.getBytesFromUniqueId( player.getUniqueId() ) );
 				query.executeUpdate();
 			} catch( SQLException e ) {
-				ParkourAddonPlugin.logger.log( Level.SEVERE, "Error while updating player parkoins : " + e.getLocalizedMessage(), e );
+				Log.severe( "Cannot update player parkoins.", e );
 			}
 		}
 	}

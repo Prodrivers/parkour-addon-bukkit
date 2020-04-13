@@ -1,6 +1,7 @@
 package fr.prodrivers.bukkit.parkouraddon.sections;
 
 import fr.prodrivers.bukkit.commons.sections.IProdriversSection;
+import fr.prodrivers.bukkit.parkouraddon.Log;
 import fr.prodrivers.bukkit.parkouraddon.ParkourAddonPlugin;
 import me.A5H73Y.parkour.course.CourseMethods;
 import me.A5H73Y.parkour.player.PlayerMethods;
@@ -37,21 +38,21 @@ public class ParkourSection implements IProdriversSection {
 	@Override
 	public boolean join( Player player, String subSection, String leavedSection ) {
 		if( PlayerMethods.getParkourSession( player.getName() ) == null ) {
-			ParkourAddonPlugin.logger.info( "[ParkourAddon] Player is not in a parkour session, wants to join " + subSection );
+			Log.finest( "Player is not in a parkour session, wants to join " + subSection );
 			if(subSection == null) {
-				ParkourAddonPlugin.logger.info( "[ParkourAddon] Refused because name is null" );
+				Log.warning( "Refused player " + player.getName() + " to join section because name is null." );
 				return false;
 			}
 			if(subSection.length() == 0) {
-				ParkourAddonPlugin.logger.info( "[ParkourAddon] Refused because name is empty" );
+				Log.warning( "Refused player " + player.getName() + " to join section because name is empty." );
 				return false;
 			}
-			ParkourAddonPlugin.logger.info( "[ParkourAddon] Proceeding" );
+			Log.finest( "Proceeding with course join." );
 			CourseMethods.joinCourse( player, subSection );
-			ParkourAddonPlugin.logger.info( "[ParkourAddon] Player is in parkour session : " + ( PlayerMethods.getParkourSession( player.getName() ) != null ) + ", in course " + ( ( PlayerMethods.getParkourSession( player.getName() ) != null )  && ( PlayerMethods.getParkourSession( player.getName() ).getCourse() != null ) ? PlayerMethods.getParkourSession( player.getName() ).getCourse().getName() : "NULL_COURSE" ) );
+			Log.finest( "Player is in parkour session : " + ( PlayerMethods.getParkourSession( player.getName() ) != null ) + ", in course " + ( ( PlayerMethods.getParkourSession( player.getName() ) != null )  && ( PlayerMethods.getParkourSession( player.getName() ).getCourse() != null ) ? PlayerMethods.getParkourSession( player.getName() ).getCourse().getName() : "NULL_COURSE" ) );
 			return ( PlayerMethods.getParkourSession( player.getName() ) != null );
 		}
-		ParkourAddonPlugin.logger.info( "[ParkourAddon] Player is already in a parkour session, wants to join " + subSection + ", is in course " + ( PlayerMethods.getParkourSession( player.getName() ).getCourse() != null ? PlayerMethods.getParkourSession( player.getName() ).getCourse().getName() : "NULL_COURSE" ) );
+		Log.finest( "Player is already in a parkour session, wants to join " + subSection + ", is in course " + ( PlayerMethods.getParkourSession( player.getName() ).getCourse() != null ? PlayerMethods.getParkourSession( player.getName() ).getCourse().getName() : "NULL_COURSE" ) );
 		return true;
 	}
 

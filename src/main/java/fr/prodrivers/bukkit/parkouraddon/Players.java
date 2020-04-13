@@ -55,7 +55,7 @@ class Players {
 				});
 			}
 		} else {
-			Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () -> ParkourAddonPlugin.logger.severe( "Player " + player.getName() + " completed a course not present in the database." ) );
+			Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () -> Log.severe( "Player " + player.getName() + " completed a course not present in the database." ) );
 		}
 	}
 
@@ -92,7 +92,7 @@ class Players {
 				}
 			}
 		} else {
-			Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () -> ParkourAddonPlugin.logger.severe( "Player " + player.getName() + " completed a course not present in the database." ) );
+			Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () -> Log.severe( "Player " + player.getName() + " completed a course not present in the database." ) );
 		}
 	}
 

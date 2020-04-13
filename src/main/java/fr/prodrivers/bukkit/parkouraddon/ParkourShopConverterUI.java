@@ -61,7 +61,7 @@ class ParkourShopConverterUI implements Listener {
 					count++;
 				}
 			} catch( NullPointerException e ) {
-				ParkourAddonPlugin.logger.warning( "Amount '" + amountStr + "' configuration lacks required values." );
+				Log.warning( "Amount '" + amountStr + "' configuration lacks required values." );
 			}
 		}
 	}
@@ -114,7 +114,7 @@ class ParkourShopConverterUI implements Listener {
 			player.openInventory( inv );
 		} else {
 			ParkourAddonPlugin.chat.error( player, ParkourAddonPlugin.messages.parkourshopui_converters_unavailable );
-			ParkourAddonPlugin.logger.severe( "Player " + player.getName() + " tried to access currency conversion UI, but no compatible economy plugin was found." );
+			Log.severe( "Player " + player.getName() + " tried to access currency conversion UI, but no compatible economy plugin was found." );
 		}
 	}
 

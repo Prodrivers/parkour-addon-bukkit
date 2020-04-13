@@ -23,22 +23,26 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 	//static Configuration config = null;
 	static Economy econ = null;
 
-	public static final Logger logger = Logger.getLogger( "Minecraft" );
-
 	@Override
 	public void onDisable() {
 		PluginDescriptionFile plugindescription = this.getDescription();
+
 		configuration.save();
-		logger.info( plugindescription.getName() + " has been disabled!" );
+		Log.info( " Saved configuration." );
+
+		Log.info( plugindescription.getName() + " has been disabled!" );
 	}
 
 	@Override
 	public void onEnable() {
 		PluginDescriptionFile plugindescription = this.getDescription();
-		Models.populate();
 
 		if( plugin == null )
 			plugin = this;
+
+		Log.init();
+
+		Models.populate();
 
 		chat = new EChat( plugindescription.getName() );
 		configuration = new EConfiguration( this, EMessages.class, chat );
@@ -47,21 +51,22 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 
 		database = SQLProvider.getEbeanServer( Models.ModelsList );
 		if( database == null ) {
-			logger.severe( "[ParkourAddon] ProdriversCommons SQL Provider not available, plugin is unable to start. Please check ProdriversCommons errors." );
+			Log.severe( "ProdriversCommons SQL Provider not available, plugin is unable to start. Please check ProdriversCommons errors." );
 			throw new InstantiationError( "SQL provider unavailable" );
 		}
 
 		if( !setupDatabase() ) {
+			Log.severe( "Database was not initialized correctly." );
 			throw new InstantiationError( "Database wrongly initialized" );
 		}
 
 		if( !setupParkour() ) {
-			logger.severe( "Compatible Parkour plugin is not installed." );
+			Log.severe( "Compatible Parkour plugin is not installed." );
 			throw new InstantiationError( "Unmet dependency" );
 		}
 
 		if( !setupEconomy() ) {
-			logger.warning( "Vault or/and compatible economy plugin is/are not installed. Currency conversion will not be available." );
+			Log.warning( "Vault or/and compatible economy plugin is/are not installed. Currency conversion will not be available." );
 		}
 
 		getServer().getPluginManager().registerEvents( new ParkourAddonListener(), this );
@@ -74,7 +79,7 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 
 		getCommand( "paddon" ).setExecutor( new Commands() );
 
-		logger.info( plugindescription.getName() + " has been enabled!" );
+		Log.info( plugindescription.getName() + " has been enabled!" );
 	}
 
 	private boolean setupDatabase() {
@@ -86,14 +91,13 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 			}
 			return true;
 		} catch( RuntimeException ex ) {
-			logger.info( "Installing database for " + getDescription().getName() + " due to first time usage" );
+			Log.info( "Installing database for " + getDescription().getName() + " due to first time usage" );
 			try {
 				database.createSqlUpdate( Utils.INIT_TABLES_SCRIPT ).execute();
 				return true;
 			} catch( RuntimeException rex ) {
-				logger.severe( "Error while installing the database " + rex.getLocalizedMessage() );
-				logger.severe( "Please manually execute the installation SQL script:\n" + Utils.INIT_TABLES_SCRIPT );
-				rex.printStackTrace();
+				Log.severe( "Cannot install the database.", rex );
+				Log.severe( "Please manually execute the installation SQL script:\n" + Utils.INIT_TABLES_SCRIPT );
 			}
 		}
 		return false;

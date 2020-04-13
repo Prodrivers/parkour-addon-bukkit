@@ -107,9 +107,8 @@ class Commands implements CommandExecutor {
 			try {
 				ParkourShopUI.getInstance().open( (Player) sender );
 			} catch( Exception e ) {
-				ParkourAddonPlugin.logger.severe( "Error while trying to open Parkour Shop UI: " + e.getLocalizedMessage() );
-				e.printStackTrace();
 				ParkourAddonPlugin.chat.internalError( sender );
+				Log.severe( "Error while trying to open Parkour Shop UI.", e );
 			}
 		} else {
 			ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notaplayer );
@@ -136,9 +135,8 @@ class Commands implements CommandExecutor {
 					System.err.println(e.getLocalizedMessage());
 					e.printStackTrace();
 				} catch( Exception e ) {
-					ParkourAddonPlugin.logger.severe( "Error while trying to open Parkour Selection UI: " + e.getLocalizedMessage() );
-					e.printStackTrace();
 					ParkourAddonPlugin.chat.internalError( sender );
+					Log.severe( "Error while trying to open Parkour Selection UI.", e );
 				}
 			} else {
 				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
@@ -384,7 +382,7 @@ class Commands implements CommandExecutor {
 				if( player != null ) {
 					try {
 						Parkoins.add( player, Integer.valueOf( args[ 2 ] ) );
-						ParkourAddonPlugin.logger.warning( "[ParkourAddon] Player " + sender.getName() + " added " + args[ 2 ] + " parkoins to player " + player.getName() );
+						Log.info( "Player " + sender.getName() + " added " + args[ 2 ] + " parkoins to player " + player.getName() );
 						ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.parkoinsadd.replace( "%PLAYER%", player.getName() ).replace( "%PARKOINS%", args[ 2 ] ) );
 						Bukkit.dispatchCommand( Bukkit.getConsoleSender(), "mail send Colasix " + sender.getName() + " a ajouté " + args[ 2 ] + " parkoins à " + player.getName() );
 					} catch( NumberFormatException e ) {
@@ -410,7 +408,7 @@ class Commands implements CommandExecutor {
 				if( player != null ) {
 					try {
 						Parkoins.remove( player, Integer.valueOf( args[ 2 ] ) );
-						ParkourAddonPlugin.logger.warning( "[ParkourAddon] Player " + sender.getName() + " deducted " + args[ 2 ] + " parkoins to player " + player.getName() );
+						Log.info( "Player " + sender.getName() + " deducted " + args[ 2 ] + " parkoins to player " + player.getName() );
 						ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.parkoinsremove.replace( "%PLAYER%", player.getName() ).replace( "%PARKOINS%", args[ 2 ] ) );
 						Bukkit.dispatchCommand( Bukkit.getConsoleSender(), "mail send Colasix " + sender.getName() + " a retiré " + args[ 2 ] + " parkoins à " + player.getName() );
 					} catch( NumberFormatException e ) {
