@@ -121,24 +121,27 @@ class ParkourSelectionUI {
 			ResultSet results = query.executeQuery();
 
 			while( results.next() ) {
+				String internalName = results.getString( "course.name" );
 				String name = ChatColor.valueOf( results.getString( "chatColor" ) ) + results.getString( "displayName" );
 				boolean completed = results.getBytes( "playeruuid" ) != null;
+				Material material = Material.valueOf( results.getString( "material" ) );
 				GUIElement element;
+
 				if(completed) {
 					element = createJoinParkourElement(
 							completed,
-							results.getString( "course.name" ),
+							internalName,
 							name,
-							Material.valueOf( results.getString( "material" ) ),
+							material,
 							lore.replace( "%COURSE%", name ),
 							lore_completed
 					);
 				} else {
 					element = createJoinParkourElement(
 							completed,
-							results.getString( "course.name" ),
+							internalName,
 							name,
-							Material.valueOf( results.getString( "material" ) ),
+							material,
 							lore.replace( "%COURSE%", name )
 					);
 				}
