@@ -1,11 +1,8 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
-import fr.prodrivers.bukkit.commons.exceptions.NotPartyOwnerException;
-import fr.prodrivers.bukkit.commons.sections.SectionManager;
 import fr.prodrivers.bukkit.commons.storage.SQLProvider;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.ParkourLevel;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
-import fr.prodrivers.bukkit.parkouraddon.models.ParkourCourse;
 import me.eddie.inventoryguiapi.gui.elements.GUIElement;
 import me.eddie.inventoryguiapi.gui.elements.GUIElementFactory;
 import me.eddie.inventoryguiapi.gui.guis.GUIBuilder;

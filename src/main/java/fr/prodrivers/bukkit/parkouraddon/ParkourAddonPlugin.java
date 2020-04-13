@@ -12,8 +12,6 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.logging.Logger;
-
 public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.Listener {
 	static ParkourAddonPlugin plugin;
 	static EConfiguration configuration;

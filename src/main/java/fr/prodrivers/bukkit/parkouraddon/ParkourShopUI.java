@@ -1,10 +1,6 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
-import fr.prodrivers.bukkit.parkouraddon.adaptation.Parkoins;
-import fr.prodrivers.bukkit.parkouraddon.adaptation.ParkourLevel;
-import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

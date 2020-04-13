@@ -1,20 +1,20 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Parkoins;
-import me.A5H73Y.parkour.Parkour;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 class ParkourShopConverterUI implements Listener {
 	private static ParkourShopConverterUI instance;

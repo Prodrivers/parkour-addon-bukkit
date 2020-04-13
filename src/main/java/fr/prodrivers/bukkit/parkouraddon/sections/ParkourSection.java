@@ -2,7 +2,6 @@ package fr.prodrivers.bukkit.parkouraddon.sections;
 
 import fr.prodrivers.bukkit.commons.sections.IProdriversSection;
 import fr.prodrivers.bukkit.parkouraddon.Log;
-import fr.prodrivers.bukkit.parkouraddon.ParkourAddonPlugin;
 import me.A5H73Y.parkour.course.CourseMethods;
 import me.A5H73Y.parkour.player.PlayerMethods;
 import org.bukkit.entity.Player;

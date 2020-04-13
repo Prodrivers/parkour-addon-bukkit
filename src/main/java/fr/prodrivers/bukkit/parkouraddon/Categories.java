@@ -1,12 +1,11 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
-import io.ebean.SqlRow;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCourse;
+import io.ebean.SqlRow;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 class Categories {
