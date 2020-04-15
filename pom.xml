@@ -37,6 +37,10 @@
 			<id>horgeon-repo</id>
 			<url>https://repo.horgeon.fr/repository/maven-all/</url>
 		</repository>
+		<repository>
+			<id>a5h73y-repo</id>
+			<url>https://dl.bintray.com/a5h73y/repo/</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -73,16 +77,14 @@
 			<groupId>me.eddie</groupId>
 			<artifactId>inventoryguiapi</artifactId>
 			<version>1.0-SNAPSHOT</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/libs/InventoryGUIAPI-1.0-SNAPSHOT.jar</systemPath>
+			<scope>provided</scope>
 		</dependency>
 		<!--Parkour plugin-->
 		<dependency>
 			<groupId>me.A5H73Y</groupId>
 			<artifactId>Parkour</artifactId>
 			<version>5.3</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/libs/Parkour.jar</systemPath>
+			<scope>provided</scope>
 		</dependency>
 		<!--Prodrivers Commons API-->
 		<dependency>
@@ -91,18 +93,11 @@
 			<version>1.0</version>
 			<scope>provided</scope>
 		</dependency>
-		<!--Prodrivers Players-->
-		<!--<dependency>
-			<groupId>fr.prodrivers.bukkit</groupId>
-			<artifactId>players</artifactId>
-			<version>1.0</version>
-			<scope>provided</scope>
-		</dependency>-->
 	</dependencies>
 
 	<build>
 		<finalName>${project.artifactId}</finalName>
-		<defaultGoal>clean compile process-classes resources:resources assembly:single</defaultGoal>
+		<defaultGoal>clean compile resources:resources package</defaultGoal>
 
 		<resources>
 			<resource>
@@ -160,44 +155,18 @@
 					</archive>
 				</configuration>
 			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.0.0</version>
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<appendAssemblyId>false</appendAssemblyId>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-scm-publish-plugin</artifactId>
-				<version>1.1</version>
-				<configuration>
-					<checkoutDirectory>${project.build.directory}/scmpublish</checkoutDirectory>
-					<checkinComment>Publishing documentation for ${project.artifactId}:${project.version}</checkinComment>
-					<content>${project.reporting.outputDirectory}/apidocs</content>
-					<skipDeletedFiles>true</skipDeletedFiles>
-					<pubScmUrl>scm:git:git@github.com:Prodrivers/bukkit-commons.git</pubScmUrl>
-					<scmBranch>gh-pages</scmBranch>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 
 	<distributionManagement>
 		<repository>
 			<id>prodrivers-repo</id>
-			<name>prodrivers-commons-releases</name>
+			<name>parkour-addon-releases</name>
 			<url>https://gitlab.com/api/v4/projects/12871610/packages/maven</url>
 		</repository>
 		<snapshotRepository>
 			<id>prodrivers-repo</id>
-			<name>prodrivers-commons-snapshots</name>
+			<name>parkour-addon-snapshots</name>
 			<url>https://gitlab.com/api/v4/projects/12871610/packages/maven</url>
 		</snapshotRepository>
 	</distributionManagement>
