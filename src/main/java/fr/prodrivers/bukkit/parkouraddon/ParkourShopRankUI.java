@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,8 +78,8 @@ class ParkourShopRankUI implements Listener {
 
 		meta.setDisplayName( rankName.replace( "%CATEGORYCOLOR%", rankItem.chatColor.toString() ).replace( "%CATEGORY%", rankItem.name ).replace( "%PRICE%", String.valueOf( rankItem.price ) ).replace( "%TARGETLEVEL%", String.valueOf( rankItem.targetLevel ) ) );
 
-		List<String> loreList = List.of( lores )
-				.stream()
+		List<String> loreList = Arrays
+				.stream( lores )
 				.map( lore -> lore
 						.replace( "%CATEGORYCOLOR%", rankItem.chatColor.toString() )
 						.replace( "%CATEGORY%", rankItem.name )
@@ -99,7 +100,7 @@ class ParkourShopRankUI implements Listener {
 				rankItem,
 				rankItem.material,
 				ParkourAddonPlugin.messages.parkourshopui_ranks_rankitemname,
-				ParkourAddonPlugin.messages.parkourshopui_ranks_rankitemlore.toArray(String[]::new)
+				ParkourAddonPlugin.messages.parkourshopui_ranks_rankitemlore.stream().toArray(String[]::new)
 		);
 	}
 
@@ -108,7 +109,7 @@ class ParkourShopRankUI implements Listener {
 				rankItem,
 				ParkourAddonPlugin.configuration.shops_ranks_alreadyBought_material,
 				ParkourAddonPlugin.messages.parkourshopui_ranks_boughtrankitemname,
-				ParkourAddonPlugin.messages.parkourshopui_ranks_boughtrankitemlore.toArray(String[]::new)
+				ParkourAddonPlugin.messages.parkourshopui_ranks_boughtrankitemlore.stream().toArray(String[]::new)
 		);
 	}
 
@@ -117,7 +118,7 @@ class ParkourShopRankUI implements Listener {
 				rankItem,
 				ParkourAddonPlugin.configuration.shops_ranks_notBuyable_material,
 				ParkourAddonPlugin.messages.parkourshopui_ranks_notbuyablerankitemname,
-				ParkourAddonPlugin.messages.parkourshopui_ranks_notbuyablerankitemlore.toArray(String[]::new)
+				ParkourAddonPlugin.messages.parkourshopui_ranks_notbuyablerankitemlore.stream().toArray(String[]::new)
 		);
 	}
 

@@ -3,6 +3,7 @@ package fr.prodrivers.bukkit.parkouraddon;
 import fr.prodrivers.bukkit.commons.configuration.Messages;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class EMessages extends Messages {
@@ -39,22 +40,22 @@ public class EMessages extends Messages {
 	public String parkourshopui_close_title = "Back";
 	public String parkourshopui_ranks_title = "Parkour = Shop Ranks";
 	public String parkourshopui_ranks_rankitemname = "Rank = %CATEGORYCOLOR%%CATEGORY%";
-	public List<String> parkourshopui_ranks_rankitemlore = List.of( "Buy Parkour Rank = %CATEGORYCOLOR%%CATEGORY%", "for %PRICE%, level %MINLEVEL%, target %TARGETLEVEL%" );
+	public List<String> parkourshopui_ranks_rankitemlore = Arrays.asList( "Buy Parkour Rank = %CATEGORYCOLOR%%CATEGORY%", "for %PRICE%, level %MINLEVEL%, target %TARGETLEVEL%" );
 	public String parkourshopui_ranks_boughtrankitemname = "Rank = %CATEGORYCOLOR%%CATEGORY%&r (BOUGHT)";
-	public List<String> parkourshopui_ranks_boughtrankitemlore = List.of( "You already bought", "rank %CATEGORY%!" );
+	public List<String> parkourshopui_ranks_boughtrankitemlore = Arrays.asList( "You already bought", "rank %CATEGORY%!" );
 	public String parkourshopui_ranks_notbuyablerankitemname = "Rank = %CATEGORYCOLOR%%CATEGORY%&r (NOT BUYABLE)";
-	public List<String> parkourshopui_ranks_notbuyablerankitemlore = List.of( "You can't buy rank %CATEGORY%!", "Requires %PRICE% parkoins.", "Requires level %MINLEVEL%." );
+	public List<String> parkourshopui_ranks_notbuyablerankitemlore = Arrays.asList( "You can't buy rank %CATEGORY%!", "Requires %PRICE% parkoins.", "Requires level %MINLEVEL%." );
 	public String parkourshopui_ranks_bought = "You bought rank %CATEGORY% !";
 	public String parkourshopui_ranks_notenoughlevel = "You do not have the required level !";
 	public String parkourshopui_ranks_notenoughbalance = "You do not have enough parkoins !";
 	public String parkourshopui_ranks_alreadyhave = "You already have this rank !";
 	public String parkourshopui_converters_title = "Parkour = Shop Convert";
 	public String parkourshopui_converters_to_name = "%AMOUNT% parkoins";
-	public List<String> parkourshopui_converters_to_lore = List.of( "&rConvert %PRICE% coins", "&rto %AMOUNT% parkoins." );
+	public List<String> parkourshopui_converters_to_lore = Arrays.asList( "&rConvert %PRICE% coins", "&rto %AMOUNT% parkoins." );
 	public String parkourshopui_converters_to_bought = "You converted %PRICE% coins to %AMOUNT% parkoins!";
 	public String parkourshopui_converters_to_notenoughbalance = "You do not have enough coins!";
 	public String parkourshopui_converters_from_name = "%AMOUNT% coins";
-	public List<String> parkourshopui_converters_from_lore = List.of( "&rConvert %PRICE% parkcoins", "&rto %AMOUNT% coins." );
+	public List<String> parkourshopui_converters_from_lore = Arrays.asList( "&rConvert %PRICE% parkcoins", "&rto %AMOUNT% coins." );
 	public String parkourshopui_converters_from_bought = "You converted %PRICE% parkoins to %AMOUNT% coins!";
 	public String parkourshopui_converters_from_notenoughbalance = "You do not have enough parkcoins!";
 	public String parkourshopui_converters_unavailable = "Currency conversion is not available.";

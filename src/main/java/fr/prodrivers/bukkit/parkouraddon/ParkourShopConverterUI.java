@@ -41,8 +41,8 @@ class ParkourShopConverterUI implements Listener {
 
 		meta.setDisplayName( name.replace( "%AMOUNT%", String.valueOf( amount ) ).replace( "%PRICE%", String.valueOf( price ) ) );
 
-		List<String> loreList = List.of( lores )
-				.stream()
+		List<String> loreList = Arrays
+				.stream( lores )
 				.map( lore -> lore
 						.replace( "%AMOUNT%", String.valueOf( amount ) )
 						.replace( "%PRICE%", String.valueOf( price ) ) )
@@ -85,7 +85,7 @@ class ParkourShopConverterUI implements Listener {
 							prices.get( i ),
 							ParkourAddonPlugin.configuration.shops_converters_to_material,
 							ParkourAddonPlugin.messages.parkourshopui_converters_to_name,
-							ParkourAddonPlugin.messages.parkourshopui_converters_to_lore.toArray(String[]::new)
+							ParkourAddonPlugin.messages.parkourshopui_converters_to_lore.stream().toArray(String[]::new)
 					)
 			);
 
@@ -96,7 +96,7 @@ class ParkourShopConverterUI implements Listener {
 							amounts.get( i ),
 							ParkourAddonPlugin.configuration.shops_converters_from_material,
 							ParkourAddonPlugin.messages.parkourshopui_converters_from_name,
-							ParkourAddonPlugin.messages.parkourshopui_converters_from_lore.toArray(String[]::new)
+							ParkourAddonPlugin.messages.parkourshopui_converters_from_lore.stream().toArray(String[]::new)
 					)
 			);
 		}
