@@ -42,7 +42,25 @@ public class Utils {
 			"alter table parkourplayercompletion add constraint pk_parkourplayercompletion primary key (playeruuid, courseId);\n" +
 			"alter table `course` add index `course_idx_categoryid_courseid` (`categoryId`,`courseId`);\n" +
 			"alter table `parkourcategory` add index `parkourcategory_idx_hidden` (`hidden`);\n" +
-			"alter table `time` add index `time_idx_courseid_time` (`courseId`,`time`);";
+			"alter table `time` add index `time_idx_courseid_time` (`courseId`,`time`);\n" +
+			"create view time_ranked as select `time`.`courseId`                      AS `courseId`,\n" +
+			"       `time`.`player`                                AS `player`,\n" +
+			"       `time`.`time`                                  AS `time`,\n" +
+			"       `time`.`deaths`                                AS `deaths`,\n" +
+			"       `time`.`playeruuid`                            AS `playeruuid`,\n" +
+			"       (select count(`b`.`timeId`)\n" +
+			"        from `time` `b`\n" +
+			"        where ((`time`.`time` >= `b`.`time`) and\n" +
+			"               (`time`.`courseId` = `b`.`courseId`))) AS `rank`\n" +
+			"from `time`\n" +
+			"order by `time`.`courseId`, `time`.`time`;\n" +
+			"create view time_sorted as select `time`.`courseId` AS `courseId`,\n" +
+			"       `time`.`player`   AS `player`,\n" +
+			"       `time`.`time`     AS `time`,\n" +
+			"       `time`.`deaths`   AS `deaths`\n" +
+			"from `time`\n" +
+			"order by `time`.`courseId`, `time`.`time`;\n" +
+			"\n";
 
 	public static String GET_PARKOURS_WITH_COMPLETION_QUERY = "SELECT *\n" +
 			"FROM parkourcategory\n" +
