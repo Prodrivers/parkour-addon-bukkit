@@ -23,6 +23,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class ParkourSelectionUI {
 	private static Map<UUID, Map<Integer, InventoryGUI>> uis = new HashMap<>();
@@ -81,8 +83,8 @@ class ParkourSelectionUI {
 	}
 
 	private static List<GUIElement> genContent( Player player, ParkourCategory category ) throws NullPointerException {
-		String lore = ParkourAddonPlugin.messages.parkourselectionuilore;
-		String lore_completed = ParkourAddonPlugin.messages.parkourselectionuilorecompleted;
+		List<String> lores = ParkourAddonPlugin.messages.parkourselectionuilore;
+		List<String> lores_completed = ParkourAddonPlugin.messages.parkourselectionuilorecompleted;
 		List<GUIElement> contents = new ArrayList<>();
 
 		PreparedStatement query;
@@ -94,27 +96,51 @@ class ParkourSelectionUI {
 
 			while( results.next() ) {
 				String internalName = results.getString( "course.name" );
+				String author = results.getString( "author" );
+				String description = results.getString( "description" );
+				final String finalDescription = ( description == null ? "" : description );
 				String name = ChatColor.valueOf( results.getString( "chatColor" ) ) + results.getString( "displayName" );
 				boolean completed = results.getBytes( "playeruuid" ) != null;
 				Material material = Material.valueOf( results.getString( "material" ) );
 				GUIElement element;
 
 				if(completed) {
+					String[] formattedLore = Stream
+							.concat(lores.stream(), lores_completed.stream())
+							.map( lore -> lore
+									.replace( "%NAME%", name)
+									.replace( "%AUTHOR%", author)
+									.replace( "%DESCRIPTION%", finalDescription )
+									.split( "\n" )
+							)
+							.flatMap(Arrays::stream)
+							.filter( lore -> !ChatColor.stripColor( lore ).isEmpty() )
+							.toArray(String[]::new);
 					element = createJoinParkourElement(
 							completed,
 							internalName,
 							name,
 							material,
-							lore.replace( "%COURSE%", name ),
-							lore_completed
+							formattedLore
 					);
 				} else {
+					String[] formattedLore = lores
+							.stream()
+							.map( lore -> lore
+									.replace( "%NAME%", name)
+									.replace( "%AUTHOR%", author)
+									.replace( "%DESCRIPTION%", finalDescription )
+									.split( "\n" )
+							)
+							.flatMap(Arrays::stream)
+							.filter( lore -> !ChatColor.stripColor( lore ).isEmpty() )
+							.toArray(String[]::new);
 					element = createJoinParkourElement(
 							completed,
 							internalName,
 							name,
 							material,
-							lore.replace( "%COURSE%", name )
+							formattedLore
 					);
 				}
 				contents.add( element );

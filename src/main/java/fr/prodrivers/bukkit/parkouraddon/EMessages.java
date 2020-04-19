@@ -31,8 +31,8 @@ public class EMessages extends Messages {
 	public String notenoughlevel = "You do not have the required level to access thoses parkours !";
 	public String parkourselectionuititle = "Parkour = %CATCOLOR%%CAT%";
 	public String parkourselectionuititlereduced = "P = %CATCOLOR%%CAT%";
-	public String parkourselectionuilore = "&rJoin %COURSE%";
-	public String parkourselectionuilorecompleted = "&rCompleted !";
+	public List<String> parkourselectionuilore = Arrays.asList( "&rJoin %COURSE%" );
+	public List<String> parkourselectionuilorecompleted = Arrays.asList( "&rCompleted !" );
 	public String parkourlevelset = "Set player's %PLAYER% parkour level to %LEVEL%";
 	public String parkoinsadd = "Added %PARKOINS% parkoins to %PLAYER%";
 	public String parkoinsremove = "Removed %PARKOINS% parkoins to %PLAYER%";
