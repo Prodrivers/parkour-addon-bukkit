@@ -9,6 +9,7 @@ import java.util.UUID;
 public class Utils {
 	public static String INIT_TABLES_SCRIPT = "alter table course add displayName varchar(180);\n" +
 			"alter table course add categoryId integer;\n" +
+			"alter table course add description varchar(255) null;\n" +
 			"\n" +
 			"create table parkourcategory (\n" +
 			"  categoryId                   integer auto_increment not null,\n" +

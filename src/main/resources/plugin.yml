@@ -54,6 +54,10 @@ permissions:
         description: Allows to ste a parkour's display name
         default: op
 
+    parkouraddon.parkour.setdescription:
+        description: Allows to set a parkour's description
+        default: op
+
     parkouraddon.setlevel:
         description: Allows to set a player's level
         default: op

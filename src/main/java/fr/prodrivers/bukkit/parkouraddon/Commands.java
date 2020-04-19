@@ -13,6 +13,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class Commands implements CommandExecutor {
 	public boolean onCommand( CommandSender sender, Command command, String label, String[] args ) {
@@ -39,6 +41,8 @@ class Commands implements CommandExecutor {
 						return setParkourCategory( sender, args );
 					case "setparkourdisplayname":
 						return setParkourDisplayName( sender, args );
+					case "setparkourdescription":
+						return setParkourDescription( sender, args );
 					case "setlevel":
 						return setLevel( sender, args );
 					case "addparkoins":
@@ -78,6 +82,7 @@ class Commands implements CommandExecutor {
 			ParkourAddonPlugin.chat.send( sender, "/paddon open <categoryId>" );
 			ParkourAddonPlugin.chat.send( sender, "/paddon setparkourcategory <courseName> <categoryId>" );
 			ParkourAddonPlugin.chat.send( sender, "/paddon setparkourdisplayname <courseName> <displayName>" );
+			ParkourAddonPlugin.chat.send( sender, "/paddon setparkourdescription <courseName> <line 1> [line 2] ..." );
 			ParkourAddonPlugin.chat.send( sender, "--- Levels ---" );
 			ParkourAddonPlugin.chat.send( sender, "/paddon setlevel <playerName> <level>" );
 			ParkourAddonPlugin.chat.send( sender, "--- Parkoins ---" );
@@ -365,6 +370,28 @@ class Commands implements CommandExecutor {
 				ParkourCourse course = ParkourCourse.retrieveFromName( ParkourAddonPlugin.database, args[ 1 ] );
 				if( course != null ) {
 					course.setDisplayName( args[ 2 ] );
+					ParkourAddonPlugin.database.save( course );
+					ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.parkourdisplaynameset.replace( "%COURSENAME%", course.getName() ).replace( "%DISPLAYNAME%", course.getDisplayName() ) );
+				} else {
+					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcourse );
+				}
+			} else {
+				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
+			}
+			return true;
+		}
+		return false;
+	}
+
+	private boolean setParkourDescription( CommandSender sender, String[] args ) {
+		if( sender.hasPermission( "parkouraddon.parkour.setdescription" ) ) {
+			if( args.length > 2 ) {
+				ParkourCourse course = ParkourCourse.retrieveFromName( ParkourAddonPlugin.database, args[ 1 ] );
+				if( course != null ) {
+					String description = Stream.of( args )
+							.skip( 2 )
+							.collect( Collectors.joining( "\n" ) );
+					course.setDescription( description );
 					ParkourAddonPlugin.database.save( course );
 					ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.parkourdisplaynameset.replace( "%COURSENAME%", course.getName() ).replace( "%DISPLAYNAME%", course.getDisplayName() ) );
 				} else {

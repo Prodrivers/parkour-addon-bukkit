@@ -25,6 +25,11 @@ public class ParkourCourse {
 	@Setter
 	String name;
 
+	@Column( length = 255, nullable = true )
+	@Getter
+	@Setter
+	String description;
+
 	@Column( length = 180, nullable = false )
 	@NotNull
 	@Getter
