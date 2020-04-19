@@ -20,6 +20,8 @@ public class EMessages extends Messages {
 	public String nextcategoryset = "Category %CAT%'s next category set to %NEXTCAT%";
 	public String prevcategoryset = "Category %CAT%'s next category set to %PREVCAT%";
 	public String parkoinsrewardcategoryset = "Category %CAT%'s parkoins reward set to %REWARD%";
+	public String categorysettohidden = "Category %CAT% is now hidden.";
+	public String categorysettoshown = "Category %CAT% is now shown.";
 	public String invalidcategory = "Invalid category.";
 	public String invalidcourse = "Invalid course.";
 	public String invalidnumber = "Invalid number.";

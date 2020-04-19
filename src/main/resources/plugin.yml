@@ -42,6 +42,10 @@ permissions:
         description: Allows to set a category's parkoins reward amount
         default: op
 
+    parkouraddon.category.sethidden:
+        description: Allows to hide and unhide a category
+        default: op
+
     parkouraddon.parkour.setcategory:
         description: Allows to set a parkour's category
         default: op

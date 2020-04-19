@@ -72,6 +72,11 @@ public class ParkourCategory {
 	@Setter
 	int price;
 
+	@Column( columnDefinition = "tinyint(1) default 0 not null" )
+	@Getter
+	@Setter
+	boolean hidden;
+
 	@OneToMany( mappedBy = "category", cascade = CascadeType.PERSIST )
 	@Getter
 	@Setter

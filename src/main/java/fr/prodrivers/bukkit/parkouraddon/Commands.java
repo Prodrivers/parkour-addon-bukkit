@@ -33,6 +33,8 @@ class Commands implements CommandExecutor {
 						return setPreviousCategory( sender, args );
 					case "setparkoinsreward":
 						return setParkoinsReward( sender, args );
+					case "sethidden":
+						return setHidden( sender, args );
 					case "setparkourcategory":
 						return setParkourCategory( sender, args );
 					case "setparkourdisplayname":
@@ -71,6 +73,7 @@ class Commands implements CommandExecutor {
 			ParkourAddonPlugin.chat.send( sender, "/paddon setnextcategory <categoryId> <nextCategoryId>" );
 			ParkourAddonPlugin.chat.send( sender, "/paddon setpreviouscategory <categoryId> <previousCategoryId>" );
 			ParkourAddonPlugin.chat.send( sender, "/paddon setparkoinsreward <categoryId> <parkoinsReward>" );
+			ParkourAddonPlugin.chat.send( sender, "/paddon sethidden <categoryId> <isHidden>" );
 			ParkourAddonPlugin.chat.send( sender, "--- Parkours ---" );
 			ParkourAddonPlugin.chat.send( sender, "/paddon open <categoryId>" );
 			ParkourAddonPlugin.chat.send( sender, "/paddon setparkourcategory <courseName> <categoryId>" );
@@ -289,6 +292,30 @@ class Commands implements CommandExecutor {
 					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidnumber );
 				} catch( Exception e ) {
 					ParkourAddonPlugin.chat.internalError( sender );
+				}
+			} else {
+				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
+			}
+			return true;
+		}
+		return false;
+	}
+
+	private boolean setHidden( CommandSender sender, String[] args ) {
+		if( sender.hasPermission( "parkouraddon.category.sethidden" ) ) {
+			if( args.length > 2 ) {
+				try {
+					ParkourCategory cat = ParkourAddonPlugin.database.find( ParkourCategory.class, Integer.valueOf( args[ 1 ] ) );
+					if( cat != null ) {
+						cat.setHidden( Boolean.parseBoolean( args[ 2 ] ) );
+						ParkourAddonPlugin.database.save( cat );
+						ParkourAddonPlugin.chat.success( sender, ( cat.isHidden() ? ParkourAddonPlugin.messages.categorysettohidden : ParkourAddonPlugin.messages.categorysettoshown ).replace( "%CAT%", cat.getName() ) );
+					} else {
+						ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcategory );
+					}
+				} catch( Exception e ) {
+					ParkourAddonPlugin.chat.internalError( sender );
+					Log.severe( "Cannot set category hidden state.", e );
 				}
 			} else {
 				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );

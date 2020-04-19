@@ -23,6 +23,7 @@ public class Utils {
 			"  chatColor                    varchar(180) not null,\n" +
 			"  hexColor                     integer default 0 not null,\n" +
 			"  price                        integer default 0 not null,\n" +
+			"  hidden                       tinyint(1) default 0 not null,\n" +
 			"  constraint pk_parkourcategory primary key (categoryId))\n" +
 			";\n" +
 			"\n" +
@@ -40,6 +41,7 @@ public class Utils {
 			"alter table parkourplayercompletion add constraint fk_parkourplayercompletion_course_3 foreign key (courseId) references course (courseId) on delete restrict on update restrict;\n" +
 			"alter table parkourplayercompletion add constraint pk_parkourplayercompletion primary key (playeruuid, courseId);\n" +
 			"alter table `course` add index `course_idx_categoryid_courseid` (`categoryId`,`courseId`);\n" +
+			"alter table `parkourcategory` add index `parkourcategory_idx_hidden` (`hidden`);\n" +
 			"alter table `time` add index `time_idx_courseid_time` (`courseId`,`time`);";
 
 	public static String GET_PARKOURS_WITH_COMPLETION_QUERY = "SELECT *\n" +
