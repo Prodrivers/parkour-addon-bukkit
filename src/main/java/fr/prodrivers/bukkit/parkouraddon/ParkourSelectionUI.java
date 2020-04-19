@@ -40,14 +40,18 @@ class ParkourSelectionUI {
 
 	static void open( Player player, ParkourCategory category ) {
 		try {
-			if( ParkourLevel.getLevel( player ) >= category.getBaseLevel() || player.hasPermission( "Parkour.Admin.Bypass" ) ) {
-				Map<Integer, InventoryGUI> playerUis = uis.computeIfAbsent( player.getUniqueId(), k -> new HashMap<>() );
-				if( !playerUis.containsKey( category.getCategoryId() ) ) {
-					playerUis.put( category.getCategoryId(), generate( player, category ) );
+			if( !category.isHidden() || category.isHidden() && player.hasPermission( "Parkour.Admin.Bypass" ) ) {
+				if( ParkourLevel.getLevel( player ) >= category.getBaseLevel() || player.hasPermission( "Parkour.Admin.Bypass" ) ) {
+					Map<Integer, InventoryGUI> playerUis = uis.computeIfAbsent( player.getUniqueId(), k -> new HashMap<>() );
+					if( !playerUis.containsKey( category.getCategoryId() ) ) {
+						playerUis.put( category.getCategoryId(), generate( player, category ) );
+					}
+					playerUis.get( category.getCategoryId() ).open( player );
+				} else {
+					ParkourAddonPlugin.chat.error( player, ParkourAddonPlugin.messages.notenoughlevel );
 				}
-				playerUis.get( category.getCategoryId() ).open( player );
 			} else {
-				ParkourAddonPlugin.chat.error( player, ParkourAddonPlugin.messages.notenoughlevel );
+				ParkourAddonPlugin.chat.error( player, ParkourAddonPlugin.messages.invalidcategory );
 			}
 		} catch( NullPointerException e ) {
 			ParkourAddonPlugin.chat.internalError( player );
