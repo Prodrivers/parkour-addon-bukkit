@@ -34,6 +34,7 @@ public class EConfiguration extends Configuration {
 	@Override
 	public void reload() {
 		super.reload();
+		getMessages().reload();
 		Categories.reload();
 	}
 }
