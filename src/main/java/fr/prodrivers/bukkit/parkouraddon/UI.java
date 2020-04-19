@@ -1,5 +1,7 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
+import fr.prodrivers.bukkit.parkouraddon.models.ParkourCourse;
+import fr.prodrivers.bukkit.parkouraddon.models.ParkourTimeRanked;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -25,5 +27,14 @@ class UI {
 		spawnFirework( player.getLocation(), Color.RED, Color.GREEN, 0.75f );
 		spawnFirework( player.getLocation(), Color.RED, Color.GREEN, 1.5f );
 		ParkourAddonPlugin.chat.success( player, ParkourAddonPlugin.messages.rankup.replaceAll( "%LEVEL%", String.valueOf( level ) ).replaceAll( "%PLAYER%", player.getName() ) );
+	}
+
+	static void courseCompleted( final Player player, final ParkourCourse course ) {
+		Bukkit.getScheduler().runTaskAsynchronously( ParkourAddonPlugin.plugin, () -> {
+			ParkourTimeRanked entry = ParkourTimeRanked.retrieve( ParkourAddonPlugin.database, player, course );
+			Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () ->
+				ParkourAddonPlugin.chat.send( player, ParkourAddonPlugin.messages.rankoncompletion.replaceAll( "%RANK%", String.valueOf( entry.getRank() ) ).replaceAll( "%COURSE%", course.getDisplayName() ) )
+			);
+		});
 	}
 }

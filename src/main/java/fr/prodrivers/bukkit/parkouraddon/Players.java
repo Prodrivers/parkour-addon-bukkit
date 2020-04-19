@@ -50,8 +50,11 @@ class Players {
 						Parkoins.add( player, parkoinsReward );
 					}
 
+					// Do some stuff to inform him
+					UI.courseCompleted( player, course );
+
 					// Trigger event
-					ParkourAddonPlugin.plugin.getServer().getPluginManager().callEvent(new PlayerCompleteCourseEvent( player, course ) );
+					ParkourAddonPlugin.plugin.getServer().getPluginManager().callEvent(new PlayerCompleteCourseEvent( player, course ));
 				});
 			}
 		} else {

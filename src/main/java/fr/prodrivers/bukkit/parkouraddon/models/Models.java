@@ -11,5 +11,6 @@ public class Models {
 		ModelsList.add( ParkourCourse.class );
 		ModelsList.add( ParkourCategory.class );
 		ModelsList.add( ParkourPlayerCompletion.class );
+		ModelsList.add( ParkourTimeRanked.class );
 	}
 }

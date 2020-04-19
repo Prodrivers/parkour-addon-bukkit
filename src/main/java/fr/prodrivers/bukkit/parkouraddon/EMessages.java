@@ -63,6 +63,7 @@ public class EMessages extends Messages {
 	public String parkourshopui_converters_unavailable = "Currency conversion is not available.";
 	public String cannotjoinnotpartyowner = "Only the party owner can enter a parkour.";
 	public String party_notenoughlevel = "A party member does not have the required level to access this course.";
+	public String rankoncompletion = "You completed the course %COURSE% for the first time ! You ranked %RANK% on it, well done !";
 
 	public EMessages( Plugin plugin ) {
 		super( plugin );
