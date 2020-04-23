@@ -32,9 +32,13 @@ class UI {
 	static void courseCompleted( final Player player, final ParkourCourse course ) {
 		Bukkit.getScheduler().runTaskAsynchronously( ParkourAddonPlugin.plugin, () -> {
 			ParkourTimeRanked entry = ParkourTimeRanked.retrieve( ParkourAddonPlugin.database, player, course );
-			Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () ->
-				ParkourAddonPlugin.chat.send( player, ParkourAddonPlugin.messages.rankoncompletion.replaceAll( "%RANK%", String.valueOf( entry.getRank() ) ).replaceAll( "%COURSE%", course.getDisplayName() ) )
-			);
+			Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () -> {
+				if( course.getDisplayName() == null ) {
+					Log.warning( "Tried to show completion of course '" + course.getName() + "' to player '" + player.getName() + "' but it has no display name." );
+					return;
+				}
+				ParkourAddonPlugin.chat.send( player, ParkourAddonPlugin.messages.rankoncompletion.replaceAll( "%RANK%", String.valueOf( entry.getRank() ) ).replaceAll( "%COURSE%", course.getDisplayName() ) );
+			});
 		});
 	}
 }
