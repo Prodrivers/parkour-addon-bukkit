@@ -1,12 +1,16 @@
 package fr.prodrivers.bukkit.parkouraddon.models;
 
+import fr.prodrivers.bukkit.parkouraddon.ParkourAddonPlugin;
+import fr.prodrivers.bukkit.parkouraddon.Utils;
 import io.ebean.EbeanServer;
+import io.ebean.SqlRow;
 import io.ebean.annotation.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table( name = "parkourcategory" )
@@ -81,6 +85,15 @@ public class ParkourCategory {
 	@Getter
 	@Setter
 	List<ParkourCourse> courses;
+
+	public int getNumberOfCompletedCourses( UUID playerUniqueId ) {
+		SqlRow row = ParkourAddonPlugin.database
+				.createSqlQuery( "SELECT COUNT( courseId ) FROM parkourplayercompletion NATURAL JOIN course GROUP BY playeruuid, categoryId HAVING playeruuid = :playeruuid AND categoryId = :categoryid;" )
+				.setParameter( "playeruuid", Utils.getBytesFromUniqueId( playerUniqueId ) )
+				.setParameter( "categoryid", getCategoryId() )
+				.findOne();
+		return ( row != null ? row.getInteger( "count( courseid )" ) : 0 );
+	}
 
 	public ParkourCategory forceGetPreviousCategory( EbeanServer server ) {
 		return server.find( ParkourCategory.class, previousCategory.getCategoryId() );

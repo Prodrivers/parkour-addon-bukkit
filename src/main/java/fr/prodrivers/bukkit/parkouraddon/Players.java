@@ -70,7 +70,7 @@ class Players {
 				final int nextLevel = nextCat.getBaseLevel();
 				if( nextLevel > playerLevel ) {
 					// Get number of completed course in the course's category for this player
-					int completed = Categories.getNumberOfCompletedCoursesInCategory( player.getUniqueId(), course.getCategory() );
+					int completed = course.getCategory().getNumberOfCompletedCourses( player.getUniqueId() );
 					// Get the required number of courses in this category
 					int required = course.getCategory().getRequiredCoursesNumberRankup();
 

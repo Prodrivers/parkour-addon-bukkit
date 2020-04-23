@@ -1,5 +1,6 @@
 package fr.prodrivers.bukkit.parkouraddon.models;
 
+import fr.prodrivers.bukkit.parkouraddon.adaptation.Course;
 import io.ebean.EbeanServer;
 import io.ebean.annotation.CreatedTimestamp;
 import io.ebean.annotation.NotNull;
@@ -49,13 +50,21 @@ public class ParkourCourse {
 	@ManyToOne()
 	@JoinColumn( name = "categoryId" )
 	@Getter
-	@Setter
 	ParkourCategory category;
 
 	@OneToMany( mappedBy = "course", cascade = CascadeType.PERSIST )
 	@Getter
 	@Setter
 	List<ParkourPlayerCompletion> completions;
+
+	public void setCategory( ParkourCategory category ) {
+		if( category == null ) {
+			Course.setMinimumLevel( getName(), -1 );
+		} else {
+			Course.setMinimumLevel( getName(), category.getBaseLevel() );
+		}
+		this.category = category;
+	}
 
 	public static ParkourCourse retrieveFromName( EbeanServer server, String courseName ) {
 		return server.find( ParkourCourse.class ).where().ieq( "name", courseName ).findOne();

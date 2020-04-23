@@ -99,7 +99,6 @@ class Commands implements CommandExecutor {
 	private boolean reload( CommandSender sender ) {
 		if( sender.hasPermission( "parkouraddon.reload" ) ) {
 			ParkourAddonPlugin.configuration.reload();
-			Categories.reload();
 			ParkourSelectionUI.reload();
 			ParkourShopUI.getInstance().reload();
 			ParkourShopRankUI.getInstance().reload();
@@ -337,12 +336,14 @@ class Commands implements CommandExecutor {
 					ParkourCourse course = ParkourCourse.retrieveFromName( ParkourAddonPlugin.database, args[ 1 ] );
 					if( course != null ) {
 						if( args[ 2 ].equalsIgnoreCase( "null" ) ) {
-							Courses.setCategory( course, null );
+							course.setCategory( null );
+							ParkourAddonPlugin.database.save( course );
 							ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.parkourcategoryset.replace( "%COURSENAME%", course.getName() ).replace( "%CAT%", "None" ) );
 						} else {
 							ParkourCategory cat = ParkourAddonPlugin.database.find( ParkourCategory.class, Integer.valueOf( args[ 2 ] ) );
 							if( cat != null ) {
-								Courses.setCategory( course, cat );
+								course.setCategory( cat );
+								ParkourAddonPlugin.database.save( course );
 								ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.parkourcategoryset.replace( "%COURSENAME%", course.getName() ).replace( "%CAT%", cat.getName() ) );
 							} else {
 								ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcategory );
