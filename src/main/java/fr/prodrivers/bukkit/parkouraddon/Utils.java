@@ -12,19 +12,18 @@ public class Utils {
 			"alter table course add description varchar(255) null;\n" +
 			"\n" +
 			"create table parkourcategory (\n" +
-			"  categoryId                   integer auto_increment not null,\n" +
-			"  name                         varchar(180) not null,\n" +
-			"  baseLevel                    integer default 0 not null,\n" +
-			"  previousCategoryId           integer,\n" +
-			"  nextCategoryId               integer,\n" +
-			"  parkoinsReward               integer default 0 not null,\n" +
-			"  requiredCoursesNumberRankup  integer default 0 not null,\n" +
-			"  material                     varchar(180) not null,\n" +
-			"  materialData                 integer default 0 not null,\n" +
-			"  chatColor                    varchar(180) not null,\n" +
-			"  hexColor                     integer default 0 not null,\n" +
-			"  price                        integer default 0 not null,\n" +
-			"  hidden                       tinyint(1) default 0 not null,\n" +
+			"  categoryId                                        integer auto_increment not null,\n" +
+			"  name                                              varchar(180) not null,\n" +
+			"  baseLevel                                         integer default 0 not null,\n" +
+			"  previousCategoryId                                integer,\n" +
+			"  parkoinsReward                                    integer default 0 not null,\n" +
+			"  requiredCoursesNumberInPreviousCategoryForRankup  integer default 0 not null,\n" +
+			"  material                                          varchar(180) not null,\n" +
+			"  materialData                                      integer default 0 not null,\n" +
+			"  chatColor                                         varchar(180) not null,\n" +
+			"  hexColor                                          integer default 0 not null,\n" +
+			"  price                                             integer default 0 not null,\n" +
+			"  hidden                                            tinyint(1) default 0 not null,\n" +
 			"  constraint pk_parkourcategory primary key (categoryId))\n" +
 			";\n" +
 			"\n" +

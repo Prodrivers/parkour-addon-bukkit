@@ -29,10 +29,10 @@ class Commands implements CommandExecutor {
 						return listCategories( sender );
 					case "addcategory":
 						return addCategory( sender, args );
-					case "setnextcategory":
-						return setNextCategory( sender, args );
 					case "setpreviouscategory":
 						return setPreviousCategory( sender, args );
+					case "setreqcoursesnbinprevcat":
+						return setRequiredCoursesNumberInPreviousCategoryForRankup( sender, args );
 					case "setparkoinsreward":
 						return setParkoinsReward( sender, args );
 					case "sethidden":
@@ -74,8 +74,8 @@ class Commands implements CommandExecutor {
 			ParkourAddonPlugin.chat.send( sender, "--- Categories ---" );
 			ParkourAddonPlugin.chat.send( sender, "/paddon listcategories" );
 			ParkourAddonPlugin.chat.send( sender, "/paddon addcategory <name> <baseLevel> <material> <materialDataValue> <chatColor> <hexColor>" );
-			ParkourAddonPlugin.chat.send( sender, "/paddon setnextcategory <categoryId> <nextCategoryId>" );
 			ParkourAddonPlugin.chat.send( sender, "/paddon setpreviouscategory <categoryId> <previousCategoryId>" );
+			ParkourAddonPlugin.chat.send( sender, "/paddon setreqcoursesnbinprevcat <categoryId> <numberOfParkourToComplete>" );
 			ParkourAddonPlugin.chat.send( sender, "/paddon setparkoinsreward <categoryId> <parkoinsReward>" );
 			ParkourAddonPlugin.chat.send( sender, "/paddon sethidden <categoryId> <isHidden>" );
 			ParkourAddonPlugin.chat.send( sender, "--- Parkours ---" );
@@ -167,7 +167,6 @@ class Commands implements CommandExecutor {
 									.replace( "%NAME%", cat.getName() )
 									.replace( "%BASELEVEL%", String.valueOf( cat.getBaseLevel() ) )
 									.replace( "%PREVID%", String.valueOf( ( cat.getPreviousCategory() != null ? cat.getPreviousCategory().getCategoryId() : "None" ) ) )
-									.replace( "%NEXTID%", String.valueOf( ( cat.getNextCategory() != null ? cat.getNextCategory().getCategoryId() : "None" ) ) )
 									.replace( "%HEXCOLOR%", "#" + Integer.toHexString( cat.getHexColor() ) )
 									.replace( "%CHATCOLOR%", cat.getChatColor() )
 									.replace( "%MATERIAL%", cat.getMaterial() )
@@ -208,42 +207,6 @@ class Commands implements CommandExecutor {
 		return false;
 	}
 
-	private boolean setNextCategory( CommandSender sender, String[] args ) {
-		if( sender.hasPermission( "parkouraddon.category.setnext" ) ) {
-			if( args.length > 2 ) {
-				try {
-					ParkourCategory cat = ParkourAddonPlugin.database.find( ParkourCategory.class, Integer.valueOf( args[ 1 ] ) );
-					if( cat != null ) {
-						if( args[ 2 ].equalsIgnoreCase( "null" ) ) {
-							cat.setNextCategory( null );
-							ParkourAddonPlugin.database.save( cat );
-							ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.nextcategoryset.replace( "%CAT%", cat.getName() ).replace( "%NEXTCAT%", "None" ) );
-						} else {
-							ParkourCategory nextcat = ParkourAddonPlugin.database.find( ParkourCategory.class, Integer.valueOf( args[ 2 ] ) );
-							if( nextcat != null ) {
-								cat.setNextCategory( nextcat );
-								ParkourAddonPlugin.database.save( cat );
-								ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.nextcategoryset.replace( "%CAT%", cat.getName() ).replace( "%NEXTCAT%", nextcat.getName() ) );
-							} else {
-								ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcategory );
-							}
-						}
-					} else {
-						ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcategory );
-					}
-				} catch( NumberFormatException e ) {
-					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidnumber );
-				} catch( Exception e ) {
-					ParkourAddonPlugin.chat.internalError( sender );
-				}
-			} else {
-				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
-			}
-			return true;
-		}
-		return false;
-	}
-
 	private boolean setPreviousCategory( CommandSender sender, String[] args ) {
 		if( sender.hasPermission( "parkouraddon.category.setprevious" ) ) {
 			if( args.length > 2 ) {
@@ -264,6 +227,31 @@ class Commands implements CommandExecutor {
 								ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcategory );
 							}
 						}
+					} else {
+						ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcategory );
+					}
+				} catch( NumberFormatException e ) {
+					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidnumber );
+				} catch( Exception e ) {
+					ParkourAddonPlugin.chat.internalError( sender );
+				}
+			} else {
+				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
+			}
+			return true;
+		}
+		return false;
+	}
+
+	private boolean setRequiredCoursesNumberInPreviousCategoryForRankup( CommandSender sender, String[] args ) {
+		if( sender.hasPermission( "parkouraddon.category.setreqcoursesnbinprevcat" ) ) {
+			if( args.length > 2 ) {
+				try {
+					ParkourCategory cat = ParkourAddonPlugin.database.find( ParkourCategory.class, Integer.valueOf( args[ 1 ] ) );
+					if( cat != null ) {
+						cat.setRequiredCoursesNumberInPreviousCategoryForRankup( Integer.parseInt( args[ 2 ] ) );
+						ParkourAddonPlugin.database.save( cat );
+						ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.reqcoursesnbinprevcatset.replace( "%CAT%", cat.getName() ).replace( "%NUMBER%", args[ 2 ] ) );
 					} else {
 						ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcategory );
 					}

@@ -30,12 +30,12 @@ permissions:
         description: Allows to list categories
         default: op
 
-    parkouraddon.category.setnext:
-        description: Allows to set a category's next category
-        default: op
-
     parkouraddon.category.setprevious:
         description: Allows to set a category's previous category
+        default: op
+
+    parkouraddon.category.setreqcoursesnbinprevcat:
+        description: Allows to set a category's number of parkour to complete in previous category
         default: op
 
     parkouraddon.category.setparkoinsreward:

@@ -14,6 +14,7 @@ import fr.prodrivers.bukkit.parkouraddon.models.ParkourPlayerCompletion;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.UUID;
 
 class Players {
@@ -62,35 +63,39 @@ class Players {
 		}
 	}
 
-	static void rankPlayer( final Player player, ParkourCourse course, final int playerLevel ) {
+	static void rankPlayer( final Player player, ParkourCourse course, int playerLevel ) {
 		if( course != null && course.getCategory() != null ) { // If the course exists
-			if( course.getCategory().getNextCategory() != null ) { // If the course has a next category
+			if( course.getCategory().getNextCategories() != null ) { // If the course has a next category
+				// Get number of completed course in the course's category for this player
+				int completed = course.getCategory().getNumberOfCompletedCourses( player.getUniqueId() );
 				// If the player has an inferior level to the next category's base level
-				ParkourCategory nextCat = course.getCategory().forceGetNextCategory( ParkourAddonPlugin.database );
-				final int nextLevel = nextCat.getBaseLevel();
-				if( nextLevel > playerLevel ) {
-					// Get number of completed course in the course's category for this player
-					int completed = course.getCategory().getNumberOfCompletedCourses( player.getUniqueId() );
-					// Get the required number of courses in this category
-					int required = course.getCategory().getRequiredCoursesNumberRankup();
+				for( ParkourCategory nextCat : course.getCategory().getNextCategories() ) {
+					// Get the next category's base level
+					final int nextLevel = nextCat.getBaseLevel();
 
-					System.out.println( "[ParkourAddon] Player " + player.getName() + " completed " + completed + " courses in category " + course.getCategory().getCategoryId() );
+					if( nextLevel > playerLevel ) { // If the player has a lower level than the next category
+						// Get the required number of courses in this category
+						int required = nextCat.getRequiredCoursesNumberInPreviousCategoryForRankup();
 
-					if( completed >= required ) { // If the player has completed the required number of courses courses
-						// Woohoo ! The player ranks up !
+						if( completed >= required ) { // If the player has completed the required number of courses courses
+							// Woohoo ! The player ranks up !
 
-						System.out.println( "[ParkourAddon] Player " + player.getName() + " ranked up to level " + nextLevel );
+							System.out.println( "[ParkourAddon] Player " + player.getName() + " ranked up to level " + nextLevel );
 
-						Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () -> {
-							// Set the player's new level
-							ParkourLevel.setLevel( player, nextLevel );
+							// Locally set new level to be considered for other iterations with other next categories
+							playerLevel = nextLevel;
 
-							// Do some stuff to inform him
-							UI.rankUp( player, nextLevel );
+							Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () -> {
+								// Set the player's new level
+								ParkourLevel.setLevel( player, nextLevel );
 
-							// Trigger event
-							ParkourAddonPlugin.plugin.getServer().getPluginManager().callEvent( new PlayerRankUpEvent( player, nextLevel ) );
-						});
+								// Do some stuff to inform him
+								UI.rankUp( player, nextLevel );
+
+								// Trigger event
+								ParkourAddonPlugin.plugin.getServer().getPluginManager().callEvent( new PlayerRankUpEvent( player, nextLevel ) );
+							} );
+						}
 					}
 				}
 			}

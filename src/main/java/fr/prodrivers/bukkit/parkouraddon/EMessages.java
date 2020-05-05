@@ -17,8 +17,8 @@ public class EMessages extends Messages {
 	public String categoryadded = "Category n°%CATID% added.";
 	public String parkourcategoryset = "Set course %COURSENAME% category to %CAT%";
 	public String parkourdisplaynameset = "Set course %COURSENAME% display name to %DISPLAYNAME%";
-	public String nextcategoryset = "Category %CAT%'s next category set to %NEXTCAT%";
 	public String prevcategoryset = "Category %CAT%'s next category set to %PREVCAT%";
+	public String reqcoursesnbinprevcatset = "Category %CAT%'s required courses number for rankup in previous category set to %NUMBER%";
 	public String parkoinsrewardcategoryset = "Category %CAT%'s parkoins reward set to %REWARD%";
 	public String categorysettohidden = "Category %CAT% is now hidden.";
 	public String categorysettoshown = "Category %CAT% is now shown.";

@@ -32,22 +32,20 @@ public class ParkourCategory {
 	@Setter
 	int baseLevel;
 
-	@OneToOne
+	@ManyToOne
 	@JoinColumn( name = "previousCategoryId" )
 	@Getter
 	@Setter
 	ParkourCategory previousCategory;
 
-	@OneToOne
-	@JoinColumn( name = "nextCategoryId" )
+	@OneToMany( mappedBy = "previousCategory" )
 	@Getter
-	@Setter
-	ParkourCategory nextCategory;
+	List<ParkourCategory> nextCategories;
 
-	@Column( name="requiredCoursesNumberRankup", columnDefinition = "integer default 0 not null" )
+	@Column( name="requiredCoursesNumberInPreviousCategoryForRankup", columnDefinition = "integer default 0 not null" )
 	@Getter
 	@Setter
-	int requiredCoursesNumberRankup;
+	int requiredCoursesNumberInPreviousCategoryForRankup;
 
 	@Column( name="parkoinsReward", columnDefinition = "integer default 0 not null" )
 	@Getter
@@ -99,8 +97,8 @@ public class ParkourCategory {
 		return server.find( ParkourCategory.class, previousCategory.getCategoryId() );
 	}
 
-	public ParkourCategory forceGetNextCategory( EbeanServer server ) {
-		return server.find( ParkourCategory.class, nextCategory.getCategoryId() );
+	public List<ParkourCategory> forceGetNextCategories( EbeanServer server ) {
+		return server.find( ParkourCategory.class ).where().ieq( "previousCategoryId", String.valueOf( this.getCategoryId() ) ).findList();
 	}
 
 	public static List<ParkourCategory> retrieveAll( EbeanServer server ) {
