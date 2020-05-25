@@ -1,5 +1,6 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
+import fr.prodrivers.bukkit.parkouraddon.adaptation.Course;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Parkoins;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.ParkourLevel;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
@@ -37,14 +38,16 @@ class Commands implements CommandExecutor {
 						return setParkoinsReward( sender, args );
 					case "sethidden":
 						return setHidden( sender, args );
+					case "setbaselevel":
+						return setBaseLevel( sender, args );
 					case "setparkourcategory":
 						return setParkourCategory( sender, args );
 					case "setparkourdisplayname":
 						return setParkourDisplayName( sender, args );
 					case "setparkourdescription":
 						return setParkourDescription( sender, args );
-					case "setlevel":
-						return setLevel( sender, args );
+					case "setplayerlevel":
+						return setPlayerLevel( sender, args );
 					case "addparkoins":
 						return addParkoins( sender, args );
 					case "removeparkoins":
@@ -317,6 +320,34 @@ class Commands implements CommandExecutor {
 		return false;
 	}
 
+	private boolean setBaseLevel( CommandSender sender, String[] args ) {
+		if( sender.hasPermission( "parkouraddon.category.setbaselevel" ) ) {
+			if( args.length > 2 ) {
+				ParkourCategory category = ParkourAddonPlugin.database.find( ParkourCategory.class, Integer.valueOf( args[ 1 ] ) );
+				if( category != null ) {
+					try {
+						int level = Integer.parseInt( args[ 2 ] );
+						category.setBaseLevel( level );
+						for( ParkourCourse course : category.getCourses() ) {
+							Course.setMinimumLevel( course.getName(), level );
+						}
+						ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.categorybaselevelset.replace( "%CAT%", category.getName() ).replace( "%LEVEL%", args[ 2 ] ) );
+					} catch( NumberFormatException e ) {
+						ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidnumber );
+					} catch( Exception e ) {
+						ParkourAddonPlugin.chat.internalError( sender );
+					}
+				} else {
+					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcategory );
+				}
+			} else {
+				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
+			}
+			return true;
+		}
+		return false;
+	}
+
 	private boolean setParkourCategory( CommandSender sender, String[] args ) {
 		if( sender.hasPermission( "parkouraddon.parkour.setcategory" ) ) {
 			if( args.length > 2 ) {
@@ -394,8 +425,8 @@ class Commands implements CommandExecutor {
 		return false;
 	}
 
-	private boolean setLevel( CommandSender sender, String[] args ) {
-		if( sender.hasPermission( "parkouraddon.setlevel" ) ) {
+	private boolean setPlayerLevel( CommandSender sender, String[] args ) {
+		if( sender.hasPermission( "parkouraddon.player.setlevel" ) ) {
 			if( args.length > 2 ) {
 				Player player = Bukkit.getPlayer( args[ 1 ] );
 				if( player != null ) {

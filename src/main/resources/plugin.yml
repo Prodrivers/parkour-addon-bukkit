@@ -46,6 +46,10 @@ permissions:
         description: Allows to hide and unhide a category
         default: op
 
+    parkouraddon.category.setbaselevel:
+        description: Allows to set a category's base level, modifying all levels of categories's parkours
+        default: op
+
     parkouraddon.parkour.setcategory:
         description: Allows to set a parkour's category
         default: op
@@ -58,7 +62,7 @@ permissions:
         description: Allows to set a parkour's description
         default: op
 
-    parkouraddon.setlevel:
+    parkouraddon.player.setlevel:
         description: Allows to set a player's level
         default: op
 
