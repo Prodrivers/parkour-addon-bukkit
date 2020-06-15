@@ -6,6 +6,7 @@ import fr.prodrivers.bukkit.commons.parties.PartyManager;
 import fr.prodrivers.bukkit.commons.sections.SectionManager;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Parkoins;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.ParkourLevel;
+import fr.prodrivers.bukkit.parkouraddon.advancements.AdvancementManager;
 import fr.prodrivers.bukkit.parkouraddon.events.PlayerCompleteCourseEvent;
 import fr.prodrivers.bukkit.parkouraddon.events.PlayerRankUpEvent;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
@@ -64,6 +65,7 @@ class Players {
 	}
 
 	static void rankPlayer( final Player player, ParkourCourse course, int playerLevel ) {
+		boolean hasRankedUp = false;
 		if( course != null && course.getCategory() != null ) { // If the course exists
 			if( course.getCategory().getNextCategories() != null ) { // If the course has a next category
 				// Get number of completed course in the course's category for this player
@@ -80,6 +82,8 @@ class Players {
 						if( completed >= required ) { // If the player has completed the required number of courses courses
 							// Woohoo ! The player ranks up !
 
+							hasRankedUp = true;
+
 							System.out.println( "[ParkourAddon] Player " + player.getName() + " ranked up to level " + nextLevel );
 
 							// Locally set new level to be considered for other iterations with other next categories
@@ -94,13 +98,25 @@ class Players {
 
 								// Trigger event
 								ParkourAddonPlugin.plugin.getServer().getPluginManager().callEvent( new PlayerRankUpEvent( player, nextLevel ) );
-							} );
+							});
 						}
 					}
 				}
 			}
 		} else {
 			Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () -> Log.severe( "Player " + player.getName() + " completed a course not present in the database." ) );
+		}
+
+		// If player has ranked up
+		if( hasRankedUp ) {
+			Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () -> {
+				try {
+					// Grant him the corresponding criteria
+					AdvancementManager.grant( player, course.getCategory() );
+				} catch( Exception e ) {
+					Log.severe( "Error on advancement criteria grant of category " + course.getCategory().getCategoryId() + " for " + player.getName() );
+				}
+			});
 		}
 	}
 

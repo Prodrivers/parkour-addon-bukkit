@@ -2,6 +2,7 @@ package fr.prodrivers.bukkit.parkouraddon;
 
 import fr.prodrivers.bukkit.commons.sections.SectionManager;
 import fr.prodrivers.bukkit.commons.storage.SQLProvider;
+import fr.prodrivers.bukkit.parkouraddon.advancements.AdvancementManager;
 import fr.prodrivers.bukkit.parkouraddon.models.Models;
 import fr.prodrivers.bukkit.parkouraddon.sections.ParkourSection;
 import io.ebean.EbeanServer;
@@ -66,6 +67,8 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 		if( !setupEconomy() ) {
 			Log.warning( "Vault or/and compatible economy plugin is/are not installed. Currency conversion will not be available." );
 		}
+
+		AdvancementManager.init( this );
 
 		getServer().getPluginManager().registerEvents( new ParkourAddonListener(), this );
 		getServer().getPluginManager().registerEvents( ParkourShopUI.getInstance(), this );

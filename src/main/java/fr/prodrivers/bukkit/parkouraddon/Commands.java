@@ -3,6 +3,7 @@ package fr.prodrivers.bukkit.parkouraddon;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Course;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Parkoins;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.ParkourLevel;
+import fr.prodrivers.bukkit.parkouraddon.advancements.AdvancementManager;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCourse;
 import org.bukkit.Bukkit;
@@ -106,6 +107,7 @@ class Commands implements CommandExecutor {
 			ParkourShopUI.getInstance().reload();
 			ParkourShopRankUI.getInstance().reload();
 			ParkourShopConverterUI.getInstance().reload();
+			AdvancementManager.reload();
 			ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.configurationreloaded );
 			return true;
 		}
