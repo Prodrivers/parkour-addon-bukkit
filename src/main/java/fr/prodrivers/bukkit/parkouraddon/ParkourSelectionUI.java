@@ -100,12 +100,12 @@ class ParkourSelectionUI {
 
 			while( results.next() ) {
 				String internalName = results.getString( "course.name" );
-				String author = results.getString( "author" );
-				String description = results.getString( "description" );
+				String author = results.getString( "course.author" );
+				String description = results.getString( "course.description" );
 				final String finalDescription = ( description == null ? "" : description );
-				String name = ChatColor.valueOf( results.getString( "chatColor" ) ) + results.getString( "displayName" );
+				String name = ChatColor.valueOf( results.getString( "parkourcategory.chatColor" ) ) + results.getString( "course.displayName" );
 				boolean completed = results.getBytes( "playeruuid" ) != null;
-				Material material = Material.valueOf( results.getString( "material" ) );
+				Material material = Material.valueOf( results.getString( "parkourcategory.material" ) );
 				GUIElement element;
 
 				if(completed) {
