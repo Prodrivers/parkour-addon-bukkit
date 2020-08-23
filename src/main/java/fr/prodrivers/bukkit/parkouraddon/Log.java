@@ -1,5 +1,6 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -8,6 +9,10 @@ public class Log {
 
 	public static void init() {
 		logger = ParkourAddonPlugin.plugin.getLogger();
+		logger.setLevel( ParkourAddonPlugin.configuration.logLevel );
+		for( Handler handler : logger.getHandlers() ) {
+			handler.setLevel( ParkourAddonPlugin.configuration.logLevel );
+		}
 	}
 
 	public static void config(String msg) {

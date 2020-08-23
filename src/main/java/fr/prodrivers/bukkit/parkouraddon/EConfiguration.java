@@ -1,6 +1,7 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
 import fr.prodrivers.bukkit.commons.Chat;
+import fr.prodrivers.bukkit.commons.annotations.ForceSkipObjectAction;
 import fr.prodrivers.bukkit.commons.configuration.Configuration;
 import fr.prodrivers.bukkit.commons.configuration.Messages;
 import org.bukkit.Material;
@@ -8,6 +9,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class EConfiguration extends Configuration {
 	public Material shops_close_material = Material.BARRIER;
@@ -18,6 +20,7 @@ public class EConfiguration extends Configuration {
 	public Material shops_converters_to_material = Material.GOLD_INGOT;
 	public Material shops_converters_from_material = Material.IRON_INGOT;
 	public Map<String, Integer> shops_converters_amounts = new LinkedHashMap<>();
+	@ForceSkipObjectAction public Level logLevel = Level.INFO;
 
 	{
 		shops_converters_amounts.put( String.valueOf( 10 ) , 5 );

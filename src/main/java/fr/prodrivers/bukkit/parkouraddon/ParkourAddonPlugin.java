@@ -39,14 +39,14 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 		if( plugin == null )
 			plugin = this;
 
-		Log.init();
-
 		Models.populate();
 
 		chat = new EChat( plugindescription.getName() );
 		configuration = new EConfiguration( this, EMessages.class, chat );
 		configuration.init();
 		messages = (EMessages) configuration.getMessages();
+
+		Log.init();
 
 		database = SQLProvider.getEbeanServer( Models.ModelsList );
 		if( database == null ) {
