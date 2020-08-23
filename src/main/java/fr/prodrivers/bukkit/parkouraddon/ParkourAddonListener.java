@@ -1,6 +1,5 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
-import fr.prodrivers.bukkit.commons.sections.SectionManager;
 import me.A5H73Y.parkour.event.PlayerFinishCourseEvent;
 import me.A5H73Y.parkour.event.PlayerJoinCourseEvent;
 import me.A5H73Y.parkour.event.PlayerLeaveCourseEvent;
@@ -12,12 +11,16 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 public class ParkourAddonListener implements Listener {
 	@EventHandler
 	public void onPlayerJoinCourseEvent( PlayerJoinCourseEvent event ) {
-		Players.joinParkour( event.getPlayer(), event.getCourseName() );
+		if( !Players.joinParkour( event.getPlayer(), event.getCourseName() ) ) {
+			event.setCancelled( true );
+		}
 	}
 
 	@EventHandler
 	public void onPlayerLeaveCourseEvent( PlayerLeaveCourseEvent event ) {
-		Players.leaveParkour( event.getPlayer() );
+		if( !Players.leaveParkour( event.getPlayer() ) ) {
+			event.setCancelled( true );
+		}
 	}
 
 	@EventHandler
@@ -36,11 +39,11 @@ public class ParkourAddonListener implements Listener {
 			} else if( command.startsWith( "/pa leave" ) ) {
 				event.setCancelled( true );
 
-				Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () -> SectionManager.enter( event.getPlayer() ) );
+				Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () -> Players.leaveParkour( event.getPlayer() ) );
 			} else if( command.startsWith( "/pa lobby" ) ) {
 				event.setCancelled( true );
 
-				Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () -> SectionManager.enter( event.getPlayer(), "main" ) );
+				Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () -> Players.leaveParkour( event.getPlayer() ) );
 			} else if( command.startsWith( "/pa joinall" ) ) {
 				event.setCancelled( true );
 			}

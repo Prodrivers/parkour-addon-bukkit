@@ -1,5 +1,6 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
+import fr.prodrivers.bukkit.commons.exceptions.IllegalSectionEnteringException;
 import fr.prodrivers.bukkit.commons.exceptions.NotPartyOwnerException;
 import fr.prodrivers.bukkit.commons.parties.Party;
 import fr.prodrivers.bukkit.commons.parties.PartyManager;
@@ -134,13 +135,13 @@ class Players {
 		});
 	}
 
-	public static void joinParkour( Player player, String name ) {
+	public static boolean joinParkour( Player player, String name ) {
 		Party party = PartyManager.getParty( player.getUniqueId() );
 		if( party != null ) {
 			ParkourCourse course = ParkourCourse.retrieveFromName( ParkourAddonPlugin.database, name );
 			if( course == null ) {
 				ParkourAddonPlugin.chat.error( player, ParkourAddonPlugin.messages.invalidcourse );
-				return;
+				return false;
 			}
 			ParkourCategory category = course.getCategory();
 			for( UUID partyPlayerUUID : party.getPlayers() ) {
@@ -152,19 +153,31 @@ class Players {
 					System.out.println(category.getBaseLevel());
 					if( level < category.getBaseLevel() ) {
 						party.broadcast( ParkourAddonPlugin.chat, ParkourAddonPlugin.messages.party_notenoughlevel );
-						return;
+						return false;
 					}
 				}
 			}
 		}
 		try {
 			SectionManager.enter( player, "parkour", name );
+			return true;
 		} catch( NotPartyOwnerException e ) {
 			ParkourAddonPlugin.chat.error( player, ParkourAddonPlugin.messages.cannotjoinnotpartyowner );
+		} catch( IllegalSectionEnteringException e ) {
+			ParkourAddonPlugin.chat.error( player, ParkourAddonPlugin.messages.errorocurred );
+			SectionManager.enter( player, "main" );
 		}
+		return false;
 	}
 
-	public static void leaveParkour( Player player ) {
-		SectionManager.enter( player, "main" );
+	public static boolean leaveParkour( Player player ) {
+		try {
+			SectionManager.enter( player, "main" );
+			return true;
+		} catch( Exception e ) {
+			ParkourAddonPlugin.chat.error( player, ParkourAddonPlugin.messages.errorocurred );
+			Log.severe( "Error when leaving parkour.", e );
+		}
+		return false;
 	}
 }

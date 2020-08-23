@@ -48,7 +48,7 @@ public class ParkourSection implements IProdriversSection {
 			}
 			Log.finest( "Proceeding with course join." );
 			CourseMethods.joinCourse( player, subSection );
-			Log.finest( "Player is in parkour session : " + ( PlayerMethods.getParkourSession( player.getName() ) != null ) + ", in course " + ( ( PlayerMethods.getParkourSession( player.getName() ) != null )  && ( PlayerMethods.getParkourSession( player.getName() ).getCourse() != null ) ? PlayerMethods.getParkourSession( player.getName() ).getCourse().getName() : "NULL_COURSE" ) );
+			Log.finest( "Player is in parkour session: " + ( PlayerMethods.getParkourSession( player.getName() ) != null ) + ", in course " + ( ( PlayerMethods.getParkourSession( player.getName() ) != null )  && ( PlayerMethods.getParkourSession( player.getName() ).getCourse() != null ) ? PlayerMethods.getParkourSession( player.getName() ).getCourse().getName() : "NULL_COURSE" ) );
 			return ( PlayerMethods.getParkourSession( player.getName() ) != null );
 		}
 		Log.finest( "Player is already in a parkour session, wants to join " + subSection + ", is in course " + ( PlayerMethods.getParkourSession( player.getName() ).getCourse() != null ? PlayerMethods.getParkourSession( player.getName() ).getCourse().getName() : "NULL_COURSE" ) );
@@ -61,9 +61,12 @@ public class ParkourSection implements IProdriversSection {
 	@Override
 	public boolean leave( Player player, String enteredSection ) {
 		if( PlayerMethods.getParkourSession( player.getName() ) != null ) {
+			Log.finest( "Player wants to leave, has parkour session." );
 			PlayerMethods.playerLeave( player );
+			Log.finest( "Player now has no parkour session: " + ( PlayerMethods.getParkourSession( player.getName() ) == null ) );
 			return ( PlayerMethods.getParkourSession( player.getName() ) == null );
 		}
+		Log.finest( "Player wants to leave, but is not in parkour." );
 		return true;
 	}
 
