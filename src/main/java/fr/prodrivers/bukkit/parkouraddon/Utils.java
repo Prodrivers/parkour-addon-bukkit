@@ -63,15 +63,15 @@ public class Utils {
 			"\n";
 
 	public static String GET_PARKOURS_WITH_COMPLETION_QUERY = "SELECT *\n" +
-			"FROM parkourcategory\n" +
-			"         JOIN course ON parkourcategory.categoryId = course.categoryId\n" +
-			"         LEFT JOIN parkourplayercompletion\n" +
-			"                   on course.courseId = parkourplayercompletion.courseId AND parkourplayercompletion.playeruuid = ?\n" +
-			"WHERE parkourcategory.categoryId = ?\n" +
-			"ORDER BY course.name";
+			"FROM `parkourcategory`\n" +
+			"         JOIN `course` ON `parkourcategory`.`categoryId` = `course`.`categoryId`\n" +
+			"         LEFT JOIN `parkourplayercompletion`\n" +
+			"                   on `course`.`courseId` = `parkourplayercompletion`.`courseId` AND `parkourplayercompletion`.`playeruuid` = ?\n" +
+			"WHERE `parkourcategory`.`categoryId` = ?\n" +
+			"ORDER BY `course`.`name`";
 
-	public static String SET_PLAYER_PARKOINS_QUERY = "UPDATE players SET parkoins = ? WHERE playeruuid = ?";
-	public static String SET_PLAYER_PARKOUR_LEVEL_QUERY = "UPDATE players SET parkourLevel = ? WHERE playeruuid = ?";
+	public static String SET_PLAYER_PARKOINS_QUERY = "UPDATE `players` SET `parkoins` = ? WHERE `playeruuid` = ?";
+	public static String SET_PLAYER_PARKOUR_LEVEL_QUERY = "UPDATE `players` SET `parkourLevel` = ? WHERE `playeruuid` = ?";
 
 	public static byte[] getBytesFromUniqueId( UUID uniqueId ) {
 		ByteBuffer bb = ByteBuffer.wrap( new byte[ 16 ] );
