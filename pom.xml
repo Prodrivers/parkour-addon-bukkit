@@ -41,6 +41,10 @@
 			<id>a5h73y-repo</id>
 			<url>https://dl.bintray.com/a5h73y/repo/</url>
 		</repository>
+		<repository>
+			<id>viaversion-repo</id>
+			<url>https://repo.viaversion.com</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -92,6 +96,12 @@
 			<artifactId>prodrivers-commons-api</artifactId>
 			<version>1.0.1</version>
 			<scope>provided</scope>
+		</dependency>
+		<!--ViaVersion-->
+		<dependency>
+			<groupId>us.myles</groupId>
+			<artifactId>viaversion</artifactId>
+			<version>3.1.0</version>
 		</dependency>
 	</dependencies>
 

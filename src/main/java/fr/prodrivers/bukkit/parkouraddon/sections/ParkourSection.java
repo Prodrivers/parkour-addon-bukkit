@@ -2,9 +2,13 @@ package fr.prodrivers.bukkit.parkouraddon.sections;
 
 import fr.prodrivers.bukkit.commons.sections.IProdriversSection;
 import fr.prodrivers.bukkit.parkouraddon.Log;
+import fr.prodrivers.bukkit.parkouraddon.ParkourAddonPlugin;
+import fr.prodrivers.bukkit.parkouraddon.models.ParkourCourse;
 import me.A5H73Y.parkour.course.CourseMethods;
 import me.A5H73Y.parkour.player.PlayerMethods;
 import org.bukkit.entity.Player;
+import us.myles.ViaVersion.api.Via;
+import us.myles.ViaVersion.api.ViaAPI;
 
 public class ParkourSection implements IProdriversSection {
 	public static String name = "parkour";
@@ -44,6 +48,12 @@ public class ParkourSection implements IProdriversSection {
 			}
 			if(subSection.length() == 0) {
 				Log.warning( "Refused player " + player.getName() + " to join section because name is empty." );
+				return false;
+			}
+			ViaAPI api = Via.getAPI();
+			ParkourCourse course = ParkourCourse.retrieveFromName( ParkourAddonPlugin.database, subSection );
+			if( api != null && api.getPlayerVersion( player ) < course.getMinimumProtocolVersion() ) {
+				ParkourAddonPlugin.chat.error( player, ParkourAddonPlugin.messages.clienttooold );
 				return false;
 			}
 			Log.finest( "Proceeding with course join." );

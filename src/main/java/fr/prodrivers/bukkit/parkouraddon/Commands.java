@@ -13,6 +13,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import us.myles.ViaVersion.api.Via;
+import us.myles.ViaVersion.api.ViaAPI;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,6 +49,8 @@ class Commands implements CommandExecutor {
 						return setParkourDisplayName( sender, args );
 					case "setparkourdescription":
 						return setParkourDescription( sender, args );
+					case "setparkourmcversion":
+						return setParkourMcVersion( sender, args );
 					case "setplayerlevel":
 						return setPlayerLevel( sender, args );
 					case "addparkoins":
@@ -416,6 +420,45 @@ class Commands implements CommandExecutor {
 					course.setDescription( description );
 					ParkourAddonPlugin.database.save( course );
 					ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.parkourdisplaynameset.replace( "%COURSENAME%", course.getName() ).replace( "%DISPLAYNAME%", course.getDisplayName() ) );
+				} else {
+					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcourse );
+				}
+			} else {
+				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
+			}
+			return true;
+		}
+		return false;
+	}
+
+	private boolean setParkourMcVersion( CommandSender sender, String[] args ) {
+		if( sender.hasPermission( "parkouraddon.parkour.setdescription" ) ) {
+			if( args.length > 1 ) {
+				ParkourCourse course = ParkourCourse.retrieveFromName( ParkourAddonPlugin.database, args[ 1 ] );
+				if( course != null ) {
+					try {
+						if( args.length > 2 ) {
+							if( args[ 2 ].equals( "null" ) ) {
+								course.setMinimumProtocolVersion( null );
+							} else {
+								int version = Integer.parseInt( args[ 2 ] );
+								course.setMinimumProtocolVersion( version );
+							}
+						} else {
+							ViaAPI api = Via.getAPI();
+							if( api != null ) {
+								if( sender instanceof Player ) {
+									course.setMinimumProtocolVersion( api.getPlayerVersion( sender ) );
+								} else {
+									ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notaplayer );
+								}
+							}
+						}
+						ParkourAddonPlugin.database.save( course );
+						ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.parkourminimumprotocolversionset.replace( "%COURSENAME%", course.getName() ).replace( "%PROTOCOLVERSION%", String.valueOf( course.getMinimumProtocolVersion() ) ) );
+					} catch( NumberFormatException e ) {
+						ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidnumber );
+					}
 				} else {
 					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcourse );
 				}

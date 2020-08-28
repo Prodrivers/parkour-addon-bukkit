@@ -17,6 +17,7 @@ public class EMessages extends Messages {
 	public String categoryadded = "Category n°%CATID% added.";
 	public String parkourcategoryset = "Set course %COURSENAME% category to %CAT%";
 	public String parkourdisplaynameset = "Set course %COURSENAME% display name to %DISPLAYNAME%";
+	public String parkourminimumprotocolversionset = "Set course %COURSENAME% minimum protocol version to %PROTOCOLVERSION%.";
 	public String prevcategoryset = "Category %CAT%'s next category set to %PREVCAT%";
 	public String reqcoursesnbinprevcatset = "Category %CAT%'s required courses number for rankup in previous category set to %NUMBER%";
 	public String parkoinsrewardcategoryset = "Category %CAT%'s parkoins reward set to %REWARD%";
@@ -30,6 +31,7 @@ public class EMessages extends Messages {
 	public String invalidargument = "Invalid argument.";
 	public String rankup = "Well done %PLAYER%! You rank up to level %LEVEL%!";
 	public String notenoughlevel = "You do not have the required level to access thoses parkours !";
+	public String clienttooold = "Your client is too old to access this course. Please update your client to the latest version.";
 	public String parkourselectionuititle = "Parkour = %CATCOLOR%%CAT%";
 	public String parkourselectionuititlereduced = "P = %CATCOLOR%%CAT%";
 	public List<String> parkourselectionuilore = Arrays.asList( "&rJoin %COURSE%" );
@@ -64,6 +66,7 @@ public class EMessages extends Messages {
 	public String parkourshopui_converters_unavailable = "Currency conversion is not available.";
 	public String cannotjoinnotpartyowner = "Only the party owner can enter a parkour.";
 	public String party_notenoughlevel = "A party member does not have the required level to access this course.";
+	public String party_clienttooold = "A party member does not have a recent enough version to access this version.";
 	public String rankoncompletion = "You completed the course %COURSE% for the first time ! You ranked %RANK% on it, well done !";
 
 	public EMessages( Plugin plugin ) {

@@ -16,8 +16,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.Listener {
 	static ParkourAddonPlugin plugin;
 	static EConfiguration configuration;
-	static EMessages messages;
-	static EChat chat;
+	public static EMessages messages;
+	public static EChat chat;
 	public static EbeanServer database = null;
 	//static Configuration config = null;
 	static Economy econ = null;

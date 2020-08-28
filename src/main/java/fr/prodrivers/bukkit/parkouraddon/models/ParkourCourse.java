@@ -47,6 +47,11 @@ public class ParkourCourse {
 	@Setter
 	String displayName;
 
+	@Column( name = "minimumProtocolVersion" )
+	@Getter
+	@Setter
+	Integer minimumProtocolVersion;
+
 	@ManyToOne()
 	@JoinColumn( name = "categoryId" )
 	@Getter

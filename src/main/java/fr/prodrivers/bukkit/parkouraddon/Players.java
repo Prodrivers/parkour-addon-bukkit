@@ -15,6 +15,8 @@ import fr.prodrivers.bukkit.parkouraddon.models.ParkourCourse;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourPlayerCompletion;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import us.myles.ViaVersion.api.Via;
+import us.myles.ViaVersion.api.ViaAPI;
 
 import java.util.List;
 import java.util.UUID;
@@ -138,6 +140,7 @@ class Players {
 	public static boolean joinParkour( Player player, String name ) {
 		Party party = PartyManager.getParty( player.getUniqueId() );
 		if( party != null ) {
+			ViaAPI api = Via.getAPI();
 			ParkourCourse course = ParkourCourse.retrieveFromName( ParkourAddonPlugin.database, name );
 			if( course == null ) {
 				ParkourAddonPlugin.chat.error( player, ParkourAddonPlugin.messages.invalidcourse );
@@ -151,6 +154,10 @@ class Players {
 					int level = ParkourLevel.getLevel( player );
 					System.out.println(level);
 					System.out.println(category.getBaseLevel());
+					if( api != null && api.getPlayerVersion( player ) < course.getMinimumProtocolVersion() ) {
+						party.broadcast( ParkourAddonPlugin.chat, ParkourAddonPlugin.messages.party_clienttooold );
+						return false;
+					}
 					if( level < category.getBaseLevel() ) {
 						party.broadcast( ParkourAddonPlugin.chat, ParkourAddonPlugin.messages.party_notenoughlevel );
 						return false;
