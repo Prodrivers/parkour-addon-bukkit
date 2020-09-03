@@ -154,7 +154,7 @@ class Players {
 					int level = ParkourLevel.getLevel( player );
 					System.out.println(level);
 					System.out.println(category.getBaseLevel());
-					if( api != null && api.getPlayerVersion( player ) < course.getMinimumProtocolVersion() ) {
+					if( api != null && course.getMinimumProtocolVersion() != null && api.getPlayerVersion( player ) < course.getMinimumProtocolVersion() ) {
 						party.broadcast( ParkourAddonPlugin.chat, ParkourAddonPlugin.messages.party_clienttooold );
 						return false;
 					}

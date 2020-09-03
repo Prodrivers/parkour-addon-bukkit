@@ -52,7 +52,7 @@ public class ParkourSection implements IProdriversSection {
 			}
 			ViaAPI api = Via.getAPI();
 			ParkourCourse course = ParkourCourse.retrieveFromName( ParkourAddonPlugin.database, subSection );
-			if( api != null && api.getPlayerVersion( player ) < course.getMinimumProtocolVersion() ) {
+			if( api != null && course.getMinimumProtocolVersion() != null && api.getPlayerVersion( player ) < course.getMinimumProtocolVersion() ) {
 				ParkourAddonPlugin.chat.error( player, ParkourAddonPlugin.messages.clienttooold );
 				return false;
 			}
