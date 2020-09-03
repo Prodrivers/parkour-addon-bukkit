@@ -4,7 +4,7 @@ version: ${project.version}
 description: ${project.description}
 depend: [ProdriversCommons,Parkour,InventoryGUIAPI]
 database: true
-api-version: 1.14
+api-version: '1.16'
 
 commands:
     paddon:
