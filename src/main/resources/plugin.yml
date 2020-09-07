@@ -62,6 +62,10 @@ permissions:
         description: Allows to set a parkour's description
         default: op
 
+    parkouraddon.parkour.setmcversion:
+        description: Allows to set a parkour's minimum Minecraft version
+        default: op
+
     parkouraddon.player.setlevel:
         description: Allows to set a player's level
         default: op

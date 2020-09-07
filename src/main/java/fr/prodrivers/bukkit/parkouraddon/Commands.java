@@ -91,6 +91,7 @@ class Commands implements CommandExecutor {
 			ParkourAddonPlugin.chat.send( sender, "/paddon setparkourcategory <courseName> <categoryId>" );
 			ParkourAddonPlugin.chat.send( sender, "/paddon setparkourdisplayname <courseName> <displayName>" );
 			ParkourAddonPlugin.chat.send( sender, "/paddon setparkourdescription <courseName> <line 1> [line 2] ..." );
+			ParkourAddonPlugin.chat.send( sender, "/paddon setparkourmcversion <courseName> [protocolVersion]" );
 			ParkourAddonPlugin.chat.send( sender, "--- Levels ---" );
 			ParkourAddonPlugin.chat.send( sender, "/paddon setlevel <playerName> <level>" );
 			ParkourAddonPlugin.chat.send( sender, "--- Parkoins ---" );
@@ -432,7 +433,7 @@ class Commands implements CommandExecutor {
 	}
 
 	private boolean setParkourMcVersion( CommandSender sender, String[] args ) {
-		if( sender.hasPermission( "parkouraddon.parkour.setdescription" ) ) {
+		if( sender.hasPermission( "parkouraddon.parkour.setmcversion" ) ) {
 			if( args.length > 1 ) {
 				ParkourCourse course = ParkourCourse.retrieveFromName( ParkourAddonPlugin.database, args[ 1 ] );
 				if( course != null ) {
