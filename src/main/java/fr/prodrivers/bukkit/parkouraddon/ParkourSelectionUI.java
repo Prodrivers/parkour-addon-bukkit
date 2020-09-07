@@ -1,12 +1,17 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
+import fr.prodrivers.bukkit.bedrockbridger.session.BedrockSession;
 import fr.prodrivers.bukkit.commons.storage.SQLProvider;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.ParkourLevel;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
+import me.eddie.inventoryguiapi.gui.contents.UnlimitedGUIPopulator;
+import me.eddie.inventoryguiapi.gui.elements.AbstractGUIElement;
+import me.eddie.inventoryguiapi.gui.elements.FormImage;
 import me.eddie.inventoryguiapi.gui.elements.GUIElement;
 import me.eddie.inventoryguiapi.gui.elements.GUIElementFactory;
 import me.eddie.inventoryguiapi.gui.guis.GUIBuilder;
 import me.eddie.inventoryguiapi.gui.guis.InventoryGUI;
+import me.eddie.inventoryguiapi.gui.view.BedrockGUIPresenter;
 import me.eddie.inventoryguiapi.plugin.InventoryGUIAPI;
 import me.eddie.inventoryguiapi.util.Callback;
 import org.bukkit.Bukkit;
@@ -23,7 +28,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class ParkourSelectionUI {
@@ -31,6 +35,10 @@ class ParkourSelectionUI {
 
 	static void reload() {
 		uis.clear();
+	}
+
+	public static void reload(Player player) {
+		uis.remove( player.getUniqueId() );
 	}
 
 	public static void reload(Player player, Integer categoryId) {
@@ -60,12 +68,31 @@ class ParkourSelectionUI {
 	}
 
 	private static InventoryGUI generate( Player player, ParkourCategory category ) throws NullPointerException {
-		String title = ParkourAddonPlugin.messages.parkourselectionuititle
+		String title = ParkourAddonPlugin.messages.parkourselectionui_title_normal
 				.replace( "%CAT%", category.getName() )
 				.replace( "%CATCOLOR%", ChatColor.valueOf( category.getChatColor() ).toString() )
 				+ ChatColor.RESET;
+
+		if( BedrockSession.hasSession( player ) ) {
+			return new GUIBuilder()
+					.guiStateBehaviour( GUIBuilder.GUIStateBehaviour.LOCAL_TO_SESSION )
+					.inventoryType( InventoryType.CHEST )
+					.dynamicallyResizeToWrapContent( true )
+					.size( 54 )
+					.presenter( new BedrockGUIPresenter() )
+					.populator( new UnlimitedGUIPopulator() )
+					.contents(
+							title,
+							genContent( true, player, category ),
+							false,
+							false,
+							false
+					)
+					.build();
+		}
+
 		if( category.getName().length() > 8 ) {
-			title = ParkourAddonPlugin.messages.parkourselectionuititlereduced
+			title = ParkourAddonPlugin.messages.parkourselectionui_title_reduced
 					.replace( "%CAT%", category.getName() )
 					.replace( "%CATCOLOR%", ChatColor.valueOf( category.getChatColor() ).toString() )
 					+ ChatColor.RESET;
@@ -78,7 +105,7 @@ class ParkourSelectionUI {
 				.size( 54 )
 				.contents(
 						title,
-						genContent( player, category ),
+						genContent( false, player, category ),
 						true,
 						true,
 						true
@@ -86,10 +113,14 @@ class ParkourSelectionUI {
 				.build();
 	}
 
-	private static List<GUIElement> genContent( Player player, ParkourCategory category ) throws NullPointerException {
-		List<String> lores = ParkourAddonPlugin.messages.parkourselectionuilore;
-		List<String> lores_completed = ParkourAddonPlugin.messages.parkourselectionuilorecompleted;
+	private static List<GUIElement> genContent( boolean isBedrockContent, Player player, ParkourCategory category ) throws NullPointerException {
+		List<String> lores = ParkourAddonPlugin.messages.parkourselectionui_item_lore_normal;
+		List<String> lores_completed = ParkourAddonPlugin.messages.parkourselectionui_item_lore_completed;
 		List<GUIElement> contents = new ArrayList<>();
+
+		if( isBedrockContent ) {
+			lores = ParkourAddonPlugin.messages.parkourselectionui_item_lore_bedrock;
+		}
 
 		PreparedStatement query;
 		try {
@@ -108,45 +139,27 @@ class ParkourSelectionUI {
 				Material material = Material.valueOf( results.getString( "parkourcategory.material" ) );
 				GUIElement element;
 
-				if(completed) {
-					String[] formattedLore = Stream
-							.concat(lores.stream(), lores_completed.stream())
-							.map( lore -> lore
-									.replace( "%NAME%", name)
-									.replace( "%AUTHOR%", author)
-									.replace( "%DESCRIPTION%", finalDescription )
-									.split( "\n" )
-							)
-							.flatMap(Arrays::stream)
-							.filter( lore -> !ChatColor.stripColor( lore ).isEmpty() )
-							.toArray(String[]::new);
-					element = createJoinParkourElement(
-							completed,
-							internalName,
-							name,
-							material,
-							formattedLore
-					);
-				} else {
-					String[] formattedLore = lores
-							.stream()
-							.map( lore -> lore
-									.replace( "%NAME%", name)
-									.replace( "%AUTHOR%", author)
-									.replace( "%DESCRIPTION%", finalDescription )
-									.split( "\n" )
-							)
-							.flatMap(Arrays::stream)
-							.filter( lore -> !ChatColor.stripColor( lore ).isEmpty() )
-							.toArray(String[]::new);
-					element = createJoinParkourElement(
-							completed,
-							internalName,
-							name,
-							material,
-							formattedLore
-					);
-				}
+				Stream<String> loreStream = completed ? Stream.concat( lores.stream(), lores_completed.stream() ) : lores.stream();
+
+				String[] formattedLore = loreStream
+						.skip(1)
+						.map( lore -> lore
+								.replace( "%NAME%", name)
+								.replace( "%AUTHOR%", author)
+								.replace( "%DESCRIPTION%", finalDescription )
+								.split( "\n" )
+						)
+						.flatMap( Arrays::stream )
+						.filter( lore -> !ChatColor.stripColor( lore ).isEmpty() )
+						.toArray(String[]::new);
+				element = createJoinParkourElement(
+						completed,
+						internalName,
+						lores.get(0).replace( "%NAME%", name )
+								.replace( "%AUTHOR%", author ),
+						material,
+						formattedLore
+				);
 				contents.add( element );
 			}
 		} catch( SQLException e ) {
@@ -166,6 +179,7 @@ class ParkourSelectionUI {
 		}
 
 		return GUIElementFactory.createActionItem(
+				AbstractGUIElement.NO_DESIRED_SLOT,
 				GUIElementFactory.formatItem(
 						item,
 						displayName,
@@ -175,7 +189,8 @@ class ParkourSelectionUI {
 						() -> {
 							player.closeInventory();
 							Players.joinParkour( player, name );
-						}, 1L )
+						}, 1L ),
+				completed ? ParkourAddonPlugin.configuration.selection_image_check : FormImage.NONE
 		);
 	}
 }

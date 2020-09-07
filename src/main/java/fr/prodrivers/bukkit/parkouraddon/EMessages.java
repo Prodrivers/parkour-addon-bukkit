@@ -32,10 +32,11 @@ public class EMessages extends Messages {
 	public String rankup = "Well done %PLAYER%! You rank up to level %LEVEL%!";
 	public String notenoughlevel = "You do not have the required level to access thoses parkours !";
 	public String clienttooold = "Your client is too old to access this course. Please update your client to the latest version.";
-	public String parkourselectionuititle = "Parkour = %CATCOLOR%%CAT%";
-	public String parkourselectionuititlereduced = "P = %CATCOLOR%%CAT%";
-	public List<String> parkourselectionuilore = Arrays.asList( "&rJoin %COURSE%" );
-	public List<String> parkourselectionuilorecompleted = Arrays.asList( "&rCompleted !" );
+	public String parkourselectionui_title_normal = "Parkour = %CATCOLOR%%CAT%";
+	public String parkourselectionui_title_reduced = "P = %CATCOLOR%%CAT%";
+	public List<String> parkourselectionui_item_lore_normal = Arrays.asList( "&r%NAME%", "&r&fCreated by %AUTHOR%" );
+	public List<String> parkourselectionui_item_lore_completed = Arrays.asList( "&rCompleted !" );
+	public List<String> parkourselectionui_item_lore_bedrock = Arrays.asList( "&r%NAME%", "&r&fCreated by %AUTHOR%" );
 	public String parkourlevelset = "Set player's %PLAYER% parkour level to %LEVEL%";
 	public String parkoinsadd = "Added %PARKOINS% parkoins to %PLAYER%";
 	public String parkoinsremove = "Removed %PARKOINS% parkoins to %PLAYER%";

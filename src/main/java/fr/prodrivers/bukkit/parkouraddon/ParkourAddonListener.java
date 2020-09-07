@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class ParkourAddonListener implements Listener {
 	@EventHandler
@@ -48,5 +49,10 @@ public class ParkourAddonListener implements Listener {
 				event.setCancelled( true );
 			}
 		}
+	}
+
+	@EventHandler
+	public void onPlayerQuit( PlayerQuitEvent event ) {
+		ParkourSelectionUI.reload( event.getPlayer() );
 	}
 }

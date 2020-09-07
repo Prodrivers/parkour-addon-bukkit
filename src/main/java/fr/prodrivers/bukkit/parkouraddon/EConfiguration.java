@@ -4,6 +4,7 @@ import fr.prodrivers.bukkit.commons.Chat;
 import fr.prodrivers.bukkit.commons.annotations.ForceSkipObjectAction;
 import fr.prodrivers.bukkit.commons.configuration.Configuration;
 import fr.prodrivers.bukkit.commons.configuration.Messages;
+import me.eddie.inventoryguiapi.gui.elements.FormImage;
 import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
 
@@ -12,6 +13,9 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public class EConfiguration extends Configuration {
+	@ForceSkipObjectAction
+	public FormImage selection_image_check =
+			new FormImage(FormImage.FormImageType.PATH, "textures/gui/newgui/check1.png");
 	public Material shops_close_material = Material.BARRIER;
 	public Material shops_ranks_material = Material.EMERALD;
 	public Material shops_ranks_alreadyBought_material = Material.EMERALD_BLOCK;
