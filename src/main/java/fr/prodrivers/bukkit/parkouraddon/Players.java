@@ -157,7 +157,7 @@ class Players {
 						party.broadcast(ParkourAddonPlugin.chat, ParkourAddonPlugin.messages.party_clienttooold);
 						return false;
 					}
-					if(level < category.getBaseLevel()) {
+					if(category != null && level < category.getBaseLevel()) {
 						party.broadcast(ParkourAddonPlugin.chat, ParkourAddonPlugin.messages.party_notenoughlevel);
 						return false;
 					}
