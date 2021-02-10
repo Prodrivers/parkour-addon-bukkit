@@ -3,7 +3,7 @@ package fr.prodrivers.bukkit.parkouraddon.adaptation;
 import fr.prodrivers.bukkit.commons.storage.SQLProvider;
 import fr.prodrivers.bukkit.parkouraddon.Log;
 import fr.prodrivers.bukkit.parkouraddon.Utils;
-import me.A5H73Y.parkour.player.PlayerInfo;
+import io.github.a5h73y.parkour.type.player.PlayerInfo;
 import org.bukkit.entity.Player;
 
 import java.sql.PreparedStatement;

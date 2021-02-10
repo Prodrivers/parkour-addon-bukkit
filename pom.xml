@@ -85,9 +85,9 @@
 		</dependency>
 		<!--Parkour-->
 		<dependency>
-			<groupId>me.A5H73Y</groupId>
+			<groupId>io.github.a5h73y</groupId>
 			<artifactId>Parkour</artifactId>
-			<version>5.3</version>
+			<version>6.3</version>
 			<scope>provided</scope>
 		</dependency>
 		<!--Prodrivers Commons API-->

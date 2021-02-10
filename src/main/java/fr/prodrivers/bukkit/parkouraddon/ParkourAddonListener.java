@@ -1,8 +1,8 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
-import me.A5H73Y.parkour.event.PlayerFinishCourseEvent;
-import me.A5H73Y.parkour.event.PlayerJoinCourseEvent;
-import me.A5H73Y.parkour.event.PlayerLeaveCourseEvent;
+import io.github.a5h73y.parkour.event.PlayerFinishCourseEvent;
+import io.github.a5h73y.parkour.event.PlayerJoinCourseEvent;
+import io.github.a5h73y.parkour.event.PlayerLeaveCourseEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

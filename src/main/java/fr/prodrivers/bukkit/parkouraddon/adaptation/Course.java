@@ -1,9 +1,9 @@
 package fr.prodrivers.bukkit.parkouraddon.adaptation;
 
-import me.A5H73Y.parkour.course.CourseInfo;
+import io.github.a5h73y.parkour.type.course.CourseInfo;
 
 public class Course {
 	static public void setMinimumLevel( String courseName, int level ) {
-		CourseInfo.setMinimumLevel( courseName, level );
+		CourseInfo.setMinimumParkourLevel( courseName, level );
 	}
 }

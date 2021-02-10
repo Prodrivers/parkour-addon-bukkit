@@ -6,7 +6,7 @@ import fr.prodrivers.bukkit.parkouraddon.advancements.AdvancementManager;
 import fr.prodrivers.bukkit.parkouraddon.models.Models;
 import fr.prodrivers.bukkit.parkouraddon.sections.ParkourSection;
 import io.ebean.EbeanServer;
-import me.A5H73Y.parkour.Parkour;
+import io.github.a5h73y.parkour.Parkour;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -21,6 +21,8 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 	public static EbeanServer database = null;
 	//static Configuration config = null;
 	static Economy econ = null;
+
+	Parkour parkour = null;
 
 	@Override
 	public void onDisable() {
@@ -76,7 +78,7 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 		getServer().getPluginManager().registerEvents( ParkourShopConverterUI.getInstance(), this );
 		getServer().getPluginManager().registerEvents( this, this );
 
-		SectionManager.register( new ParkourSection() );
+		SectionManager.register( new ParkourSection( parkour ) );
 
 		getCommand( "paddon" ).setExecutor( new Commands() );
 
@@ -118,7 +120,11 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 	}
 
 	private boolean setupParkour() {
-		Plugin parkour = getServer().getPluginManager().getPlugin( "Parkour" );
-		return ( parkour != null && parkour instanceof Parkour );
+		Plugin plugin = getServer().getPluginManager().getPlugin( "Parkour" );
+		if( plugin instanceof Parkour ) {
+			parkour = (Parkour) plugin;
+			return true;
+		}
+		return false;
 	}
 }
