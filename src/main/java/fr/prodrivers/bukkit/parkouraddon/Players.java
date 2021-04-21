@@ -177,6 +177,21 @@ class Players {
 		return false;
 	}
 
+	public static boolean joinParkourAll( Player originator, String name ) {
+		name = name.trim();
+
+		ParkourCourse course = ParkourCourse.retrieveFromName( ParkourAddonPlugin.database, name );
+		if( course == null ) {
+			ParkourAddonPlugin.chat.error( originator, ParkourAddonPlugin.messages.invalidcourse );
+			return false;
+		}
+
+		for( Player player : Bukkit.getOnlinePlayers() ) {
+			joinParkour( player, name );
+		}
+		return false;
+	}
+
 	public static boolean leaveParkour( Player player ) {
 		try {
 			SectionManager.enter( player, "main" );

@@ -47,6 +47,8 @@ public class ParkourAddonListener implements Listener {
 				Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () -> Players.leaveParkour( event.getPlayer() ) );
 			} else if( command.startsWith( "/pa joinall" ) ) {
 				event.setCancelled( true );
+
+				Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () -> Players.joinParkourAll( event.getPlayer(), command.substring( 11 ) ) );
 			}
 		}
 	}
