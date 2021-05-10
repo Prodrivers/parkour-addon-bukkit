@@ -74,4 +74,8 @@ public class ParkourCourse {
 	public static ParkourCourse retrieveFromName( EbeanServer server, String courseName ) {
 		return server.find( ParkourCourse.class ).where().ieq( "name", courseName ).findOne();
 	}
+
+	public static List<ParkourCourse> retrieveAll( EbeanServer server ) {
+		return server.find( ParkourCourse.class ).select( "*" ).findList();
+	}
 }
