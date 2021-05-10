@@ -52,6 +52,26 @@ public class ParkourCourse {
 	@Setter
 	Integer minimumProtocolVersion;
 
+	@Column( name = "positionX" )
+	@Getter
+	@Setter
+	Double positionX;
+
+	@Column( name = "positionY" )
+	@Getter
+	@Setter
+	Double positionY;
+
+	@Column( name = "positionZ" )
+	@Getter
+	@Setter
+	Double positionZ;
+
+	@Column( length = 24, name = "positionWorld" )
+	@Getter
+	@Setter
+	String positionWorld;
+
 	@ManyToOne()
 	@JoinColumn( name = "categoryId" )
 	@Getter

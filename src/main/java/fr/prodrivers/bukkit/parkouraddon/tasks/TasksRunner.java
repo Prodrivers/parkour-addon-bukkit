@@ -4,7 +4,7 @@ import fr.prodrivers.bukkit.parkouraddon.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TasksRunner implements Runnable {
@@ -13,7 +13,9 @@ public class TasksRunner implements Runnable {
 
 	public TasksRunner( JavaPlugin plugin ) {
 		this.plugin = plugin;
-		this.tasks = new ArrayList<>();
+		this.tasks = Arrays.asList(
+				new ParkourPositionUpdater()
+		);
 	}
 
 	public void run() {

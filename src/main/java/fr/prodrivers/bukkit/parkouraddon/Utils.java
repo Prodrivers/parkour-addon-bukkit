@@ -11,6 +11,10 @@ public class Utils {
 			"alter table course add categoryId integer;\n" +
 			"alter table course add description varchar(255) null;\n" +
 			"alter table course add minimumProtocolVersion integer null;\n" +
+			"alter table course add positionX double null;\n" +
+			"alter table course add positionY double null;\n" +
+			"alter table course add positionZ double null;\n" +
+			"alter table course add positionWorld varchar(24) null;" +
 			"\n" +
 			"create table parkourcategory (\n" +
 			"  categoryId                                        integer auto_increment not null,\n" +
