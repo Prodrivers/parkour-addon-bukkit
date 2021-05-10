@@ -5,6 +5,7 @@ import fr.prodrivers.bukkit.commons.storage.SQLProvider;
 import fr.prodrivers.bukkit.parkouraddon.advancements.AdvancementManager;
 import fr.prodrivers.bukkit.parkouraddon.models.Models;
 import fr.prodrivers.bukkit.parkouraddon.sections.ParkourSection;
+import fr.prodrivers.bukkit.parkouraddon.tasks.TasksRunner;
 import io.ebean.EbeanServer;
 import io.github.a5h73y.parkour.Parkour;
 import net.milkbowl.vault.economy.Economy;
@@ -23,6 +24,8 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 	static Economy econ = null;
 
 	Parkour parkour = null;
+
+	private TasksRunner tasksRunner;
 
 	@Override
 	public void onDisable() {
@@ -72,6 +75,8 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 
 		AdvancementManager.init( this );
 
+		tasksRunner = new TasksRunner( this );
+
 		getServer().getPluginManager().registerEvents( new ParkourAddonListener(), this );
 		getServer().getPluginManager().registerEvents( ParkourShopUI.getInstance(), this );
 		getServer().getPluginManager().registerEvents( ParkourShopRankUI.getInstance(), this );
@@ -81,6 +86,8 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 		SectionManager.register( new ParkourSection( parkour ) );
 
 		getCommand( "paddon" ).setExecutor( new Commands() );
+
+		tasksRunner.run();
 
 		Log.info( plugindescription.getName() + " has been enabled!" );
 	}
@@ -126,5 +133,9 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 			return true;
 		}
 		return false;
+	}
+
+	public TasksRunner getTasksRunner() {
+		return tasksRunner;
 	}
 }
