@@ -1,5 +1,6 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
+import de.bluecolored.bluemap.api.BlueMapAPI;
 import fr.prodrivers.bukkit.commons.sections.SectionManager;
 import fr.prodrivers.bukkit.commons.storage.SQLProvider;
 import fr.prodrivers.bukkit.parkouraddon.advancements.AdvancementManager;
@@ -73,6 +74,10 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 			Log.warning( "Vault or/and compatible economy plugin is/are not installed. Currency conversion will not be available." );
 		}
 
+		if( !setupBluemap() ) {
+			Log.warning( "BlueMap is not installed. Marker generation will not be available." );
+		}
+
 		AdvancementManager.init( this );
 
 		tasksRunner = new TasksRunner( this );
@@ -111,6 +116,14 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 			}
 		}
 		return false;
+	}
+
+	private boolean setupBluemap() {
+		try {
+			return BlueMapAPI.getInstance().isPresent();
+		} catch( Exception | NoClassDefFoundError e ) {
+			return false;
+		}
 	}
 
 	private boolean setupEconomy() {

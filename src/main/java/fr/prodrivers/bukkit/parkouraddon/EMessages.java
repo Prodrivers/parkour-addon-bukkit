@@ -69,6 +69,11 @@ public class EMessages extends Messages {
 	public String party_notenoughlevel = "A party member does not have the required level to access this course.";
 	public String party_clienttooold = "A party member does not have a recent enough version to access this version.";
 	public String rankoncompletion = "You completed the course %COURSE% for the first time ! You ranked %RANK% on it, well done !";
+	public String bluemap_parkours_label = "Parkours";
+	public String bluemap_parkours_markers_withcategory_id = "%s/%s";
+	public String bluemap_parkours_markers_withcategory_html = "<span style='display:inline-block;background:#%s;color:%s'>%d</span> <b style='color:#fff;text-shadow:0px 0px 5px #222'>%s</b>";
+	public String bluemap_parkours_markers_nocategory_id = "%s";
+	public String bluemap_parkours_markers_nocategory_html = "<span style='display:inline-block;background:#000;color:white;width:1em;height:1em'></span> <b style='color:#fff;text-shadow:0px 0px 5px #222'>%s</b>";
 
 	public EMessages( Plugin plugin ) {
 		super( plugin );

@@ -14,7 +14,8 @@ public class TasksRunner implements Runnable {
 	public TasksRunner( JavaPlugin plugin ) {
 		this.plugin = plugin;
 		this.tasks = Arrays.asList(
-				new ParkourPositionUpdater()
+				new ParkourPositionUpdater(),
+				new BlueMapParkourMarker()
 		);
 	}
 

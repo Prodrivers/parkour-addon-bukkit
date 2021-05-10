@@ -3,6 +3,7 @@ package fr.prodrivers.bukkit.parkouraddon;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.awt.Color;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
@@ -107,5 +108,24 @@ public class Utils {
 		meta.setDisplayName( ParkourAddonPlugin.messages.parkourshopui_close_title );
 		item.setItemMeta( meta );
 		return item;
+	}
+
+	public static float[] intToHsl(int rgbColor) {
+		float r = 0xFF & (rgbColor >> 0x10);
+		float g = 0xFF & (rgbColor >> 0x8);
+		float b = 0xFF & rgbColor;
+
+		r = r / 255.f;
+		g = g / 255.f;
+		b = b / 255.f;
+
+		float[] hsv = new float[3];
+		Color.RGBtoHSB((int)r, (int)g, (int)b, hsv);
+
+		return hsv;
+	}
+
+	public static boolean isColorLight(int rgbColor) {
+		return intToHsl(rgbColor)[2] > 200;
 	}
 }
