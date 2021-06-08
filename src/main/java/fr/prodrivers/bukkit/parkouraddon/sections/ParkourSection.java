@@ -1,5 +1,7 @@
 package fr.prodrivers.bukkit.parkouraddon.sections;
 
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.ViaAPI;
 import fr.prodrivers.bukkit.commons.sections.IProdriversSection;
 import fr.prodrivers.bukkit.parkouraddon.Log;
 import fr.prodrivers.bukkit.parkouraddon.ParkourAddonPlugin;
@@ -7,8 +9,6 @@ import fr.prodrivers.bukkit.parkouraddon.models.ParkourCourse;
 import io.github.a5h73y.parkour.Parkour;
 import io.github.a5h73y.parkour.type.player.ParkourSession;
 import org.bukkit.entity.Player;
-import us.myles.ViaVersion.api.Via;
-import us.myles.ViaVersion.api.ViaAPI;
 
 public class ParkourSection implements IProdriversSection {
 	public static String name = "parkour";
@@ -57,7 +57,7 @@ public class ParkourSection implements IProdriversSection {
 				Log.warning("Refused player " + player.getName() + " to join section because name is empty.");
 				return false;
 			}
-			ViaAPI api = Via.getAPI();
+			@SuppressWarnings("unchecked") ViaAPI<Player> api = (ViaAPI<Player>) Via.getAPI();
 			ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.database, subSection);
 			if(course == null) {
 				ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.invalidcourse);

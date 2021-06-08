@@ -1,5 +1,7 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.ViaAPI;
 import fr.prodrivers.bukkit.commons.exceptions.IllegalSectionEnteringException;
 import fr.prodrivers.bukkit.commons.exceptions.NotPartyOwnerException;
 import fr.prodrivers.bukkit.commons.parties.Party;
@@ -15,8 +17,6 @@ import fr.prodrivers.bukkit.parkouraddon.models.ParkourCourse;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourPlayerCompletion;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import us.myles.ViaVersion.api.Via;
-import us.myles.ViaVersion.api.ViaAPI;
 
 import java.util.UUID;
 
@@ -139,7 +139,7 @@ class Players {
 	public static boolean joinParkour(Player player, String name) {
 		Party party = PartyManager.getParty(player.getUniqueId());
 		if(party != null) {
-			ViaAPI api = Via.getAPI();
+			@SuppressWarnings("unchecked") ViaAPI<Player> api = (ViaAPI<Player>) Via.getAPI();
 			ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.database, name);
 			if(course == null) {
 				ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.invalidcourse);

@@ -103,9 +103,9 @@
 		</dependency>
 		<!--ViaVersion-->
 		<dependency>
-			<groupId>us.myles</groupId>
+			<groupId>com.viaversion</groupId>
 			<artifactId>viaversion</artifactId>
-			<version>3.1.0</version>
+			<version>4.0.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<!--BlueMapAPI-->
