@@ -12,26 +12,26 @@ import java.security.Timestamp;
 import java.util.List;
 
 @Entity
-@Table( name = "course" )
+@Table(name = "course")
 public class ParkourCourse {
 	@Id
-	@Column( name = "courseId" )
+	@Column(name = "courseId")
 	@Getter
 	@Setter
 	int courseId;
 
-	@Column( length = 180, nullable = false )
+	@Column(length = 180, nullable = false)
 	@NotNull
 	@Getter
 	@Setter
 	String name;
 
-	@Column( length = 255, nullable = true )
+	@Column(length = 255, nullable = true)
 	@Getter
 	@Setter
 	String description;
 
-	@Column( length = 180, nullable = false )
+	@Column(length = 180, nullable = false)
 	@NotNull
 	@Getter
 	@Setter
@@ -42,60 +42,60 @@ public class ParkourCourse {
 	@Setter
 	Timestamp created;
 
-	@Column( length = 180, name = "displayName" )
+	@Column(length = 180, name = "displayName")
 	@Getter
 	@Setter
 	String displayName;
 
-	@Column( name = "minimumProtocolVersion" )
+	@Column(name = "minimumProtocolVersion")
 	@Getter
 	@Setter
 	Integer minimumProtocolVersion;
 
-	@Column( name = "positionX" )
+	@Column(name = "positionX")
 	@Getter
 	@Setter
 	Double positionX;
 
-	@Column( name = "positionY" )
+	@Column(name = "positionY")
 	@Getter
 	@Setter
 	Double positionY;
 
-	@Column( name = "positionZ" )
+	@Column(name = "positionZ")
 	@Getter
 	@Setter
 	Double positionZ;
 
-	@Column( length = 24, name = "positionWorld" )
+	@Column(length = 24, name = "positionWorld")
 	@Getter
 	@Setter
 	String positionWorld;
 
 	@ManyToOne()
-	@JoinColumn( name = "categoryId" )
+	@JoinColumn(name = "categoryId")
 	@Getter
 	ParkourCategory category;
 
-	@OneToMany( mappedBy = "course", cascade = CascadeType.PERSIST )
+	@OneToMany(mappedBy = "course", cascade = CascadeType.PERSIST)
 	@Getter
 	@Setter
 	List<ParkourPlayerCompletion> completions;
 
-	public void setCategory( ParkourCategory category ) {
-		if( category == null ) {
-			Course.setMinimumLevel( getName(), -1 );
+	public void setCategory(ParkourCategory category) {
+		if(category == null) {
+			Course.setMinimumLevel(getName(), -1);
 		} else {
-			Course.setMinimumLevel( getName(), category.getBaseLevel() );
+			Course.setMinimumLevel(getName(), category.getBaseLevel());
 		}
 		this.category = category;
 	}
 
-	public static ParkourCourse retrieveFromName( EbeanServer server, String courseName ) {
-		return server.find( ParkourCourse.class ).where().ieq( "name", courseName ).findOne();
+	public static ParkourCourse retrieveFromName(EbeanServer server, String courseName) {
+		return server.find(ParkourCourse.class).where().ieq("name", courseName).findOne();
 	}
 
-	public static List<ParkourCourse> retrieveAll( EbeanServer server ) {
-		return server.find( ParkourCourse.class ).select( "*" ).findList();
+	public static List<ParkourCourse> retrieveAll(EbeanServer server) {
+		return server.find(ParkourCourse.class).select("*").findList();
 	}
 }

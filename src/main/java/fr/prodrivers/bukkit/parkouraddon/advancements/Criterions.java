@@ -14,22 +14,22 @@ public class Criterions {
 
 	static void init() {
 		HashSet<String> newCriterion = new HashSet<>();
-		ParkourCategory.retrieveAll( ParkourAddonPlugin.database )
+		ParkourCategory.retrieveAll(ParkourAddonPlugin.database)
 				.stream()
-				.map( Criterions::get )
-				.forEach( newCriterion::add );
-		criterion = Collections.unmodifiableSet( newCriterion );
+				.map(Criterions::get)
+				.forEach(newCriterion::add);
+		criterion = Collections.unmodifiableSet(newCriterion);
 	}
 
 	static Set<String> all() {
 		return criterion;
 	}
 
-	static String get( ParkourCategory category ) {
+	static String get(ParkourCategory category) {
 		return "parkourcategory." + category.getCategoryId();
 	}
 
-	static void grant( Advancement advancement, Player player, ParkourCategory category ) {
-		player.getAdvancementProgress( advancement ).awardCriteria( get( category ) );
+	static void grant(Advancement advancement, Player player, ParkourCategory category) {
+		player.getAdvancementProgress(advancement).awardCriteria(get(category));
 	}
 }

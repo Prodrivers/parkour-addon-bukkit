@@ -21,50 +21,50 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class Commands implements CommandExecutor {
-	public boolean onCommand( CommandSender sender, Command command, String label, String[] args ) {
-		if( label.equalsIgnoreCase( "paddon" ) ) {
-			if( args.length > 0 ) {
-				switch( args[ 0 ] ) {
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		if(label.equalsIgnoreCase("paddon")) {
+			if(args.length > 0) {
+				switch(args[0]) {
 					case "shop":
-						return openShop( sender );
+						return openShop(sender);
 					case "open":
-						return openSelection( sender, args );
+						return openSelection(sender, args);
 					case "listcategories":
-						return listCategories( sender );
+						return listCategories(sender);
 					case "addcategory":
-						return addCategory( sender, args );
+						return addCategory(sender, args);
 					case "setpreviouscategory":
-						return setPreviousCategory( sender, args );
+						return setPreviousCategory(sender, args);
 					case "setreqcoursesnbinprevcat":
-						return setRequiredCoursesNumberInPreviousCategoryForRankup( sender, args );
+						return setRequiredCoursesNumberInPreviousCategoryForRankup(sender, args);
 					case "setparkoinsreward":
-						return setParkoinsReward( sender, args );
+						return setParkoinsReward(sender, args);
 					case "sethidden":
-						return setHidden( sender, args );
+						return setHidden(sender, args);
 					case "setbaselevel":
-						return setBaseLevel( sender, args );
+						return setBaseLevel(sender, args);
 					case "setparkourcategory":
-						return setParkourCategory( sender, args );
+						return setParkourCategory(sender, args);
 					case "setparkourdisplayname":
-						return setParkourDisplayName( sender, args );
+						return setParkourDisplayName(sender, args);
 					case "setparkourdescription":
-						return setParkourDescription( sender, args );
+						return setParkourDescription(sender, args);
 					case "setparkourmcversion":
-						return setParkourMcVersion( sender, args );
+						return setParkourMcVersion(sender, args);
 					case "setplayerlevel":
-						return setPlayerLevel( sender, args );
+						return setPlayerLevel(sender, args);
 					case "addparkoins":
-						return addParkoins( sender, args );
+						return addParkoins(sender, args);
 					case "removeparkoins":
-						return removeParkoins( sender, args );
+						return removeParkoins(sender, args);
 					case "reload":
-						return reload( sender );
+						return reload(sender);
 					case "help":
-						return help( sender );
+						return help(sender);
 				}
 			} else {
-				if( sender.hasPermission( "parkouraddon.help" ) ) {
-					ParkourAddonPlugin.chat.error( sender, "Unknown command, use /paddon help" );
+				if(sender.hasPermission("parkouraddon.help")) {
+					ParkourAddonPlugin.chat.error(sender, "Unknown command, use /paddon help");
 					return true;
 				}
 			}
@@ -73,40 +73,40 @@ class Commands implements CommandExecutor {
 		return false;
 	}
 
-	private boolean help( CommandSender sender ) {
-		if( sender.hasPermission( "parkouraddon.help" ) ) {
-			ParkourAddonPlugin.chat.send( sender, "=== USAGE ===" );
-			ParkourAddonPlugin.chat.send( sender, "--- General ---" );
-			ParkourAddonPlugin.chat.send( sender, "/paddon shop" );
-			ParkourAddonPlugin.chat.send( sender, "/paddon reload" );
-			ParkourAddonPlugin.chat.send( sender, "--- Categories ---" );
-			ParkourAddonPlugin.chat.send( sender, "/paddon listcategories" );
-			ParkourAddonPlugin.chat.send( sender, "/paddon addcategory <name> <baseLevel> <material> <materialDataValue> <chatColor> <hexColor>" );
-			ParkourAddonPlugin.chat.send( sender, "/paddon setpreviouscategory <categoryId> <previousCategoryId>" );
-			ParkourAddonPlugin.chat.send( sender, "/paddon setreqcoursesnbinprevcat <categoryId> <numberOfParkourToComplete>" );
-			ParkourAddonPlugin.chat.send( sender, "/paddon setparkoinsreward <categoryId> <parkoinsReward>" );
-			ParkourAddonPlugin.chat.send( sender, "/paddon sethidden <categoryId> <isHidden>" );
-			ParkourAddonPlugin.chat.send( sender, "--- Parkours ---" );
-			ParkourAddonPlugin.chat.send( sender, "/paddon open <categoryId>" );
-			ParkourAddonPlugin.chat.send( sender, "/paddon setparkourcategory <courseName> <categoryId>" );
-			ParkourAddonPlugin.chat.send( sender, "/paddon setparkourdisplayname <courseName> <displayName>" );
-			ParkourAddonPlugin.chat.send( sender, "/paddon setparkourdescription <courseName> <line 1> [line 2] ..." );
-			ParkourAddonPlugin.chat.send( sender, "/paddon setparkourmcversion <courseName> [protocolVersion]" );
-			ParkourAddonPlugin.chat.send( sender, "--- Levels ---" );
-			ParkourAddonPlugin.chat.send( sender, "/paddon setlevel <playerName> <level>" );
-			ParkourAddonPlugin.chat.send( sender, "--- Parkoins ---" );
-			ParkourAddonPlugin.chat.send( sender, "/paddon addparkoins <playerName> <parkoins>" );
-			ParkourAddonPlugin.chat.send( sender, "/paddon removeparkoins <playerName> <parkoins>" );
+	private boolean help(CommandSender sender) {
+		if(sender.hasPermission("parkouraddon.help")) {
+			ParkourAddonPlugin.chat.send(sender, "=== USAGE ===");
+			ParkourAddonPlugin.chat.send(sender, "--- General ---");
+			ParkourAddonPlugin.chat.send(sender, "/paddon shop");
+			ParkourAddonPlugin.chat.send(sender, "/paddon reload");
+			ParkourAddonPlugin.chat.send(sender, "--- Categories ---");
+			ParkourAddonPlugin.chat.send(sender, "/paddon listcategories");
+			ParkourAddonPlugin.chat.send(sender, "/paddon addcategory <name> <baseLevel> <material> <materialDataValue> <chatColor> <hexColor>");
+			ParkourAddonPlugin.chat.send(sender, "/paddon setpreviouscategory <categoryId> <previousCategoryId>");
+			ParkourAddonPlugin.chat.send(sender, "/paddon setreqcoursesnbinprevcat <categoryId> <numberOfParkourToComplete>");
+			ParkourAddonPlugin.chat.send(sender, "/paddon setparkoinsreward <categoryId> <parkoinsReward>");
+			ParkourAddonPlugin.chat.send(sender, "/paddon sethidden <categoryId> <isHidden>");
+			ParkourAddonPlugin.chat.send(sender, "--- Parkours ---");
+			ParkourAddonPlugin.chat.send(sender, "/paddon open <categoryId>");
+			ParkourAddonPlugin.chat.send(sender, "/paddon setparkourcategory <courseName> <categoryId>");
+			ParkourAddonPlugin.chat.send(sender, "/paddon setparkourdisplayname <courseName> <displayName>");
+			ParkourAddonPlugin.chat.send(sender, "/paddon setparkourdescription <courseName> <line 1> [line 2] ...");
+			ParkourAddonPlugin.chat.send(sender, "/paddon setparkourmcversion <courseName> [protocolVersion]");
+			ParkourAddonPlugin.chat.send(sender, "--- Levels ---");
+			ParkourAddonPlugin.chat.send(sender, "/paddon setlevel <playerName> <level>");
+			ParkourAddonPlugin.chat.send(sender, "--- Parkoins ---");
+			ParkourAddonPlugin.chat.send(sender, "/paddon addparkoins <playerName> <parkoins>");
+			ParkourAddonPlugin.chat.send(sender, "/paddon removeparkoins <playerName> <parkoins>");
 		} else {
-			ParkourAddonPlugin.chat.send( sender, "Usage:" );
-			ParkourAddonPlugin.chat.send( sender, "/paddon open <category>" );
-			ParkourAddonPlugin.chat.send( sender, "/paddon shop" );
+			ParkourAddonPlugin.chat.send(sender, "Usage:");
+			ParkourAddonPlugin.chat.send(sender, "/paddon open <category>");
+			ParkourAddonPlugin.chat.send(sender, "/paddon shop");
 		}
 		return true;
 	}
 
-	private boolean reload( CommandSender sender ) {
-		if( sender.hasPermission( "parkouraddon.reload" ) ) {
+	private boolean reload(CommandSender sender) {
+		if(sender.hasPermission("parkouraddon.reload")) {
 			ParkourAddonPlugin.configuration.reload();
 			ParkourSelectionUI.reload();
 			ParkourShopUI.getInstance().reload();
@@ -114,434 +114,434 @@ class Commands implements CommandExecutor {
 			ParkourShopConverterUI.getInstance().reload();
 			AdvancementManager.reload();
 			ParkourAddonPlugin.plugin.getTasksRunner().run();
-			ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.configurationreloaded );
+			ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.configurationreloaded);
 			return true;
 		}
 		return false;
 	}
 
-	private boolean openShop( CommandSender sender ) {
-		if( sender instanceof Player ) {
+	private boolean openShop(CommandSender sender) {
+		if(sender instanceof Player) {
 			try {
-				ParkourShopUI.getInstance().open( (Player) sender );
-			} catch( Exception e ) {
-				ParkourAddonPlugin.chat.internalError( sender );
-				Log.severe( "Error while trying to open Parkour Shop UI.", e );
+				ParkourShopUI.getInstance().open((Player) sender);
+			} catch(Exception e) {
+				ParkourAddonPlugin.chat.internalError(sender);
+				Log.severe("Error while trying to open Parkour Shop UI.", e);
 			}
 		} else {
-			ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notaplayer );
+			ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.notaplayer);
 		}
 		return true;
 	}
 
-	private boolean openSelection( CommandSender sender, String[] args ) {
-		if( sender instanceof Player ) {
-			if( args.length > 1 ) {
+	private boolean openSelection(CommandSender sender, String[] args) {
+		if(sender instanceof Player) {
+			if(args.length > 1) {
 				try {
-					ParkourCategory cat = ParkourAddonPlugin.database.find( ParkourCategory.class, Integer.valueOf( args[ 1 ] ) );
-					if( cat != null ) {
-						ParkourSelectionUI.open( (Player) sender, cat );
+					ParkourCategory cat = ParkourAddonPlugin.database.find(ParkourCategory.class, Integer.valueOf(args[1]));
+					if(cat != null) {
+						ParkourSelectionUI.open((Player) sender, cat);
 					} else {
-						ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcategory );
+						ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidcategory);
 					}
-				} catch( NumberFormatException e ) {
-					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidnumber );
+				} catch(NumberFormatException e) {
+					ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidnumber);
 					System.err.println(e.getLocalizedMessage());
 					e.printStackTrace();
-				} catch( IllegalArgumentException e ) {
-					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidargument );
+				} catch(IllegalArgumentException e) {
+					ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidargument);
 					System.err.println(e.getLocalizedMessage());
 					e.printStackTrace();
-				} catch( Exception e ) {
-					ParkourAddonPlugin.chat.internalError( sender );
-					Log.severe( "Error while trying to open Parkour Selection UI.", e );
+				} catch(Exception e) {
+					ParkourAddonPlugin.chat.internalError(sender);
+					Log.severe("Error while trying to open Parkour Selection UI.", e);
 				}
 			} else {
-				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
+				ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.notenougharguments);
 			}
 		} else {
-			ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notaplayer );
+			ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.notaplayer);
 		}
 		return true;
 	}
 
-	private boolean listCategories( CommandSender sender ) {
-		if( sender.hasPermission( "parkouraddon.category.list" ) ) {
-			List<ParkourCategory> categories = ParkourAddonPlugin.database.find( ParkourCategory.class ).select( "*" ).findList();
+	private boolean listCategories(CommandSender sender) {
+		if(sender.hasPermission("parkouraddon.category.list")) {
+			List<ParkourCategory> categories = ParkourAddonPlugin.database.find(ParkourCategory.class).select("*").findList();
 
-			if( categories.size() > 0 ) {
-				ParkourAddonPlugin.chat.send( sender, ParkourAddonPlugin.messages.categoryentryheader );
-				for( ParkourCategory cat : categories ) {
-					ParkourAddonPlugin.chat.send( sender,
+			if(categories.size() > 0) {
+				ParkourAddonPlugin.chat.send(sender, ParkourAddonPlugin.messages.categoryentryheader);
+				for(ParkourCategory cat : categories) {
+					ParkourAddonPlugin.chat.send(sender,
 							ParkourAddonPlugin.messages.categoryentry
-									.replace( "%ID%", String.valueOf( cat.getCategoryId() ) )
-									.replace( "%NAME%", cat.getName() )
-									.replace( "%BASELEVEL%", String.valueOf( cat.getBaseLevel() ) )
-									.replace( "%PREVID%", String.valueOf( ( cat.getPreviousCategory() != null ? cat.getPreviousCategory().getCategoryId() : "None" ) ) )
-									.replace( "%HEXCOLOR%", "#" + Integer.toHexString( cat.getHexColor() ) )
-									.replace( "%CHATCOLOR%", cat.getChatColor() )
-									.replace( "%MATERIAL%", cat.getMaterial() )
+									.replace("%ID%", String.valueOf(cat.getCategoryId()))
+									.replace("%NAME%", cat.getName())
+									.replace("%BASELEVEL%", String.valueOf(cat.getBaseLevel()))
+									.replace("%PREVID%", String.valueOf((cat.getPreviousCategory() != null ? cat.getPreviousCategory().getCategoryId() : "None")))
+									.replace("%HEXCOLOR%", "#" + Integer.toHexString(cat.getHexColor()))
+									.replace("%CHATCOLOR%", cat.getChatColor())
+									.replace("%MATERIAL%", cat.getMaterial())
 					);
 				}
 			} else {
-				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.nocategoryentries );
+				ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.nocategoryentries);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	private boolean addCategory( CommandSender sender, String[] args ) {
-		if( sender.hasPermission( "parkouraddon.category.add" ) ) {
-			if( args.length > 6 ) {
+	private boolean addCategory(CommandSender sender, String[] args) {
+		if(sender.hasPermission("parkouraddon.category.add")) {
+			if(args.length > 6) {
 				try {
 					ParkourCategory cat = new ParkourCategory();
-					cat.setName( args[ 1 ] );
-					cat.setBaseLevel( Integer.valueOf( args[ 2 ] ) );
-					cat.setMaterial( Material.valueOf( args[ 3 ] ).toString() );
-					cat.setChatColor( ChatColor.valueOf( args[ 5 ] ).toString() );
-					cat.setHexColor( Utils.parseColor( args[ 6 ] ) );
-					ParkourAddonPlugin.database.save( cat );
-					ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.categoryadded.replace( "%CATID%", String.valueOf( cat.getCategoryId() ) ) );
-				} catch( NumberFormatException e ) {
-					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidnumber );
-				} catch( IllegalArgumentException e ) {
-					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidargument );
-				} catch( Exception e ) {
-					ParkourAddonPlugin.chat.internalError( sender );
+					cat.setName(args[1]);
+					cat.setBaseLevel(Integer.valueOf(args[2]));
+					cat.setMaterial(Material.valueOf(args[3]).toString());
+					cat.setChatColor(ChatColor.valueOf(args[5]).toString());
+					cat.setHexColor(Utils.parseColor(args[6]));
+					ParkourAddonPlugin.database.save(cat);
+					ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.categoryadded.replace("%CATID%", String.valueOf(cat.getCategoryId())));
+				} catch(NumberFormatException e) {
+					ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidnumber);
+				} catch(IllegalArgumentException e) {
+					ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidargument);
+				} catch(Exception e) {
+					ParkourAddonPlugin.chat.internalError(sender);
 				}
 			} else {
-				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
+				ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.notenougharguments);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	private boolean setPreviousCategory( CommandSender sender, String[] args ) {
-		if( sender.hasPermission( "parkouraddon.category.setprevious" ) ) {
-			if( args.length > 2 ) {
+	private boolean setPreviousCategory(CommandSender sender, String[] args) {
+		if(sender.hasPermission("parkouraddon.category.setprevious")) {
+			if(args.length > 2) {
 				try {
-					ParkourCategory cat = ParkourAddonPlugin.database.find( ParkourCategory.class, Integer.valueOf( args[ 1 ] ) );
-					if( cat != null ) {
-						if( args[ 2 ].equalsIgnoreCase( "null" ) ) {
-							cat.setPreviousCategory( null );
-							ParkourAddonPlugin.database.save( cat );
-							ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.prevcategoryset.replace( "%CAT%", cat.getName() ).replace( "%PREVCAT%", "None" ) );
+					ParkourCategory cat = ParkourAddonPlugin.database.find(ParkourCategory.class, Integer.valueOf(args[1]));
+					if(cat != null) {
+						if(args[2].equalsIgnoreCase("null")) {
+							cat.setPreviousCategory(null);
+							ParkourAddonPlugin.database.save(cat);
+							ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.prevcategoryset.replace("%CAT%", cat.getName()).replace("%PREVCAT%", "None"));
 						} else {
-							ParkourCategory prevcat = ParkourAddonPlugin.database.find( ParkourCategory.class, Integer.valueOf( args[ 2 ] ) );
-							if( prevcat != null ) {
-								cat.setPreviousCategory( prevcat );
-								ParkourAddonPlugin.database.save( cat );
-								ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.prevcategoryset.replace( "%CAT%", cat.getName() ).replace( "%PREVCAT%", prevcat.getName() ) );
+							ParkourCategory prevcat = ParkourAddonPlugin.database.find(ParkourCategory.class, Integer.valueOf(args[2]));
+							if(prevcat != null) {
+								cat.setPreviousCategory(prevcat);
+								ParkourAddonPlugin.database.save(cat);
+								ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.prevcategoryset.replace("%CAT%", cat.getName()).replace("%PREVCAT%", prevcat.getName()));
 							} else {
-								ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcategory );
+								ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidcategory);
 							}
 						}
 					} else {
-						ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcategory );
+						ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidcategory);
 					}
-				} catch( NumberFormatException e ) {
-					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidnumber );
-				} catch( Exception e ) {
-					ParkourAddonPlugin.chat.internalError( sender );
+				} catch(NumberFormatException e) {
+					ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidnumber);
+				} catch(Exception e) {
+					ParkourAddonPlugin.chat.internalError(sender);
 				}
 			} else {
-				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
+				ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.notenougharguments);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	private boolean setRequiredCoursesNumberInPreviousCategoryForRankup( CommandSender sender, String[] args ) {
-		if( sender.hasPermission( "parkouraddon.category.setreqcoursesnbinprevcat" ) ) {
-			if( args.length > 2 ) {
+	private boolean setRequiredCoursesNumberInPreviousCategoryForRankup(CommandSender sender, String[] args) {
+		if(sender.hasPermission("parkouraddon.category.setreqcoursesnbinprevcat")) {
+			if(args.length > 2) {
 				try {
-					ParkourCategory cat = ParkourAddonPlugin.database.find( ParkourCategory.class, Integer.valueOf( args[ 1 ] ) );
-					if( cat != null ) {
-						cat.setRequiredCoursesNumberInPreviousCategoryForRankup( Integer.parseInt( args[ 2 ] ) );
-						ParkourAddonPlugin.database.save( cat );
-						ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.reqcoursesnbinprevcatset.replace( "%CAT%", cat.getName() ).replace( "%NUMBER%", args[ 2 ] ) );
+					ParkourCategory cat = ParkourAddonPlugin.database.find(ParkourCategory.class, Integer.valueOf(args[1]));
+					if(cat != null) {
+						cat.setRequiredCoursesNumberInPreviousCategoryForRankup(Integer.parseInt(args[2]));
+						ParkourAddonPlugin.database.save(cat);
+						ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.reqcoursesnbinprevcatset.replace("%CAT%", cat.getName()).replace("%NUMBER%", args[2]));
 					} else {
-						ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcategory );
+						ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidcategory);
 					}
-				} catch( NumberFormatException e ) {
-					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidnumber );
-				} catch( Exception e ) {
-					ParkourAddonPlugin.chat.internalError( sender );
+				} catch(NumberFormatException e) {
+					ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidnumber);
+				} catch(Exception e) {
+					ParkourAddonPlugin.chat.internalError(sender);
 				}
 			} else {
-				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
+				ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.notenougharguments);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	private boolean setParkoinsReward( CommandSender sender, String[] args ) {
-		if( sender.hasPermission( "parkouraddon.category.setparkoinsreward" ) ) {
-			if( args.length > 2 ) {
+	private boolean setParkoinsReward(CommandSender sender, String[] args) {
+		if(sender.hasPermission("parkouraddon.category.setparkoinsreward")) {
+			if(args.length > 2) {
 				try {
-					ParkourCategory cat = ParkourAddonPlugin.database.find( ParkourCategory.class, Integer.valueOf( args[ 1 ] ) );
-					if( cat != null ) {
-						cat.setParkoinsReward( Integer.valueOf( args[ 2 ] ) );
-						ParkourAddonPlugin.database.save( cat );
-						ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.parkoinsrewardcategoryset.replace( "%CAT%", cat.getName() ).replace( "%REWARD%", args[ 2 ] ) );
+					ParkourCategory cat = ParkourAddonPlugin.database.find(ParkourCategory.class, Integer.valueOf(args[1]));
+					if(cat != null) {
+						cat.setParkoinsReward(Integer.valueOf(args[2]));
+						ParkourAddonPlugin.database.save(cat);
+						ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.parkoinsrewardcategoryset.replace("%CAT%", cat.getName()).replace("%REWARD%", args[2]));
 					} else {
-						ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcategory );
+						ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidcategory);
 					}
-				} catch( NumberFormatException e ) {
-					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidnumber );
-				} catch( Exception e ) {
-					ParkourAddonPlugin.chat.internalError( sender );
+				} catch(NumberFormatException e) {
+					ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidnumber);
+				} catch(Exception e) {
+					ParkourAddonPlugin.chat.internalError(sender);
 				}
 			} else {
-				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
+				ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.notenougharguments);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	private boolean setHidden( CommandSender sender, String[] args ) {
-		if( sender.hasPermission( "parkouraddon.category.sethidden" ) ) {
-			if( args.length > 2 ) {
+	private boolean setHidden(CommandSender sender, String[] args) {
+		if(sender.hasPermission("parkouraddon.category.sethidden")) {
+			if(args.length > 2) {
 				try {
-					ParkourCategory cat = ParkourAddonPlugin.database.find( ParkourCategory.class, Integer.valueOf( args[ 1 ] ) );
-					if( cat != null ) {
-						cat.setHidden( Boolean.parseBoolean( args[ 2 ] ) );
-						ParkourAddonPlugin.database.save( cat );
-						ParkourAddonPlugin.chat.success( sender, ( cat.isHidden() ? ParkourAddonPlugin.messages.categorysettohidden : ParkourAddonPlugin.messages.categorysettoshown ).replace( "%CAT%", cat.getName() ) );
+					ParkourCategory cat = ParkourAddonPlugin.database.find(ParkourCategory.class, Integer.valueOf(args[1]));
+					if(cat != null) {
+						cat.setHidden(Boolean.parseBoolean(args[2]));
+						ParkourAddonPlugin.database.save(cat);
+						ParkourAddonPlugin.chat.success(sender, (cat.isHidden() ? ParkourAddonPlugin.messages.categorysettohidden : ParkourAddonPlugin.messages.categorysettoshown).replace("%CAT%", cat.getName()));
 					} else {
-						ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcategory );
+						ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidcategory);
 					}
-				} catch( Exception e ) {
-					ParkourAddonPlugin.chat.internalError( sender );
-					Log.severe( "Cannot set category hidden state.", e );
+				} catch(Exception e) {
+					ParkourAddonPlugin.chat.internalError(sender);
+					Log.severe("Cannot set category hidden state.", e);
 				}
 			} else {
-				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
+				ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.notenougharguments);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	private boolean setBaseLevel( CommandSender sender, String[] args ) {
-		if( sender.hasPermission( "parkouraddon.category.setbaselevel" ) ) {
-			if( args.length > 2 ) {
-				ParkourCategory category = ParkourAddonPlugin.database.find( ParkourCategory.class, Integer.valueOf( args[ 1 ] ) );
-				if( category != null ) {
+	private boolean setBaseLevel(CommandSender sender, String[] args) {
+		if(sender.hasPermission("parkouraddon.category.setbaselevel")) {
+			if(args.length > 2) {
+				ParkourCategory category = ParkourAddonPlugin.database.find(ParkourCategory.class, Integer.valueOf(args[1]));
+				if(category != null) {
 					try {
-						int level = Integer.parseInt( args[ 2 ] );
-						category.setBaseLevel( level );
-						for( ParkourCourse course : category.getCourses() ) {
-							Course.setMinimumLevel( course.getName(), level );
+						int level = Integer.parseInt(args[2]);
+						category.setBaseLevel(level);
+						for(ParkourCourse course : category.getCourses()) {
+							Course.setMinimumLevel(course.getName(), level);
 						}
-						ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.categorybaselevelset.replace( "%CAT%", category.getName() ).replace( "%LEVEL%", args[ 2 ] ) );
-					} catch( NumberFormatException e ) {
-						ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidnumber );
-					} catch( Exception e ) {
-						ParkourAddonPlugin.chat.internalError( sender );
+						ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.categorybaselevelset.replace("%CAT%", category.getName()).replace("%LEVEL%", args[2]));
+					} catch(NumberFormatException e) {
+						ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidnumber);
+					} catch(Exception e) {
+						ParkourAddonPlugin.chat.internalError(sender);
 					}
 				} else {
-					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcategory );
+					ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidcategory);
 				}
 			} else {
-				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
+				ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.notenougharguments);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	private boolean setParkourCategory( CommandSender sender, String[] args ) {
-		if( sender.hasPermission( "parkouraddon.parkour.setcategory" ) ) {
-			if( args.length > 2 ) {
+	private boolean setParkourCategory(CommandSender sender, String[] args) {
+		if(sender.hasPermission("parkouraddon.parkour.setcategory")) {
+			if(args.length > 2) {
 				try {
-					ParkourCourse course = ParkourCourse.retrieveFromName( ParkourAddonPlugin.database, args[ 1 ] );
-					if( course != null ) {
-						if( args[ 2 ].equalsIgnoreCase( "null" ) ) {
-							course.setCategory( null );
-							ParkourAddonPlugin.database.save( course );
-							ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.parkourcategoryset.replace( "%COURSENAME%", course.getName() ).replace( "%CAT%", "None" ) );
+					ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.database, args[1]);
+					if(course != null) {
+						if(args[2].equalsIgnoreCase("null")) {
+							course.setCategory(null);
+							ParkourAddonPlugin.database.save(course);
+							ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.parkourcategoryset.replace("%COURSENAME%", course.getName()).replace("%CAT%", "None"));
 						} else {
-							ParkourCategory cat = ParkourAddonPlugin.database.find( ParkourCategory.class, Integer.valueOf( args[ 2 ] ) );
-							if( cat != null ) {
-								course.setCategory( cat );
-								ParkourAddonPlugin.database.save( course );
-								ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.parkourcategoryset.replace( "%COURSENAME%", course.getName() ).replace( "%CAT%", cat.getName() ) );
+							ParkourCategory cat = ParkourAddonPlugin.database.find(ParkourCategory.class, Integer.valueOf(args[2]));
+							if(cat != null) {
+								course.setCategory(cat);
+								ParkourAddonPlugin.database.save(course);
+								ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.parkourcategoryset.replace("%COURSENAME%", course.getName()).replace("%CAT%", cat.getName()));
 							} else {
-								ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcategory );
+								ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidcategory);
 							}
 						}
 					} else {
-						ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcourse );
+						ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidcourse);
 					}
-				} catch( NumberFormatException e ) {
-					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidnumber );
-				} catch( Exception e ) {
-					ParkourAddonPlugin.chat.internalError( sender );
+				} catch(NumberFormatException e) {
+					ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidnumber);
+				} catch(Exception e) {
+					ParkourAddonPlugin.chat.internalError(sender);
 				}
 			} else {
-				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
+				ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.notenougharguments);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	private boolean setParkourDisplayName( CommandSender sender, String[] args ) {
-		if( sender.hasPermission( "parkouraddon.parkour.setdisplayname" ) ) {
-			if( args.length > 2 ) {
-				ParkourCourse course = ParkourCourse.retrieveFromName( ParkourAddonPlugin.database, args[ 1 ] );
-				if( course != null ) {
-					course.setDisplayName( args[ 2 ] );
-					ParkourAddonPlugin.database.save( course );
-					ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.parkourdisplaynameset.replace( "%COURSENAME%", course.getName() ).replace( "%DISPLAYNAME%", course.getDisplayName() ) );
+	private boolean setParkourDisplayName(CommandSender sender, String[] args) {
+		if(sender.hasPermission("parkouraddon.parkour.setdisplayname")) {
+			if(args.length > 2) {
+				ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.database, args[1]);
+				if(course != null) {
+					course.setDisplayName(args[2]);
+					ParkourAddonPlugin.database.save(course);
+					ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.parkourdisplaynameset.replace("%COURSENAME%", course.getName()).replace("%DISPLAYNAME%", course.getDisplayName()));
 				} else {
-					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcourse );
+					ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidcourse);
 				}
 			} else {
-				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
+				ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.notenougharguments);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	private boolean setParkourDescription( CommandSender sender, String[] args ) {
-		if( sender.hasPermission( "parkouraddon.parkour.setdescription" ) ) {
-			if( args.length > 2 ) {
-				ParkourCourse course = ParkourCourse.retrieveFromName( ParkourAddonPlugin.database, args[ 1 ] );
-				if( course != null ) {
-					String description = Stream.of( args )
-							.skip( 2 )
-							.collect( Collectors.joining( "\n" ) );
-					course.setDescription( description );
-					ParkourAddonPlugin.database.save( course );
-					ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.parkourdisplaynameset.replace( "%COURSENAME%", course.getName() ).replace( "%DISPLAYNAME%", course.getDisplayName() ) );
+	private boolean setParkourDescription(CommandSender sender, String[] args) {
+		if(sender.hasPermission("parkouraddon.parkour.setdescription")) {
+			if(args.length > 2) {
+				ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.database, args[1]);
+				if(course != null) {
+					String description = Stream.of(args)
+							.skip(2)
+							.collect(Collectors.joining("\n"));
+					course.setDescription(description);
+					ParkourAddonPlugin.database.save(course);
+					ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.parkourdisplaynameset.replace("%COURSENAME%", course.getName()).replace("%DISPLAYNAME%", course.getDisplayName()));
 				} else {
-					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcourse );
+					ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidcourse);
 				}
 			} else {
-				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
+				ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.notenougharguments);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	private boolean setParkourMcVersion( CommandSender sender, String[] args ) {
-		if( sender.hasPermission( "parkouraddon.parkour.setmcversion" ) ) {
-			if( args.length > 1 ) {
-				ParkourCourse course = ParkourCourse.retrieveFromName( ParkourAddonPlugin.database, args[ 1 ] );
-				if( course != null ) {
+	private boolean setParkourMcVersion(CommandSender sender, String[] args) {
+		if(sender.hasPermission("parkouraddon.parkour.setmcversion")) {
+			if(args.length > 1) {
+				ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.database, args[1]);
+				if(course != null) {
 					try {
-						if( args.length > 2 ) {
-							if( args[ 2 ].equals( "null" ) ) {
-								course.setMinimumProtocolVersion( null );
+						if(args.length > 2) {
+							if(args[2].equals("null")) {
+								course.setMinimumProtocolVersion(null);
 							} else {
-								int version = Integer.parseInt( args[ 2 ] );
-								course.setMinimumProtocolVersion( version );
+								int version = Integer.parseInt(args[2]);
+								course.setMinimumProtocolVersion(version);
 							}
 						} else {
 							ViaAPI api = Via.getAPI();
-							if( api != null ) {
-								if( sender instanceof Player ) {
-									course.setMinimumProtocolVersion( api.getPlayerVersion( sender ) );
+							if(api != null) {
+								if(sender instanceof Player) {
+									course.setMinimumProtocolVersion(api.getPlayerVersion(sender));
 								} else {
-									ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notaplayer );
+									ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.notaplayer);
 								}
 							}
 						}
-						ParkourAddonPlugin.database.save( course );
-						ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.parkourminimumprotocolversionset.replace( "%COURSENAME%", course.getName() ).replace( "%PROTOCOLVERSION%", String.valueOf( course.getMinimumProtocolVersion() ) ) );
-					} catch( NumberFormatException e ) {
-						ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidnumber );
+						ParkourAddonPlugin.database.save(course);
+						ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.parkourminimumprotocolversionset.replace("%COURSENAME%", course.getName()).replace("%PROTOCOLVERSION%", String.valueOf(course.getMinimumProtocolVersion())));
+					} catch(NumberFormatException e) {
+						ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidnumber);
 					}
 				} else {
-					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidcourse );
+					ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidcourse);
 				}
 			} else {
-				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
+				ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.notenougharguments);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	private boolean setPlayerLevel( CommandSender sender, String[] args ) {
-		if( sender.hasPermission( "parkouraddon.player.setlevel" ) ) {
-			if( args.length > 2 ) {
-				Player player = Bukkit.getPlayer( args[ 1 ] );
-				if( player != null ) {
+	private boolean setPlayerLevel(CommandSender sender, String[] args) {
+		if(sender.hasPermission("parkouraddon.player.setlevel")) {
+			if(args.length > 2) {
+				Player player = Bukkit.getPlayer(args[1]);
+				if(player != null) {
 					try {
-						ParkourLevel.setLevel( player, Integer.valueOf( args[ 2 ] ) );
-						ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.parkourlevelset.replace( "%PLAYER%", player.getName() ).replace( "%LEVEL%", args[ 2 ] ) );
-					} catch( NumberFormatException e ) {
-						ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidnumber );
-					} catch( Exception e ) {
-						ParkourAddonPlugin.chat.internalError( sender );
+						ParkourLevel.setLevel(player, Integer.valueOf(args[2]));
+						ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.parkourlevelset.replace("%PLAYER%", player.getName()).replace("%LEVEL%", args[2]));
+					} catch(NumberFormatException e) {
+						ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidnumber);
+					} catch(Exception e) {
+						ParkourAddonPlugin.chat.internalError(sender);
 					}
 				} else {
-					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidplayer );
+					ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidplayer);
 				}
 			} else {
-				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
+				ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.notenougharguments);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	private boolean addParkoins( CommandSender sender, String[] args ) {
-		if( sender.hasPermission( "parkouraddon.parkoins.add" ) ) {
-			if( args.length > 2 ) {
-				Player player = Bukkit.getPlayer( args[ 1 ] );
-				if( player != null ) {
+	private boolean addParkoins(CommandSender sender, String[] args) {
+		if(sender.hasPermission("parkouraddon.parkoins.add")) {
+			if(args.length > 2) {
+				Player player = Bukkit.getPlayer(args[1]);
+				if(player != null) {
 					try {
-						Parkoins.add( player, Integer.valueOf( args[ 2 ] ) );
-						Log.info( "Player " + sender.getName() + " added " + args[ 2 ] + " parkoins to player " + player.getName() );
-						ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.parkoinsadd.replace( "%PLAYER%", player.getName() ).replace( "%PARKOINS%", args[ 2 ] ) );
-						Bukkit.dispatchCommand( Bukkit.getConsoleSender(), "mail send Colasix " + sender.getName() + " a ajouté " + args[ 2 ] + " parkoins à " + player.getName() );
-					} catch( NumberFormatException e ) {
-						ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidnumber );
-					} catch( Exception e ) {
-						ParkourAddonPlugin.chat.internalError( sender );
+						Parkoins.add(player, Integer.valueOf(args[2]));
+						Log.info("Player " + sender.getName() + " added " + args[2] + " parkoins to player " + player.getName());
+						ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.parkoinsadd.replace("%PLAYER%", player.getName()).replace("%PARKOINS%", args[2]));
+						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mail send Colasix " + sender.getName() + " a ajouté " + args[2] + " parkoins à " + player.getName());
+					} catch(NumberFormatException e) {
+						ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidnumber);
+					} catch(Exception e) {
+						ParkourAddonPlugin.chat.internalError(sender);
 					}
 				} else {
-					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidplayer );
+					ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidplayer);
 				}
 			} else {
-				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
+				ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.notenougharguments);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	private boolean removeParkoins( CommandSender sender, String[] args ) {
-		if( sender.hasPermission( "parkouraddon.parkoins.deduct" ) ) {
-			if( args.length > 2 ) {
-				Player player = Bukkit.getPlayer( args[ 1 ] );
-				if( player != null ) {
+	private boolean removeParkoins(CommandSender sender, String[] args) {
+		if(sender.hasPermission("parkouraddon.parkoins.deduct")) {
+			if(args.length > 2) {
+				Player player = Bukkit.getPlayer(args[1]);
+				if(player != null) {
 					try {
-						Parkoins.remove( player, Integer.valueOf( args[ 2 ] ) );
-						Log.info( "Player " + sender.getName() + " deducted " + args[ 2 ] + " parkoins to player " + player.getName() );
-						ParkourAddonPlugin.chat.success( sender, ParkourAddonPlugin.messages.parkoinsremove.replace( "%PLAYER%", player.getName() ).replace( "%PARKOINS%", args[ 2 ] ) );
-						Bukkit.dispatchCommand( Bukkit.getConsoleSender(), "mail send Colasix " + sender.getName() + " a retiré " + args[ 2 ] + " parkoins à " + player.getName() );
-					} catch( NumberFormatException e ) {
-						ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidnumber );
-					} catch( Exception e ) {
-						ParkourAddonPlugin.chat.internalError( sender );
+						Parkoins.remove(player, Integer.valueOf(args[2]));
+						Log.info("Player " + sender.getName() + " deducted " + args[2] + " parkoins to player " + player.getName());
+						ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.parkoinsremove.replace("%PLAYER%", player.getName()).replace("%PARKOINS%", args[2]));
+						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mail send Colasix " + sender.getName() + " a retiré " + args[2] + " parkoins à " + player.getName());
+					} catch(NumberFormatException e) {
+						ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidnumber);
+					} catch(Exception e) {
+						ParkourAddonPlugin.chat.internalError(sender);
 					}
 				} else {
-					ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.invalidplayer );
+					ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidplayer);
 				}
 			} else {
-				ParkourAddonPlugin.chat.error( sender, ParkourAddonPlugin.messages.notenougharguments );
+				ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.notenougharguments);
 			}
 			return true;
 		}

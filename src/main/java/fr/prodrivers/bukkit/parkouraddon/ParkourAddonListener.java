@@ -11,50 +11,50 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class ParkourAddonListener implements Listener {
 	@EventHandler
-	public void onPlayerJoinCourseEvent( PlayerJoinCourseEvent event ) {
-		if( !Players.joinParkour( event.getPlayer(), event.getCourseName() ) ) {
-			event.setCancelled( true );
+	public void onPlayerJoinCourseEvent(PlayerJoinCourseEvent event) {
+		if(!Players.joinParkour(event.getPlayer(), event.getCourseName())) {
+			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler
-	public void onPlayerLeaveCourseEvent( PlayerLeaveCourseEvent event ) {
-		if( !Players.leaveParkour( event.getPlayer() ) ) {
-			event.setCancelled( true );
+	public void onPlayerLeaveCourseEvent(PlayerLeaveCourseEvent event) {
+		if(!Players.leaveParkour(event.getPlayer())) {
+			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler
-	public void onPlayerFinishParkour( PlayerFinishCourseEvent event ) {
-		Players.insertCompletionAndRankAsync( event.getPlayer(), event.getCourseName() );
+	public void onPlayerFinishParkour(PlayerFinishCourseEvent event) {
+		Players.insertCompletionAndRankAsync(event.getPlayer(), event.getCourseName());
 	}
 
 	@EventHandler
-	public void onPlayerCommandPreprocessEvent( PlayerCommandPreprocessEvent event ) {
+	public void onPlayerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
 		String command = event.getMessage();
-		if( command.startsWith( "/pa " ) ) {
-			if( command.startsWith( "/pa join " ) ) {
-				event.setCancelled( true );
+		if(command.startsWith("/pa ")) {
+			if(command.startsWith("/pa join ")) {
+				event.setCancelled(true);
 
-				Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () -> Players.joinParkour( event.getPlayer(), command.substring( 9 ) ) );
-			} else if( command.startsWith( "/pa leave" ) ) {
-				event.setCancelled( true );
+				Bukkit.getScheduler().runTask(ParkourAddonPlugin.plugin, () -> Players.joinParkour(event.getPlayer(), command.substring(9)));
+			} else if(command.startsWith("/pa leave")) {
+				event.setCancelled(true);
 
-				Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () -> Players.leaveParkour( event.getPlayer() ) );
-			} else if( command.startsWith( "/pa lobby" ) ) {
-				event.setCancelled( true );
+				Bukkit.getScheduler().runTask(ParkourAddonPlugin.plugin, () -> Players.leaveParkour(event.getPlayer()));
+			} else if(command.startsWith("/pa lobby")) {
+				event.setCancelled(true);
 
-				Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () -> Players.leaveParkour( event.getPlayer() ) );
-			} else if( command.startsWith( "/pa joinall" ) ) {
-				event.setCancelled( true );
+				Bukkit.getScheduler().runTask(ParkourAddonPlugin.plugin, () -> Players.leaveParkour(event.getPlayer()));
+			} else if(command.startsWith("/pa joinall")) {
+				event.setCancelled(true);
 
-				Bukkit.getScheduler().runTask( ParkourAddonPlugin.plugin, () -> Players.joinParkourAll( event.getPlayer(), command.substring( 11 ) ) );
+				Bukkit.getScheduler().runTask(ParkourAddonPlugin.plugin, () -> Players.joinParkourAll(event.getPlayer(), command.substring(11)));
 			}
 		}
 	}
 
 	@EventHandler
-	public void onPlayerQuit( PlayerQuitEvent event ) {
-		ParkourSelectionUI.reload( event.getPlayer() );
+	public void onPlayerQuit(PlayerQuitEvent event) {
+		ParkourSelectionUI.reload(event.getPlayer());
 	}
 }

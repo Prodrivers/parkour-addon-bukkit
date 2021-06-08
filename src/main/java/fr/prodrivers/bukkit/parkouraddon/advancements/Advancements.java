@@ -14,14 +14,14 @@ public class Advancements {
 		advancements = HashMultimap.create();
 	}
 
-	static Collection<Advancement> get( ParkourCategory category ) {
-		return advancements.get( Criterions.get( category ) );
+	static Collection<Advancement> get(ParkourCategory category) {
+		return advancements.get(Criterions.get(category));
 	}
 
-	static void load( Advancement advancement ) {
-		for( String criterion : advancement.getCriteria() ) {
-			if( Criterions.all().contains( criterion ) ) {
-				advancements.put( criterion, advancement );
+	static void load(Advancement advancement) {
+		for(String criterion : advancement.getCriteria()) {
+			if(Criterions.all().contains(criterion)) {
+				advancements.put(criterion, advancement);
 			}
 		}
 	}

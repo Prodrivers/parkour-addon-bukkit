@@ -14,7 +14,7 @@ class ParkourShopUI implements Listener {
 	private static ParkourShopUI instance;
 
 	static ParkourShopUI getInstance() {
-		if( instance == null )
+		if(instance == null)
 			instance = new ParkourShopUI();
 		return instance;
 	}
@@ -25,18 +25,18 @@ class ParkourShopUI implements Listener {
 		prepare();
 	}
 
-	private ItemStack prepareItem( Material material, String shopName ) {
-		ItemStack item = new ItemStack( material, 1 );
+	private ItemStack prepareItem(Material material, String shopName) {
+		ItemStack item = new ItemStack(material, 1);
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName( shopName );
-		item.setItemMeta( meta );
+		meta.setDisplayName(shopName);
+		item.setItemMeta(meta);
 		return item;
 	}
 
 	private void prepare() {
-		inv = Bukkit.createInventory( null, 4 * 9, ParkourAddonPlugin.messages.parkourshopui_general_title );
+		inv = Bukkit.createInventory(null, 4 * 9, ParkourAddonPlugin.messages.parkourshopui_general_title);
 
-		if( ParkourAddonPlugin.econ != null ) {
+		if(ParkourAddonPlugin.econ != null) {
 			inv.setItem(
 					12,
 					prepareItem(
@@ -72,40 +72,40 @@ class ParkourShopUI implements Listener {
 		prepare();
 	}
 
-	void open( Player player ) {
-		player.openInventory( inv );
+	void open(Player player) {
+		player.openInventory(inv);
 	}
 
 	@EventHandler
-	public void onInventoryClick( InventoryClickEvent event ) {
-		if( !( event.getWhoClicked() instanceof Player ) ) return;
-		if( event.isCancelled() ) return;
+	public void onInventoryClick(InventoryClickEvent event) {
+		if(!(event.getWhoClicked() instanceof Player)) return;
+		if(event.isCancelled()) return;
 
 		Player player = (Player) event.getWhoClicked();
 		int slot = event.getSlot();
 		Inventory inventory = event.getInventory();
 
-		if( event.getView().getTitle().equals( ParkourAddonPlugin.messages.parkourshopui_general_title ) ) {
-			event.setCancelled( true );
+		if(event.getView().getTitle().equals(ParkourAddonPlugin.messages.parkourshopui_general_title)) {
+			event.setCancelled(true);
 
-			if( ParkourAddonPlugin.econ != null ) {
-				if( slot == 12 ) {
+			if(ParkourAddonPlugin.econ != null) {
+				if(slot == 12) {
 					player.closeInventory();
-					ParkourShopRankUI.getInstance().open( player );
-				} else if( slot == 14 ) {
+					ParkourShopRankUI.getInstance().open(player);
+				} else if(slot == 14) {
 					player.closeInventory();
-					ParkourShopConverterUI.getInstance().open( player );
+					ParkourShopConverterUI.getInstance().open(player);
 				}
 			} else {
-				if( slot == 13 ) {
+				if(slot == 13) {
 					player.closeInventory();
-					ParkourShopRankUI.getInstance().open( player );
+					ParkourShopRankUI.getInstance().open(player);
 				}
 			}
 
-			if( slot == 31 ) {
+			if(slot == 31) {
 				player.closeInventory();
-				player.performCommand( "bossshop shop" );
+				player.performCommand("bossshop shop");
 			}
 		}
 	}

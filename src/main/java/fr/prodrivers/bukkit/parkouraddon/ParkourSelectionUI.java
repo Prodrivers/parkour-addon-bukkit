@@ -38,52 +38,52 @@ class ParkourSelectionUI {
 	}
 
 	public static void reload(Player player) {
-		uis.remove( player.getUniqueId() );
+		uis.remove(player.getUniqueId());
 	}
 
 	public static void reload(Player player, Integer categoryId) {
-		Map<Integer, InventoryGUI> playerUis = uis.computeIfAbsent( player.getUniqueId(), k -> new HashMap<>() );
-		playerUis.remove( categoryId );
+		Map<Integer, InventoryGUI> playerUis = uis.computeIfAbsent(player.getUniqueId(), k -> new HashMap<>());
+		playerUis.remove(categoryId);
 	}
 
-	static void open( Player player, ParkourCategory category ) {
+	static void open(Player player, ParkourCategory category) {
 		try {
-			if( !category.isHidden() || category.isHidden() && player.hasPermission( "Parkour.Admin.Bypass" ) ) {
-				if( ParkourLevel.getLevel( player ) >= category.getBaseLevel() || player.hasPermission( "Parkour.Admin.Bypass" ) ) {
-					Map<Integer, InventoryGUI> playerUis = uis.computeIfAbsent( player.getUniqueId(), k -> new HashMap<>() );
-					if( !playerUis.containsKey( category.getCategoryId() ) ) {
-						playerUis.put( category.getCategoryId(), generate( player, category ) );
+			if(!category.isHidden() || category.isHidden() && player.hasPermission("Parkour.Admin.Bypass")) {
+				if(ParkourLevel.getLevel(player) >= category.getBaseLevel() || player.hasPermission("Parkour.Admin.Bypass")) {
+					Map<Integer, InventoryGUI> playerUis = uis.computeIfAbsent(player.getUniqueId(), k -> new HashMap<>());
+					if(!playerUis.containsKey(category.getCategoryId())) {
+						playerUis.put(category.getCategoryId(), generate(player, category));
 					}
-					playerUis.get( category.getCategoryId() ).open( player );
+					playerUis.get(category.getCategoryId()).open(player);
 				} else {
-					ParkourAddonPlugin.chat.error( player, ParkourAddonPlugin.messages.notenoughlevel );
+					ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.notenoughlevel);
 				}
 			} else {
-				ParkourAddonPlugin.chat.error( player, ParkourAddonPlugin.messages.invalidcategory );
+				ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.invalidcategory);
 			}
-		} catch( NullPointerException e ) {
-			ParkourAddonPlugin.chat.internalError( player );
-			Log.severe( "Cannot show selection UI to player " + player.getName() + " .", e );
+		} catch(NullPointerException e) {
+			ParkourAddonPlugin.chat.internalError(player);
+			Log.severe("Cannot show selection UI to player " + player.getName() + " .", e);
 		}
 	}
 
-	private static InventoryGUI generate( Player player, ParkourCategory category ) throws NullPointerException {
+	private static InventoryGUI generate(Player player, ParkourCategory category) throws NullPointerException {
 		String title = ParkourAddonPlugin.messages.parkourselectionui_title_normal
-				.replace( "%CAT%", category.getName() )
-				.replace( "%CATCOLOR%", ChatColor.valueOf( category.getChatColor() ).toString() )
+				.replace("%CAT%", category.getName())
+				.replace("%CATCOLOR%", ChatColor.valueOf(category.getChatColor()).toString())
 				+ ChatColor.RESET;
 
-		if( BedrockSession.hasSession( player ) ) {
+		if(BedrockSession.hasSession(player)) {
 			return new GUIBuilder()
-					.guiStateBehaviour( GUIBuilder.GUIStateBehaviour.LOCAL_TO_SESSION )
-					.inventoryType( InventoryType.CHEST )
-					.dynamicallyResizeToWrapContent( true )
-					.size( 54 )
-					.presenter( new BedrockGUIPresenter() )
-					.populator( new UnlimitedGUIPopulator() )
+					.guiStateBehaviour(GUIBuilder.GUIStateBehaviour.LOCAL_TO_SESSION)
+					.inventoryType(InventoryType.CHEST)
+					.dynamicallyResizeToWrapContent(true)
+					.size(54)
+					.presenter(new BedrockGUIPresenter())
+					.populator(new UnlimitedGUIPopulator())
 					.contents(
 							title,
-							genContent( true, player, category ),
+							genContent(true, player, category),
 							false,
 							false,
 							false
@@ -91,21 +91,21 @@ class ParkourSelectionUI {
 					.build();
 		}
 
-		if( category.getName().length() > 8 ) {
+		if(category.getName().length() > 8) {
 			title = ParkourAddonPlugin.messages.parkourselectionui_title_reduced
-					.replace( "%CAT%", category.getName() )
-					.replace( "%CATCOLOR%", ChatColor.valueOf( category.getChatColor() ).toString() )
+					.replace("%CAT%", category.getName())
+					.replace("%CATCOLOR%", ChatColor.valueOf(category.getChatColor()).toString())
 					+ ChatColor.RESET;
 		}
 
 		return new GUIBuilder()
-				.guiStateBehaviour( GUIBuilder.GUIStateBehaviour.LOCAL_TO_SESSION )
-				.inventoryType( InventoryType.CHEST )
-				.dynamicallyResizeToWrapContent( true )
-				.size( 54 )
+				.guiStateBehaviour(GUIBuilder.GUIStateBehaviour.LOCAL_TO_SESSION)
+				.inventoryType(InventoryType.CHEST)
+				.dynamicallyResizeToWrapContent(true)
+				.size(54)
 				.contents(
 						title,
-						genContent( false, player, category ),
+						genContent(false, player, category),
 						true,
 						true,
 						true
@@ -113,69 +113,69 @@ class ParkourSelectionUI {
 				.build();
 	}
 
-	private static List<GUIElement> genContent( boolean isBedrockContent, Player player, ParkourCategory category ) throws NullPointerException {
+	private static List<GUIElement> genContent(boolean isBedrockContent, Player player, ParkourCategory category) throws NullPointerException {
 		List<String> lores = ParkourAddonPlugin.messages.parkourselectionui_item_lore_normal;
 		List<String> lores_completed = ParkourAddonPlugin.messages.parkourselectionui_item_lore_completed;
 		List<GUIElement> contents = new ArrayList<>();
 
-		if( isBedrockContent ) {
+		if(isBedrockContent) {
 			lores = ParkourAddonPlugin.messages.parkourselectionui_item_lore_bedrock;
 		}
 
 		PreparedStatement query;
 		try {
-			query = SQLProvider.getConnection().prepareStatement( Utils.GET_PARKOURS_WITH_COMPLETION_QUERY );
-			query.setBytes( 1, Utils.getBytesFromUniqueId( player.getUniqueId() ) );
-			query.setInt( 2, category.getCategoryId() );
+			query = SQLProvider.getConnection().prepareStatement(Utils.GET_PARKOURS_WITH_COMPLETION_QUERY);
+			query.setBytes(1, Utils.getBytesFromUniqueId(player.getUniqueId()));
+			query.setInt(2, category.getCategoryId());
 			ResultSet results = query.executeQuery();
 
-			while( results.next() ) {
-				String internalName = results.getString( "course.name" );
-				String author = results.getString( "course.author" );
-				String description = results.getString( "course.description" );
-				final String finalDescription = ( description == null ? "" : description );
-				String name = ChatColor.valueOf( results.getString( "parkourcategory.chatColor" ) ) + results.getString( "course.displayName" );
-				boolean completed = results.getBytes( "playeruuid" ) != null;
-				Material material = Material.valueOf( results.getString( "parkourcategory.material" ) );
+			while(results.next()) {
+				String internalName = results.getString("course.name");
+				String author = results.getString("course.author");
+				String description = results.getString("course.description");
+				final String finalDescription = (description == null ? "" : description);
+				String name = ChatColor.valueOf(results.getString("parkourcategory.chatColor")) + results.getString("course.displayName");
+				boolean completed = results.getBytes("playeruuid") != null;
+				Material material = Material.valueOf(results.getString("parkourcategory.material"));
 				GUIElement element;
 
-				Stream<String> loreStream = completed ? Stream.concat( lores.stream(), lores_completed.stream() ) : lores.stream();
+				Stream<String> loreStream = completed ? Stream.concat(lores.stream(), lores_completed.stream()) : lores.stream();
 
 				String[] formattedLore = loreStream
 						.skip(1)
-						.map( lore -> lore
-								.replace( "%NAME%", name)
-								.replace( "%AUTHOR%", author)
-								.replace( "%DESCRIPTION%", finalDescription )
-								.split( "\n" )
+						.map(lore -> lore
+								.replace("%NAME%", name)
+								.replace("%AUTHOR%", author)
+								.replace("%DESCRIPTION%", finalDescription)
+								.split("\n")
 						)
-						.flatMap( Arrays::stream )
-						.filter( lore -> !ChatColor.stripColor( lore ).isEmpty() )
+						.flatMap(Arrays::stream)
+						.filter(lore -> !ChatColor.stripColor(lore).isEmpty())
 						.toArray(String[]::new);
 				element = createJoinParkourElement(
 						completed,
 						internalName,
-						lores.get(0).replace( "%NAME%", name )
-								.replace( "%AUTHOR%", author ),
+						lores.get(0).replace("%NAME%", name)
+								.replace("%AUTHOR%", author),
 						material,
 						formattedLore
 				);
-				contents.add( element );
+				contents.add(element);
 			}
-		} catch( SQLException e ) {
-			Log.severe( "Cannot get courses to show selection UI.", e );
+		} catch(SQLException e) {
+			Log.severe("Cannot get courses to show selection UI.", e);
 		}
 
 		return contents;
 	}
 
-	private static GUIElement createJoinParkourElement( boolean completed, final String name, String displayName, Material material, String... lore ) {
-		ItemStack item = new ItemStack( material, 1 );
-		if( completed ) {
+	private static GUIElement createJoinParkourElement(boolean completed, final String name, String displayName, Material material, String... lore) {
+		ItemStack item = new ItemStack(material, 1);
+		if(completed) {
 			ItemMeta meta = item.getItemMeta();
-			meta.addEnchant( Enchantment.DAMAGE_ALL, 1, true );
-			meta.addItemFlags( ItemFlag.HIDE_ENCHANTS );
-			item.setItemMeta( meta );
+			meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+			item.setItemMeta(meta);
 		}
 
 		return GUIElementFactory.createActionItem(
@@ -185,11 +185,11 @@ class ParkourSelectionUI {
 						displayName,
 						lore
 				),
-				(Callback<Player>) player -> Bukkit.getScheduler().runTaskLater( InventoryGUIAPI.getInstance(),
+				(Callback<Player>) player -> Bukkit.getScheduler().runTaskLater(InventoryGUIAPI.getInstance(),
 						() -> {
 							player.closeInventory();
-							Players.joinParkour( player, name );
-						}, 1L ),
+							Players.joinParkour(player, name);
+						}, 1L),
 				completed ? ParkourAddonPlugin.configuration.selection_image_check : FormImage.NONE
 		);
 	}

@@ -14,7 +14,7 @@ public class ParkourLevel {
 		private final Player player;
 		private final int level;
 
-		ParkourLevelSetThread( final Player player, final int level ) {
+		ParkourLevelSetThread(final Player player, final int level) {
 			this.player = player;
 			this.level = level;
 		}
@@ -22,23 +22,23 @@ public class ParkourLevel {
 		public void run() {
 			// Update the player's parkour level
 			try {
-				PreparedStatement query = SQLProvider.getConnection().prepareStatement( Utils.SET_PLAYER_PARKOUR_LEVEL_QUERY );
-				query.setInt( 1, level );
-				query.setBytes( 2, Utils.getBytesFromUniqueId( player.getUniqueId() ) );
+				PreparedStatement query = SQLProvider.getConnection().prepareStatement(Utils.SET_PLAYER_PARKOUR_LEVEL_QUERY);
+				query.setInt(1, level);
+				query.setBytes(2, Utils.getBytesFromUniqueId(player.getUniqueId()));
 				query.executeUpdate();
-			} catch( SQLException e ) {
-				Log.severe( "Cannot update player parkour level.", e );
+			} catch(SQLException e) {
+				Log.severe("Cannot update player parkour level.", e);
 			}
 		}
 	}
 
-	public static int getLevel( Player player ) {
-		return PlayerInfo.getParkourLevel( player );
+	public static int getLevel(Player player) {
+		return PlayerInfo.getParkourLevel(player);
 	}
 
-	public static void setLevel( Player player, int level ) {
-		Log.info( "Setting player " + player.getName() + " level to " + level + "." );
-		PlayerInfo.setParkourLevel( player, level );
-		( new ParkourLevelSetThread( player, level ) ).run();
+	public static void setLevel(Player player, int level) {
+		Log.info("Setting player " + player.getName() + " level to " + level + ".");
+		PlayerInfo.setParkourLevel(player, level);
+		(new ParkourLevelSetThread(player, level)).run();
 	}
 }

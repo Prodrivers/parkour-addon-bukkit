@@ -6,11 +6,9 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- *
  * An Event that fires when a player completes a parkour course
  *
  * @see Event
- *
  */
 public class PlayerCompleteCourseEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
@@ -22,9 +20,8 @@ public class PlayerCompleteCourseEvent extends Event {
 	 *
 	 * @param player Player that completed the course
 	 * @param course Completed course
-	 *
 	 */
-	public PlayerCompleteCourseEvent( Player player, ParkourCourse course ) {
+	public PlayerCompleteCourseEvent(Player player, ParkourCourse course) {
 		this.player = player;
 		this.course = course;
 

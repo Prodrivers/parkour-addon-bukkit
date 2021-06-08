@@ -8,9 +8,9 @@ public class Models {
 
 	public static void populate() {
 		ModelsList.clear();
-		ModelsList.add( ParkourCourse.class );
-		ModelsList.add( ParkourCategory.class );
-		ModelsList.add( ParkourPlayerCompletion.class );
-		ModelsList.add( ParkourTimeRanked.class );
+		ModelsList.add(ParkourCourse.class);
+		ModelsList.add(ParkourCategory.class);
+		ModelsList.add(ParkourPlayerCompletion.class);
+		ModelsList.add(ParkourTimeRanked.class);
 	}
 }

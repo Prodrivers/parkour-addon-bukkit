@@ -9,19 +9,19 @@ import java.util.List;
 
 public class ParkourPositionUpdater implements Runnable {
 	public void run() {
-		List<ParkourCourse> courses = ParkourCourse.retrieveAll( ParkourAddonPlugin.database );
+		List<ParkourCourse> courses = ParkourCourse.retrieveAll(ParkourAddonPlugin.database);
 
-		for( ParkourCourse course : courses ) {
-			Location location = Course.getLocation( course.getName() );
+		for(ParkourCourse course : courses) {
+			Location location = Course.getLocation(course.getName());
 			assert location != null;
 			assert location.getWorld() != null;
 
-			course.setPositionX( location.getX() );
-			course.setPositionY( location.getY() );
-			course.setPositionZ( location.getZ() );
-			course.setPositionWorld( location.getWorld().getName() );
+			course.setPositionX(location.getX());
+			course.setPositionY(location.getY());
+			course.setPositionZ(location.getZ());
+			course.setPositionWorld(location.getWorld().getName());
 		}
 
-		ParkourAddonPlugin.database.saveAll( courses );
+		ParkourAddonPlugin.database.saveAll(courses);
 	}
 }

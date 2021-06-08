@@ -3,7 +3,7 @@ package fr.prodrivers.bukkit.parkouraddon;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.awt.Color;
+import java.awt.*;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
@@ -79,34 +79,34 @@ public class Utils {
 	public static String SET_PLAYER_PARKOINS_QUERY = "UPDATE `players` SET `parkoins` = ? WHERE `playeruuid` = ?";
 	public static String SET_PLAYER_PARKOUR_LEVEL_QUERY = "UPDATE `players` SET `parkourLevel` = ? WHERE `playeruuid` = ?";
 
-	public static byte[] getBytesFromUniqueId( UUID uniqueId ) {
-		ByteBuffer bb = ByteBuffer.wrap( new byte[ 16 ] );
-		bb.putLong( uniqueId.getMostSignificantBits() );
-		bb.putLong( uniqueId.getLeastSignificantBits() );
+	public static byte[] getBytesFromUniqueId(UUID uniqueId) {
+		ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
+		bb.putLong(uniqueId.getMostSignificantBits());
+		bb.putLong(uniqueId.getLeastSignificantBits());
 		return bb.array();
 	}
 
-	public static UUID getUniqueIdFromBytes( byte[] uniqueId ) {
-		return UUID.nameUUIDFromBytes( uniqueId );
+	public static UUID getUniqueIdFromBytes(byte[] uniqueId) {
+		return UUID.nameUUIDFromBytes(uniqueId);
 	}
 
-	public static int parseColor( String colorString ) {
-		if( colorString.charAt( 0 ) == '#' ) {
+	public static int parseColor(String colorString) {
+		if(colorString.charAt(0) == '#') {
 			// Use a long to avoid rollovers on #ffXXXXXX
-			long color = Long.parseLong( colorString.substring( 1 ), 16 );
-			if( colorString.length() != 7 ) {
-				throw new IllegalArgumentException( "Unknown color" );
+			long color = Long.parseLong(colorString.substring(1), 16);
+			if(colorString.length() != 7) {
+				throw new IllegalArgumentException("Unknown color");
 			}
 			return (int) color;
 		}
-		throw new IllegalArgumentException( "Unknown color" );
+		throw new IllegalArgumentException("Unknown color");
 	}
 
 	public static ItemStack getCloseItem() {
-		ItemStack item = new ItemStack( ParkourAddonPlugin.configuration.shops_close_material, 1 );
+		ItemStack item = new ItemStack(ParkourAddonPlugin.configuration.shops_close_material, 1);
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName( ParkourAddonPlugin.messages.parkourshopui_close_title );
-		item.setItemMeta( meta );
+		meta.setDisplayName(ParkourAddonPlugin.messages.parkourshopui_close_title);
+		item.setItemMeta(meta);
 		return item;
 	}
 
@@ -120,7 +120,7 @@ public class Utils {
 		b = b / 255.f;
 
 		float[] hsv = new float[3];
-		Color.RGBtoHSB((int)r, (int)g, (int)b, hsv);
+		Color.RGBtoHSB((int) r, (int) g, (int) b, hsv);
 
 		return hsv;
 	}

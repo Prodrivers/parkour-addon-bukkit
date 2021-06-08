@@ -19,43 +19,43 @@ public class BlueMapParkourMarker implements Runnable {
 
 	public void run() {
 		try {
-			BlueMapAPI.getInstance().ifPresent( api -> {
+			BlueMapAPI.getInstance().ifPresent(api -> {
 				try {
 					MarkerAPI markerApi = api.getMarkerAPI();
 
 					markerApi.load();
 
-					markerApi.removeMarkerSet( PARKOUR_MARKER_SET );
-					MarkerSet set = markerApi.createMarkerSet( PARKOUR_MARKER_SET );
+					markerApi.removeMarkerSet(PARKOUR_MARKER_SET);
+					MarkerSet set = markerApi.createMarkerSet(PARKOUR_MARKER_SET);
 
-					set.setLabel( ParkourAddonPlugin.messages.bluemap_parkours_label );
-					set.setToggleable( true );
-					set.setDefaultHidden( true );
+					set.setLabel(ParkourAddonPlugin.messages.bluemap_parkours_label);
+					set.setToggleable(true);
+					set.setDefaultHidden(true);
 
-					for( ParkourCourse course : ParkourCourse.retrieveAll( ParkourAddonPlugin.database ) ) {
-						createMarker( api, set, course );
+					for(ParkourCourse course : ParkourCourse.retrieveAll(ParkourAddonPlugin.database)) {
+						createMarker(api, set, course);
 					}
 
 					markerApi.save();
 
-					Log.info( set.getMarkers().size() + " markers generated for BlueMap." );
-				} catch( Exception e ) {
-					Log.severe( "Could not generate markers for BlueMap.", e );
+					Log.info(set.getMarkers().size() + " markers generated for BlueMap.");
+				} catch(Exception e) {
+					Log.severe("Could not generate markers for BlueMap.", e);
 				}
-			} );
-		} catch( NoClassDefFoundError e ) {
-			Log.warning( "Cannot create BlueMap markers as plugin is not installed." );
+			});
+		} catch(NoClassDefFoundError e) {
+			Log.warning("Cannot create BlueMap markers as plugin is not installed.");
 		}
 	}
 
-	public void createMarker( BlueMapAPI api, MarkerSet set, ParkourCourse course ) {
+	public void createMarker(BlueMapAPI api, MarkerSet set, ParkourCourse course) {
 		ParkourCategory category = course.getCategory();
 
-		Location location = Course.getLocation( course.getName() );
+		Location location = Course.getLocation(course.getName());
 		assert location != null;
 		assert location.getWorld() != null;
 
-		Optional<BlueMapMap> map = api.getMap( location.getWorld().getName() );
+		Optional<BlueMapMap> map = api.getMap(location.getWorld().getName());
 
 		// Do not show maps that do not have a display name
 		if(map.isPresent() && course.getDisplayName() != null) {
@@ -72,8 +72,8 @@ public class BlueMapParkourMarker implements Runnable {
 				);
 				html = String.format(
 						ParkourAddonPlugin.messages.bluemap_parkours_markers_withcategory_html,
-						Integer.toHexString( category.getHexColor() ),
-						( Utils.isColorLight( category.getHexColor() ) ? "#000" : "#fff" ),
+						Integer.toHexString(category.getHexColor()),
+						(Utils.isColorLight(category.getHexColor()) ? "#000" : "#fff"),
 						category.getBaseLevel(),
 						course.getDisplayName()
 				);
@@ -96,7 +96,7 @@ public class BlueMapParkourMarker implements Runnable {
 					html
 			);
 		} else {
-			Log.warning( "BlueMap map " + location.getWorld().getName() + " does not exists." );
+			Log.warning("BlueMap map " + location.getWorld().getName() + " does not exists.");
 		}
 	}
 }

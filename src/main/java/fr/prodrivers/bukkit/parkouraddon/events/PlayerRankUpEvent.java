@@ -5,11 +5,9 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- *
  * An Event that fires when a player
  *
  * @see Event
- *
  */
 public class PlayerRankUpEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
@@ -19,11 +17,10 @@ public class PlayerRankUpEvent extends Event {
 	/**
 	 * Construct a new player complete course event
 	 *
-	 * @param player Player that completed the course
+	 * @param player   Player that completed the course
 	 * @param newLevel Player's new level
-	 *
 	 */
-	public PlayerRankUpEvent( Player player, int newLevel ) {
+	public PlayerRankUpEvent(Player player, int newLevel) {
 		this.player = player;
 		this.newLevel = newLevel;
 
