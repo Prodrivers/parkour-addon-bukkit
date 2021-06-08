@@ -7,10 +7,14 @@ Integration and additional functionalities for Parkour plugin :
 	* Each category has a minimum parkour level
 	* Once a certain threshold of completed parkour in a category is attained, the player gains access to the following one by being upgraded to the next category's parkour level
 	* Multiple categories can be unlocked at once if they have the same minimum parkour level
+	* Categories unlocking integrates with Minecraft advancements if they exists
 * Category UI showing all parkours of a category and the player's progression in it
 * Shop UI to buy access to categories and exchange Parkoins with the server's economy through VaultAPI
+* ViaVersion support to limit access of certain courses to certain versions
+* BlueMap integration
+* Additional information in database, such as parkoins, parkour level and course position
 
-This plugin only supports servers with 1.14+ API.
+This plugin only supports servers with 1.16+ API.
 
 ## Overview
 
