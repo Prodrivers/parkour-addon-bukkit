@@ -7,6 +7,8 @@ import fr.prodrivers.bukkit.parkouraddon.Log;
 import fr.prodrivers.bukkit.parkouraddon.ParkourAddonPlugin;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCourse;
 import io.github.a5h73y.parkour.Parkour;
+import io.github.a5h73y.parkour.other.ParkourValidation;
+import io.github.a5h73y.parkour.type.course.Course;
 import io.github.a5h73y.parkour.type.player.ParkourSession;
 import org.bukkit.entity.Player;
 
@@ -46,35 +48,56 @@ public class ParkourSection implements IProdriversSection {
 
 	@Override
 	public boolean join(Player player, String subSection, String leavedSection) {
-		ParkourSession session = parkour.getPlayerManager().getParkourSession(player);
-		if(session == null) {
-			Log.finest("Player is not in a parkour session, wants to join " + subSection);
-			if(subSection == null) {
-				Log.warning("Refused player " + player.getName() + " to join section because name is null.");
-				return false;
-			}
-			if(subSection.length() == 0) {
-				Log.warning("Refused player " + player.getName() + " to join section because name is empty.");
-				return false;
-			}
-			@SuppressWarnings("unchecked") ViaAPI<Player> api = (ViaAPI<Player>) Via.getAPI();
-			ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.database, subSection);
-			if(course == null) {
-				ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.invalidcourse);
-				return false;
-			}
-			if(api != null && course.getMinimumProtocolVersion() != null && api.getPlayerVersion(player) < course.getMinimumProtocolVersion()) {
-				ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.clienttooold);
-				return false;
-			}
-			Log.finest("Proceeding with course join.");
-			parkour.getPlayerManager().joinCourse(player, subSection);
-			session = parkour.getPlayerManager().getParkourSession(player);
-			Log.finest("Player is in parkour session: " + (session != null) + ", in course " + ((session != null) && (session.getCourse() != null) ? session.getCourse().getName() : "NULL_COURSE"));
-			return (session != null);
+		// Check parameter validity
+		if(subSection == null) {
+			Log.warning("Refused player " + player.getName() + " to join section because name is null.");
+			return false;
 		}
-		Log.finest("Player is already in a parkour session, wants to join " + subSection + ", is in course " + (session.getCourse() != null ? session.getCourse().getName() : "NULL_COURSE"));
-		return true;
+		if(subSection.length() == 0) {
+			Log.warning("Refused player " + player.getName() + " to join section because name is empty.");
+			return false;
+		}
+
+		Log.finest("Player wants to join " + subSection);
+
+		// Get course from Parkour plugin side
+		Course pluginCourse = parkour.getCourseManager().findCourse(subSection);
+		if(pluginCourse == null) {
+			ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.invalidcourse);
+			return false;
+		}
+		// Check if player can join course
+		if(!ParkourValidation.canJoinCourse(player, pluginCourse)) {
+			Log.warning("Parkour plugin refused player " + player.getName() + " to join parkour " + subSection);
+			return false;
+		}
+
+		@SuppressWarnings("unchecked") ViaAPI<Player> api = (ViaAPI<Player>) Via.getAPI();
+
+		// Get course from ParkourAddon side
+		ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.database, subSection);
+		if(course == null) {
+			ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.invalidcourse);
+			return false;
+		}
+
+		// Check player protocol version
+		if(api != null) {
+			int playerVersion = api.getPlayerVersion(player);
+			if(course.getMinimumProtocolVersion() != null && playerVersion < course.getMinimumProtocolVersion()) {
+				ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.clienttooold);
+				Log.warning("Refused player " + player.getName() + " to join parkour " + subSection + " because client is too old. (has " + playerVersion + ", required " + course.getMinimumProtocolVersion() + ")");
+				return false;
+			}
+		}
+
+		Log.finest("Proceeding with course join.");
+		parkour.getPlayerManager().joinCourse(player, subSection);
+
+		ParkourSession session = parkour.getPlayerManager().getParkourSession(player);
+		Log.finest("Player is in parkour session: " + (session != null) + ", in course " + ((session != null) && (session.getCourse() != null) ? session.getCourse().getName() : "NULL_COURSE"));
+
+		return (session != null);
 	}
 
 	@Override
