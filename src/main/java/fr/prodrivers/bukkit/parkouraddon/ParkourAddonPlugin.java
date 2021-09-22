@@ -48,9 +48,8 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 		Models.populate();
 
 		chat = new EChat(plugindescription.getName());
-		configuration = new EConfiguration(this, EMessages.class, chat);
-		configuration.init();
-		messages = (EMessages) configuration.getMessages();
+		messages = new EMessages(this);
+		configuration = new EConfiguration(this, messages, chat);
 
 		Log.init();
 

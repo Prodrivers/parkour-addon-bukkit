@@ -1,7 +1,6 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
 import fr.prodrivers.bukkit.commons.Chat;
-import fr.prodrivers.bukkit.commons.annotations.ForceSkipObjectAction;
 import fr.prodrivers.bukkit.commons.configuration.Configuration;
 import fr.prodrivers.bukkit.commons.configuration.Messages;
 import me.eddie.inventoryguiapi.gui.elements.FormImage;
@@ -13,7 +12,6 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public class EConfiguration extends Configuration {
-	@ForceSkipObjectAction
 	public FormImage selection_image_check =
 			new FormImage(FormImage.FormImageType.PATH, "textures/ui/check.png");
 	public Material shops_close_material = Material.BARRIER;
@@ -24,7 +22,6 @@ public class EConfiguration extends Configuration {
 	public Material shops_converters_to_material = Material.GOLD_INGOT;
 	public Material shops_converters_from_material = Material.IRON_INGOT;
 	public Map<String, Integer> shops_converters_amounts = new LinkedHashMap<>();
-	@ForceSkipObjectAction
 	public Level logLevel = Level.INFO;
 
 	{
@@ -35,13 +32,8 @@ public class EConfiguration extends Configuration {
 		shops_converters_amounts.put(String.valueOf(2000), 1000);
 	}
 
-	public EConfiguration(Plugin plugin, Class<? extends Messages> messagesClass, Chat chat) {
-		super(plugin, messagesClass, chat);
-	}
-
-	@Override
-	public void reload() {
-		super.reload();
-		getMessages().reload();
+	public EConfiguration(Plugin plugin, Messages messages, Chat chat) {
+		super(plugin, chat, messages);
+		init();
 	}
 }
