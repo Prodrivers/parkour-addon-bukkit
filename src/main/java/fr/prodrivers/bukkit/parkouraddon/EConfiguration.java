@@ -12,8 +12,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public class EConfiguration extends Configuration {
-	public FormImage selection_image_check =
-			new FormImage(FormImage.FormImageType.PATH, "textures/ui/check.png");
+	public FormImage selection_image_check = new FormImage(FormImage.Type.PATH, "textures/ui/check.png");
 	public Material shops_close_material = Material.BARRIER;
 	public Material shops_ranks_material = Material.EMERALD;
 	public Material shops_ranks_alreadyBought_material = Material.EMERALD_BLOCK;
