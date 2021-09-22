@@ -52,8 +52,10 @@ public class BlueMapParkourMarker implements Runnable {
 		ParkourCategory category = course.getCategory();
 
 		Location location = Course.getLocation(course.getName());
-		assert location != null;
-		assert location.getWorld() != null;
+		if(location == null || location.getWorld() == null) {
+			Log.warning("Course " + course.getName() + " has no checkpoint, hence cannot get its location and update its marker.");
+			return;
+		}
 
 		Optional<BlueMapMap> map = api.getMap(location.getWorld().getName());
 
