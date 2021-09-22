@@ -8,7 +8,7 @@ import fr.prodrivers.bukkit.commons.parties.PartyManager;
 import fr.prodrivers.bukkit.commons.sections.SectionManager;
 import fr.prodrivers.bukkit.parkouraddon.advancements.AdvancementManager;
 import fr.prodrivers.bukkit.parkouraddon.models.Models;
-import fr.prodrivers.bukkit.parkouraddon.sections.ParkourSection;
+import fr.prodrivers.bukkit.parkouraddon.sections.ParkourSectionManager;
 import fr.prodrivers.bukkit.parkouraddon.tasks.TasksRunner;
 import io.ebean.Database;
 import io.github.a5h73y.parkour.Parkour;
@@ -36,6 +36,7 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 	private PartyManager partyManager;
 
 	private TasksRunner tasksRunner;
+	private ParkourSectionManager parkourSectionManager;
 
 	@Override
 	public void onDisable() {
@@ -96,7 +97,7 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 
 		AdvancementManager.init(this);
 
-		tasksRunner = new TasksRunner(this);
+		this.tasksRunner = new TasksRunner(this);
 
 		getServer().getPluginManager().registerEvents(new ParkourAddonListener(), this);
 		getServer().getPluginManager().registerEvents(ParkourShopUI.getInstance(), this);
@@ -104,11 +105,12 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 		getServer().getPluginManager().registerEvents(ParkourShopConverterUI.getInstance(), this);
 		getServer().getPluginManager().registerEvents(this, this);
 
-		SectionManager.register(new ParkourSection(parkour));
+		this.parkourSectionManager = new ParkourSectionManager(this.parkour, this.sectionManager, this.partyManager);
+		this.parkourSectionManager.load();
 
 		getCommand("paddon").setExecutor(new Commands());
 
-		tasksRunner.run();
+		this.tasksRunner.run();
 
 		Log.info(plugindescription.getName() + " has been enabled!");
 	}
@@ -174,6 +176,10 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 
 	public PartyManager getPartyManager() {
 		return partyManager;
+	}
+
+	public ParkourSectionManager getParkourSectionManager() {
+		return parkourSectionManager;
 	}
 
 	public TasksRunner getTasksRunner() {

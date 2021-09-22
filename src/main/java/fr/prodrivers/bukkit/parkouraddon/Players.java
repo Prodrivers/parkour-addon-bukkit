@@ -1,11 +1,9 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
-import com.viaversion.viaversion.api.Via;
-import com.viaversion.viaversion.api.ViaAPI;
 import fr.prodrivers.bukkit.commons.exceptions.IllegalSectionEnteringException;
+import fr.prodrivers.bukkit.commons.exceptions.InvalidSectionException;
 import fr.prodrivers.bukkit.commons.exceptions.NotPartyOwnerException;
-import fr.prodrivers.bukkit.commons.parties.Party;
-import fr.prodrivers.bukkit.commons.parties.PartyManager;
+import fr.prodrivers.bukkit.commons.sections.Section;
 import fr.prodrivers.bukkit.commons.sections.SectionManager;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Parkoins;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.ParkourLevel;
@@ -15,10 +13,10 @@ import fr.prodrivers.bukkit.parkouraddon.events.PlayerRankUpEvent;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCourse;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourPlayerCompletion;
+import fr.prodrivers.bukkit.parkouraddon.sections.ParkourSection;
+import io.github.a5h73y.parkour.type.player.ParkourSession;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 class Players {
 	static void insertCompletion(final Player player, final ParkourCourse course) {
@@ -137,41 +135,22 @@ class Players {
 	}
 
 	public static boolean joinParkour(Player player, String name) {
-		Party party = PartyManager.getParty(player.getUniqueId());
-		if(party != null) {
-			@SuppressWarnings("unchecked") ViaAPI<Player> api = (ViaAPI<Player>) Via.getAPI();
-			ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.database, name);
-			if(course == null) {
-				ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.invalidcourse);
-				return false;
-			}
-			ParkourCategory category = course.getCategory();
-			for(UUID partyPlayerUUID : party.getPlayers()) {
-				Player partyPlayer = Bukkit.getPlayer(partyPlayerUUID);
-				System.out.println(partyPlayer);
-				if(partyPlayer != null) {
-					int level = ParkourLevel.getLevel(player);
-					System.out.println(level);
-					System.out.println(category.getBaseLevel());
-					if(api != null && course.getMinimumProtocolVersion() != null && api.getPlayerVersion(player) < course.getMinimumProtocolVersion()) {
-						party.broadcast(ParkourAddonPlugin.chat, ParkourAddonPlugin.messages.party_clienttooold);
-						return false;
-					}
-					if(category != null && level < category.getBaseLevel()) {
-						party.broadcast(ParkourAddonPlugin.chat, ParkourAddonPlugin.messages.party_notenoughlevel);
-						return false;
-					}
-				}
-			}
-		}
 		try {
-			SectionManager.enter(player, "parkour", name);
+			ParkourSession session = ParkourAddonPlugin.plugin.getParkour().getPlayerManager().getParkourSession(player);
+			if(session != null && name.equals(session.getCourseName())) {
+				Log.finest("Player is in a parkour session and same course, ignoring.");
+				// We return true to not fail the check
+				return true;
+			}
+
+			ParkourAddonPlugin.plugin.getSectionManager().enter(player, ParkourSection.NAME_PREFIX + name);
 			return true;
+		} catch(InvalidSectionException e) {
+			ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.invalidcourse);
 		} catch(NotPartyOwnerException e) {
 			ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.cannotjoinnotpartyowner);
 		} catch(IllegalSectionEnteringException e) {
 			ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.errorocurred);
-			SectionManager.enter(player, "main");
 		}
 		return false;
 	}
@@ -193,7 +172,11 @@ class Players {
 
 	public static boolean leaveParkour(Player player) {
 		try {
-			SectionManager.enter(player, "main");
+			SectionManager sectionManager = ParkourAddonPlugin.plugin.getSectionManager();
+			Section section = sectionManager.getCurrentSection(player);
+			if(section != null && section.getFullName().startsWith(ParkourSection.NAME_PREFIX)) {
+				sectionManager.enter(player);
+			}
 			return true;
 		} catch(Exception e) {
 			ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.errorocurred);

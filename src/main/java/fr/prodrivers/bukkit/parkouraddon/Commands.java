@@ -114,6 +114,7 @@ class Commands implements CommandExecutor {
 			ParkourShopConverterUI.getInstance().reload();
 			AdvancementManager.reload();
 			ParkourAddonPlugin.plugin.getTasksRunner().run();
+			ParkourAddonPlugin.plugin.getParkourSectionManager().load();
 			ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.configurationreloaded);
 			return true;
 		}
