@@ -1,7 +1,9 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.geysermc.floodgate.api.FloodgateApi;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
@@ -127,5 +129,17 @@ public class Utils {
 
 	public static boolean isColorLight(int rgbColor) {
 		return intToHsl(rgbColor)[2] > 200;
+	}
+
+	public static boolean hasBedrockSession(Player player) {
+		try {
+			// Check presence of FloodgateApi
+			Class.forName("org.geysermc.floodgate.api.FloodgateApi");
+
+			FloodgateApi api = FloodgateApi.getInstance();
+			return api != null && api.isFloodgatePlayer(player.getUniqueId());
+		} catch(ClassNotFoundException e) {
+			return false;
+		}
 	}
 }

@@ -1,6 +1,5 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
-import fr.prodrivers.bukkit.bedrockbridger.session.BedrockSession;
 import fr.prodrivers.bukkit.commons.storage.SQLProvider;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.ParkourLevel;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
@@ -73,7 +72,7 @@ class ParkourSelectionUI {
 				.replace("%CATCOLOR%", ChatColor.valueOf(category.getChatColor()).toString())
 				+ ChatColor.RESET;
 
-		if(BedrockSession.hasSession(player)) {
+		if(Utils.hasBedrockSession(player)) {
 			return new GUIBuilder()
 					.guiStateBehaviour(GUIBuilder.GUIStateBehaviour.LOCAL_TO_SESSION)
 					.inventoryType(InventoryType.CHEST)
