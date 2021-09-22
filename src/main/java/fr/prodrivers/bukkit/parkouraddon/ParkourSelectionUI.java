@@ -124,7 +124,7 @@ class ParkourSelectionUI {
 
 		PreparedStatement query;
 		try {
-			query = SQLProvider.getConnection().prepareStatement(Utils.GET_PARKOURS_WITH_COMPLETION_QUERY);
+			query = ParkourAddonPlugin.plugin.getConnection().prepareStatement(Utils.GET_PARKOURS_WITH_COMPLETION_QUERY);
 			query.setBytes(1, Utils.getBytesFromUniqueId(player.getUniqueId()));
 			query.setInt(2, category.getCategoryId());
 			ResultSet results = query.executeQuery();

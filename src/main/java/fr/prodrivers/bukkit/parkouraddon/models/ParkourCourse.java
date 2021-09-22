@@ -1,7 +1,7 @@
 package fr.prodrivers.bukkit.parkouraddon.models;
 
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Course;
-import io.ebean.EbeanServer;
+import io.ebean.Database;
 import io.ebean.annotation.CreatedTimestamp;
 import io.ebean.annotation.NotNull;
 import lombok.Getter;
@@ -91,11 +91,11 @@ public class ParkourCourse {
 		this.category = category;
 	}
 
-	public static ParkourCourse retrieveFromName(EbeanServer server, String courseName) {
+	public static ParkourCourse retrieveFromName(Database server, String courseName) {
 		return server.find(ParkourCourse.class).where().ieq("name", courseName).findOne();
 	}
 
-	public static List<ParkourCourse> retrieveAll(EbeanServer server) {
+	public static List<ParkourCourse> retrieveAll(Database server) {
 		return server.find(ParkourCourse.class).select("*").findList();
 	}
 }

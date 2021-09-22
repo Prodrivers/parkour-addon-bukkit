@@ -1,0 +1,2 @@
+ebean.search.packages: fr.prodrivers.bukkit.parkouraddon.models
+ebean.default: "fr.prodrivers.bukkit.parkouraddon.models.*"

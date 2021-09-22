@@ -1,7 +1,7 @@
 package fr.prodrivers.bukkit.parkouraddon.models;
 
 import fr.prodrivers.bukkit.parkouraddon.Utils;
-import io.ebean.EbeanServer;
+import io.ebean.Database;
 import io.ebean.annotation.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,7 +49,7 @@ public class ParkourTimeRanked {
 	@Setter
 	int rank;
 
-	public static ParkourTimeRanked retrieve(EbeanServer server, OfflinePlayer player, ParkourCourse course) {
+	public static ParkourTimeRanked retrieve(Database server, OfflinePlayer player, ParkourCourse course) {
 		return server.find(ParkourTimeRanked.class).where().eq("playeruuid", Utils.getBytesFromUniqueId(player.getUniqueId())).eq("courseId", course.getCourseId()).findOne();
 	}
 }

@@ -2,7 +2,7 @@ package fr.prodrivers.bukkit.parkouraddon.models;
 
 import fr.prodrivers.bukkit.parkouraddon.ParkourAddonPlugin;
 import fr.prodrivers.bukkit.parkouraddon.Utils;
-import io.ebean.EbeanServer;
+import io.ebean.Database;
 import io.ebean.SqlRow;
 import io.ebean.annotation.NotNull;
 import lombok.Getter;
@@ -93,15 +93,15 @@ public class ParkourCategory {
 		return (row != null ? row.getInteger("count( courseid )") : 0);
 	}
 
-	public ParkourCategory forceGetPreviousCategory(EbeanServer server) {
+	public ParkourCategory forceGetPreviousCategory(Database server) {
 		return server.find(ParkourCategory.class, previousCategory.getCategoryId());
 	}
 
-	public List<ParkourCategory> forceGetNextCategories(EbeanServer server) {
+	public List<ParkourCategory> forceGetNextCategories(Database server) {
 		return server.find(ParkourCategory.class).where().ieq("previousCategoryId", String.valueOf(this.getCategoryId())).findList();
 	}
 
-	public static List<ParkourCategory> retrieveAll(EbeanServer server) {
+	public static List<ParkourCategory> retrieveAll(Database server) {
 		return server.find(ParkourCategory.class).select("*").findList();
 	}
 }

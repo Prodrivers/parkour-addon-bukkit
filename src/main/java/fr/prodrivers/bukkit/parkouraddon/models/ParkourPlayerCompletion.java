@@ -1,6 +1,6 @@
 package fr.prodrivers.bukkit.parkouraddon.models;
 
-import io.ebean.EbeanServer;
+import io.ebean.Database;
 import io.ebean.annotation.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +24,7 @@ public class ParkourPlayerCompletion {
 	@Setter
 	ParkourCourse course;
 
-	public static ParkourPlayerCompletion retrieve(EbeanServer server, byte[] playerUniqueId, ParkourCourse course) {
+	public static ParkourPlayerCompletion retrieve(Database server, byte[] playerUniqueId, ParkourCourse course) {
 		return server.find(ParkourPlayerCompletion.class).where().eq("playeruuid", playerUniqueId).eq("courseId", course.getCourseId()).findOne();
 	}
 }
