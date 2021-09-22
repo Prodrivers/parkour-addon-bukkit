@@ -1,13 +1,16 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
+import com.google.inject.*;
+import com.google.inject.Module;
 import de.bluecolored.bluemap.api.BlueMapAPI;
+import fr.prodrivers.bukkit.commons.ProdriversCommons;
+import fr.prodrivers.bukkit.commons.parties.PartyManager;
 import fr.prodrivers.bukkit.commons.sections.SectionManager;
-import fr.prodrivers.bukkit.commons.storage.SQLProvider;
 import fr.prodrivers.bukkit.parkouraddon.advancements.AdvancementManager;
 import fr.prodrivers.bukkit.parkouraddon.models.Models;
 import fr.prodrivers.bukkit.parkouraddon.sections.ParkourSection;
 import fr.prodrivers.bukkit.parkouraddon.tasks.TasksRunner;
-import io.ebean.EbeanServer;
+import io.ebean.Database;
 import io.github.a5h73y.parkour.Parkour;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.Plugin;
@@ -15,16 +18,22 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.Connection;
+
 public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.Listener {
-	static ParkourAddonPlugin plugin;
-	static EConfiguration configuration;
+	public static ParkourAddonPlugin plugin;
+	public static EConfiguration configuration;
 	public static EMessages messages;
 	public static EChat chat;
-	public static EbeanServer database = null;
-	//static Configuration config = null;
+	public static Database database = null;
 	static Economy econ = null;
 
 	Parkour parkour = null;
+
+	private Injector injector;
+
+	private SectionManager sectionManager;
+	private PartyManager partyManager;
 
 	private TasksRunner tasksRunner;
 
@@ -53,7 +62,15 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 
 		Log.init();
 
-		database = SQLProvider.getEbeanServer(Models.ModelsList);
+		injector = Guice.createInjector(
+				ProdriversCommons.getGuiceModule(),
+				new ParkourAddonModule()
+		);
+
+		this.sectionManager = injector.getInstance(SectionManager.class);
+		this.partyManager = injector.getInstance(PartyManager.class);
+
+		database = injector.getInstance(Database.class);
 		if(database == null) {
 			Log.severe("ProdriversCommons SQL Provider not available, plugin is unable to start. Please check ProdriversCommons errors.");
 			throw new InstantiationError("SQL provider unavailable");
@@ -147,7 +164,23 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 		return false;
 	}
 
+	public Connection getConnection() {
+		return injector.getInstance(Connection.class);
+	}
+
+	public SectionManager getSectionManager() {
+		return sectionManager;
+	}
+
+	public PartyManager getPartyManager() {
+		return partyManager;
+	}
+
 	public TasksRunner getTasksRunner() {
 		return tasksRunner;
+	}
+
+	public Parkour getParkour() {
+		return parkour;
 	}
 }
