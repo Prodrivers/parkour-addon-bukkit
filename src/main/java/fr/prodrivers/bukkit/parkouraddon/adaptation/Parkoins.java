@@ -1,15 +1,12 @@
 package fr.prodrivers.bukkit.parkouraddon.adaptation;
 
-import fr.prodrivers.bukkit.commons.storage.SQLProvider;
 import fr.prodrivers.bukkit.parkouraddon.Log;
 import fr.prodrivers.bukkit.parkouraddon.ParkourAddonPlugin;
 import fr.prodrivers.bukkit.parkouraddon.Utils;
+import io.ebean.SqlUpdate;
 import io.github.a5h73y.parkour.Parkour;
 import io.github.a5h73y.parkour.type.player.PlayerInfo;
 import org.bukkit.entity.Player;
-
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 public class Parkoins {
 	private static class ParkoinsSetThread extends Thread {
@@ -23,13 +20,11 @@ public class Parkoins {
 
 		public void run() {
 			// Update the player's parkoins
-			try {
-				PreparedStatement query = ParkourAddonPlugin.plugin.getConnection().prepareStatement(Utils.SET_PLAYER_PARKOINS_QUERY);
-				query.setDouble(1, parkoins);
-				query.setBytes(2, Utils.getBytesFromUniqueId(player.getUniqueId()));
-				query.executeUpdate();
-			} catch(SQLException e) {
-				Log.severe("Cannot update player parkoins.", e);
+			SqlUpdate query = ParkourAddonPlugin.plugin.getDatabase().sqlUpdate(Utils.SET_PLAYER_PARKOINS_QUERY);
+			query.setParameter(1, parkoins);
+			query.setParameter(2, Utils.getBytesFromUniqueId(player.getUniqueId()));
+			if(query.execute() == 0) {
+				Log.severe("Cannot update player parkoins.");
 			}
 		}
 	}

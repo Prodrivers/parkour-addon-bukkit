@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ParkourPositionUpdater implements Runnable {
 	public void run() {
-		List<ParkourCourse> courses = ParkourCourse.retrieveAll(ParkourAddonPlugin.database);
+		List<ParkourCourse> courses = ParkourCourse.retrieveAll(ParkourAddonPlugin.plugin.getDatabase());
 
 		for(ParkourCourse course : courses) {
 			Location location = Course.getLocation(course.getName());
@@ -25,6 +25,6 @@ public class ParkourPositionUpdater implements Runnable {
 			}
 		}
 
-		ParkourAddonPlugin.database.saveAll(courses);
+		ParkourAddonPlugin.plugin.getDatabase().saveAll(courses);
 	}
 }

@@ -85,8 +85,8 @@ public class ParkourCategory {
 	List<ParkourCourse> courses;
 
 	public int getNumberOfCompletedCourses(UUID playerUniqueId) {
-		SqlRow row = ParkourAddonPlugin.database
-				.createSqlQuery("SELECT COUNT( courseId ) FROM `parkourplayercompletion` NATURAL JOIN `course` GROUP BY `playeruuid`, `categoryId` HAVING `playeruuid` = :playeruuid AND `categoryId` = :categoryid;")
+		SqlRow row = ParkourAddonPlugin.plugin.getDatabase()
+				.sqlQuery("SELECT COUNT( courseId ) FROM `parkourplayercompletion` NATURAL JOIN `course` GROUP BY `playeruuid`, `categoryId` HAVING `playeruuid` = :playeruuid AND `categoryId` = :categoryid;")
 				.setParameter("playeruuid", Utils.getBytesFromUniqueId(playerUniqueId))
 				.setParameter("categoryid", getCategoryId())
 				.findOne();

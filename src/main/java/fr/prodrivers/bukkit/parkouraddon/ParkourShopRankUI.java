@@ -130,14 +130,14 @@ class ParkourShopRankUI implements Listener {
 		boughtRankItems.clear();
 		notBuyableRankItems.clear();
 
-		List<ParkourCategory> categories = ParkourCategory.retrieveAll(ParkourAddonPlugin.database);
+		List<ParkourCategory> categories = ParkourCategory.retrieveAll(ParkourAddonPlugin.plugin.getDatabase());
 
 		for(ParkourCategory category : categories) {
 			try {
 				if(count < 45 && category.getBaseLevel() > 0 && category.getPrice() > 0) {
 					ParkourCategory prevCat = null;
 					if(category.getPreviousCategory() != null)
-						prevCat = category.forceGetPreviousCategory(ParkourAddonPlugin.database);
+						prevCat = category.forceGetPreviousCategory(ParkourAddonPlugin.plugin.getDatabase());
 					item = new RankItem(
 							category.getName(),
 							category.getPrice(),

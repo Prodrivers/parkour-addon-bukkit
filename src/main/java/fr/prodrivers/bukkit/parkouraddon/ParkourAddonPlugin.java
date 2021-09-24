@@ -18,14 +18,11 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.sql.Connection;
-
 public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.Listener {
 	public static ParkourAddonPlugin plugin;
 	public static EConfiguration configuration;
 	public static EMessages messages;
 	public static EChat chat;
-	public static Database database = null;
 	static Economy econ = null;
 
 	Parkour parkour = null;
@@ -34,6 +31,7 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 
 	private SectionManager sectionManager;
 	private PartyManager partyManager;
+	private Database database;
 
 	private TasksRunner tasksRunner;
 	private ParkourSectionManager parkourSectionManager;
@@ -59,7 +57,7 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 
 		chat = new EChat(plugindescription.getName());
 		messages = new EMessages(this);
-		configuration = new EConfiguration(this, messages, chat);
+		configuration = new EConfiguration(this, chat, messages);
 
 		Log.init();
 
@@ -71,8 +69,8 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 		this.sectionManager = injector.getInstance(SectionManager.class);
 		this.partyManager = injector.getInstance(PartyManager.class);
 
-		database = injector.getInstance(Database.class);
-		if(database == null) {
+		this.database = injector.getInstance(Database.class);
+		if(this.database == null) {
 			Log.severe("ProdriversCommons SQL Provider not available, plugin is unable to start. Please check ProdriversCommons errors.");
 			throw new InstantiationError("SQL provider unavailable");
 		}
@@ -116,17 +114,17 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 	}
 
 	private boolean setupDatabase() {
-		if(database == null)
+		if(this.database == null)
 			return false;
 		try {
 			for(Class<?> modelClass : Models.ModelsList) {
-				database.find(modelClass).findCount();
+				this.database.find(modelClass).findCount();
 			}
 			return true;
 		} catch(RuntimeException ex) {
 			Log.info("Installing database for " + getDescription().getName() + " due to first time usage");
 			try {
-				database.createSqlUpdate(Utils.INIT_TABLES_SCRIPT).execute();
+				this.database.sqlUpdate(Utils.INIT_TABLES_SCRIPT).execute();
 				return true;
 			} catch(RuntimeException rex) {
 				Log.severe("Cannot install the database.", rex);
@@ -166,10 +164,6 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 		return false;
 	}
 
-	public Connection getConnection() {
-		return injector.getInstance(Connection.class);
-	}
-
 	public SectionManager getSectionManager() {
 		return sectionManager;
 	}
@@ -180,6 +174,10 @@ public class ParkourAddonPlugin extends JavaPlugin implements org.bukkit.event.L
 
 	public ParkourSectionManager getParkourSectionManager() {
 		return parkourSectionManager;
+	}
+
+	public Database getDatabase() {
+		return database;
 	}
 
 	public TasksRunner getTasksRunner() {

@@ -139,7 +139,7 @@ class Commands implements CommandExecutor {
 		if(sender instanceof Player) {
 			if(args.length > 1) {
 				try {
-					ParkourCategory cat = ParkourAddonPlugin.database.find(ParkourCategory.class, Integer.valueOf(args[1]));
+					ParkourCategory cat = ParkourAddonPlugin.plugin.getDatabase().find(ParkourCategory.class, Integer.valueOf(args[1]));
 					if(cat != null) {
 						ParkourSelectionUI.open((Player) sender, cat);
 					} else {
@@ -168,7 +168,7 @@ class Commands implements CommandExecutor {
 
 	private boolean listCategories(CommandSender sender) {
 		if(sender.hasPermission("parkouraddon.category.list")) {
-			List<ParkourCategory> categories = ParkourAddonPlugin.database.find(ParkourCategory.class).select("*").findList();
+			List<ParkourCategory> categories = ParkourAddonPlugin.plugin.getDatabase().find(ParkourCategory.class).select("*").findList();
 
 			if(categories.size() > 0) {
 				ParkourAddonPlugin.chat.send(sender, ParkourAddonPlugin.messages.categoryentryheader);
@@ -202,7 +202,7 @@ class Commands implements CommandExecutor {
 					cat.setMaterial(Material.valueOf(args[3]).toString());
 					cat.setChatColor(ChatColor.valueOf(args[5]).toString());
 					cat.setHexColor(Utils.parseColor(args[6]));
-					ParkourAddonPlugin.database.save(cat);
+					ParkourAddonPlugin.plugin.getDatabase().save(cat);
 					ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.categoryadded.replace("%CATID%", String.valueOf(cat.getCategoryId())));
 				} catch(NumberFormatException e) {
 					ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidnumber);
@@ -223,17 +223,17 @@ class Commands implements CommandExecutor {
 		if(sender.hasPermission("parkouraddon.category.setprevious")) {
 			if(args.length > 2) {
 				try {
-					ParkourCategory cat = ParkourAddonPlugin.database.find(ParkourCategory.class, Integer.valueOf(args[1]));
+					ParkourCategory cat = ParkourAddonPlugin.plugin.getDatabase().find(ParkourCategory.class, Integer.valueOf(args[1]));
 					if(cat != null) {
 						if(args[2].equalsIgnoreCase("null")) {
 							cat.setPreviousCategory(null);
-							ParkourAddonPlugin.database.save(cat);
+							ParkourAddonPlugin.plugin.getDatabase().save(cat);
 							ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.prevcategoryset.replace("%CAT%", cat.getName()).replace("%PREVCAT%", "None"));
 						} else {
-							ParkourCategory prevcat = ParkourAddonPlugin.database.find(ParkourCategory.class, Integer.valueOf(args[2]));
+							ParkourCategory prevcat = ParkourAddonPlugin.plugin.getDatabase().find(ParkourCategory.class, Integer.valueOf(args[2]));
 							if(prevcat != null) {
 								cat.setPreviousCategory(prevcat);
-								ParkourAddonPlugin.database.save(cat);
+								ParkourAddonPlugin.plugin.getDatabase().save(cat);
 								ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.prevcategoryset.replace("%CAT%", cat.getName()).replace("%PREVCAT%", prevcat.getName()));
 							} else {
 								ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidcategory);
@@ -259,10 +259,10 @@ class Commands implements CommandExecutor {
 		if(sender.hasPermission("parkouraddon.category.setreqcoursesnbinprevcat")) {
 			if(args.length > 2) {
 				try {
-					ParkourCategory cat = ParkourAddonPlugin.database.find(ParkourCategory.class, Integer.valueOf(args[1]));
+					ParkourCategory cat = ParkourAddonPlugin.plugin.getDatabase().find(ParkourCategory.class, Integer.valueOf(args[1]));
 					if(cat != null) {
 						cat.setRequiredCoursesNumberInPreviousCategoryForRankup(Integer.parseInt(args[2]));
-						ParkourAddonPlugin.database.save(cat);
+						ParkourAddonPlugin.plugin.getDatabase().save(cat);
 						ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.reqcoursesnbinprevcatset.replace("%CAT%", cat.getName()).replace("%NUMBER%", args[2]));
 					} else {
 						ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidcategory);
@@ -284,10 +284,10 @@ class Commands implements CommandExecutor {
 		if(sender.hasPermission("parkouraddon.category.setparkoinsreward")) {
 			if(args.length > 2) {
 				try {
-					ParkourCategory cat = ParkourAddonPlugin.database.find(ParkourCategory.class, Integer.valueOf(args[1]));
+					ParkourCategory cat = ParkourAddonPlugin.plugin.getDatabase().find(ParkourCategory.class, Integer.valueOf(args[1]));
 					if(cat != null) {
 						cat.setParkoinsReward(Integer.valueOf(args[2]));
-						ParkourAddonPlugin.database.save(cat);
+						ParkourAddonPlugin.plugin.getDatabase().save(cat);
 						ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.parkoinsrewardcategoryset.replace("%CAT%", cat.getName()).replace("%REWARD%", args[2]));
 					} else {
 						ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidcategory);
@@ -309,10 +309,10 @@ class Commands implements CommandExecutor {
 		if(sender.hasPermission("parkouraddon.category.sethidden")) {
 			if(args.length > 2) {
 				try {
-					ParkourCategory cat = ParkourAddonPlugin.database.find(ParkourCategory.class, Integer.valueOf(args[1]));
+					ParkourCategory cat = ParkourAddonPlugin.plugin.getDatabase().find(ParkourCategory.class, Integer.valueOf(args[1]));
 					if(cat != null) {
 						cat.setHidden(Boolean.parseBoolean(args[2]));
-						ParkourAddonPlugin.database.save(cat);
+						ParkourAddonPlugin.plugin.getDatabase().save(cat);
 						ParkourAddonPlugin.chat.success(sender, (cat.isHidden() ? ParkourAddonPlugin.messages.categorysettohidden : ParkourAddonPlugin.messages.categorysettoshown).replace("%CAT%", cat.getName()));
 					} else {
 						ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidcategory);
@@ -332,7 +332,7 @@ class Commands implements CommandExecutor {
 	private boolean setBaseLevel(CommandSender sender, String[] args) {
 		if(sender.hasPermission("parkouraddon.category.setbaselevel")) {
 			if(args.length > 2) {
-				ParkourCategory category = ParkourAddonPlugin.database.find(ParkourCategory.class, Integer.valueOf(args[1]));
+				ParkourCategory category = ParkourAddonPlugin.plugin.getDatabase().find(ParkourCategory.class, Integer.valueOf(args[1]));
 				if(category != null) {
 					try {
 						int level = Integer.parseInt(args[2]);
@@ -361,17 +361,17 @@ class Commands implements CommandExecutor {
 		if(sender.hasPermission("parkouraddon.parkour.setcategory")) {
 			if(args.length > 2) {
 				try {
-					ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.database, args[1]);
+					ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.plugin.getDatabase(), args[1]);
 					if(course != null) {
 						if(args[2].equalsIgnoreCase("null")) {
 							course.setCategory(null);
-							ParkourAddonPlugin.database.save(course);
+							ParkourAddonPlugin.plugin.getDatabase().save(course);
 							ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.parkourcategoryset.replace("%COURSENAME%", course.getName()).replace("%CAT%", "None"));
 						} else {
-							ParkourCategory cat = ParkourAddonPlugin.database.find(ParkourCategory.class, Integer.valueOf(args[2]));
+							ParkourCategory cat = ParkourAddonPlugin.plugin.getDatabase().find(ParkourCategory.class, Integer.valueOf(args[2]));
 							if(cat != null) {
 								course.setCategory(cat);
-								ParkourAddonPlugin.database.save(course);
+								ParkourAddonPlugin.plugin.getDatabase().save(course);
 								ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.parkourcategoryset.replace("%COURSENAME%", course.getName()).replace("%CAT%", cat.getName()));
 							} else {
 								ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidcategory);
@@ -396,10 +396,10 @@ class Commands implements CommandExecutor {
 	private boolean setParkourDisplayName(CommandSender sender, String[] args) {
 		if(sender.hasPermission("parkouraddon.parkour.setdisplayname")) {
 			if(args.length > 2) {
-				ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.database, args[1]);
+				ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.plugin.getDatabase(), args[1]);
 				if(course != null) {
 					course.setDisplayName(args[2]);
-					ParkourAddonPlugin.database.save(course);
+					ParkourAddonPlugin.plugin.getDatabase().save(course);
 					ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.parkourdisplaynameset.replace("%COURSENAME%", course.getName()).replace("%DISPLAYNAME%", course.getDisplayName()));
 				} else {
 					ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidcourse);
@@ -415,13 +415,13 @@ class Commands implements CommandExecutor {
 	private boolean setParkourDescription(CommandSender sender, String[] args) {
 		if(sender.hasPermission("parkouraddon.parkour.setdescription")) {
 			if(args.length > 2) {
-				ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.database, args[1]);
+				ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.plugin.getDatabase(), args[1]);
 				if(course != null) {
 					String description = Stream.of(args)
 							.skip(2)
 							.collect(Collectors.joining("\n"));
 					course.setDescription(description);
-					ParkourAddonPlugin.database.save(course);
+					ParkourAddonPlugin.plugin.getDatabase().save(course);
 					ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.parkourdisplaynameset.replace("%COURSENAME%", course.getName()).replace("%DISPLAYNAME%", course.getDisplayName()));
 				} else {
 					ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidcourse);
@@ -437,7 +437,7 @@ class Commands implements CommandExecutor {
 	private boolean setParkourMcVersion(CommandSender sender, String[] args) {
 		if(sender.hasPermission("parkouraddon.parkour.setmcversion")) {
 			if(args.length > 1) {
-				ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.database, args[1]);
+				ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.plugin.getDatabase(), args[1]);
 				if(course != null) {
 					try {
 						if(args.length > 2) {
@@ -457,7 +457,7 @@ class Commands implements CommandExecutor {
 								}
 							}
 						}
-						ParkourAddonPlugin.database.save(course);
+						ParkourAddonPlugin.plugin.getDatabase().save(course);
 						ParkourAddonPlugin.chat.success(sender, ParkourAddonPlugin.messages.parkourminimumprotocolversionset.replace("%COURSENAME%", course.getName()).replace("%PROTOCOLVERSION%", String.valueOf(course.getMinimumProtocolVersion())));
 					} catch(NumberFormatException e) {
 						ParkourAddonPlugin.chat.error(sender, ParkourAddonPlugin.messages.invalidnumber);

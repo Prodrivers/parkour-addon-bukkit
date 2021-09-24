@@ -14,7 +14,7 @@ public class Criterions {
 
 	static void init() {
 		HashSet<String> newCriterion = new HashSet<>();
-		ParkourCategory.retrieveAll(ParkourAddonPlugin.database)
+		ParkourCategory.retrieveAll(ParkourAddonPlugin.plugin.getDatabase())
 				.stream()
 				.map(Criterions::get)
 				.forEach(newCriterion::add);

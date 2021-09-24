@@ -31,7 +31,7 @@ public class EConfiguration extends Configuration {
 		shops_converters_amounts.put(String.valueOf(2000), 1000);
 	}
 
-	public EConfiguration(Plugin plugin, Messages messages, Chat chat) {
+	public EConfiguration(Plugin plugin, Chat chat, Messages messages) {
 		super(plugin, chat, messages);
 		init();
 	}

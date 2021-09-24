@@ -1,8 +1,9 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
-import fr.prodrivers.bukkit.commons.storage.SQLProvider;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.ParkourLevel;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
+import io.ebean.SqlQuery;
+import io.ebean.SqlRow;
 import me.eddie.inventoryguiapi.gui.contents.UnlimitedGUIPopulator;
 import me.eddie.inventoryguiapi.gui.elements.AbstractGUIElement;
 import me.eddie.inventoryguiapi.gui.elements.FormImage;
@@ -23,9 +24,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -121,48 +119,43 @@ class ParkourSelectionUI {
 			lores = ParkourAddonPlugin.messages.parkourselectionui_item_lore_bedrock;
 		}
 
-		PreparedStatement query;
-		try {
-			query = ParkourAddonPlugin.plugin.getConnection().prepareStatement(Utils.GET_PARKOURS_WITH_COMPLETION_QUERY);
-			query.setBytes(1, Utils.getBytesFromUniqueId(player.getUniqueId()));
-			query.setInt(2, category.getCategoryId());
-			ResultSet results = query.executeQuery();
+		SqlQuery query = ParkourAddonPlugin.plugin.getDatabase().sqlQuery(Utils.GET_PARKOURS_WITH_COMPLETION_QUERY);
+		query.setParameter(1, Utils.getBytesFromUniqueId(player.getUniqueId()));
+		query.setParameter(2, category.getCategoryId());
+		List<SqlRow> results = query.findList();
 
-			while(results.next()) {
-				String internalName = results.getString("course.name");
-				String author = results.getString("course.author");
-				String description = results.getString("course.description");
-				final String finalDescription = (description == null ? "" : description);
-				String name = ChatColor.valueOf(results.getString("parkourcategory.chatColor")) + results.getString("course.displayName");
-				boolean completed = results.getBytes("playeruuid") != null;
-				Material material = Material.valueOf(results.getString("parkourcategory.material"));
-				GUIElement element;
+		for(SqlRow row : results) {
+			String internalName = row.getString("course.name");
+			String author = row.getString("course.author");
+			String description = row.getString("course.description");
+			final String finalDescription = (description == null ? "" : description);
+			String name = ChatColor.valueOf(row.getString("parkourcategory.chatColor")) + row.getString("course.displayName");
+			boolean completed = row.get("playeruuid") != null;
+			Material material = Material.valueOf(row.getString("parkourcategory.material"));
+			GUIElement element;
 
-				Stream<String> loreStream = completed ? Stream.concat(lores.stream(), lores_completed.stream()) : lores.stream();
+			Stream<String> loreStream = completed ? Stream.concat(lores.stream(), lores_completed.stream()) : lores.stream();
 
-				String[] formattedLore = loreStream
-						.skip(1)
-						.map(lore -> lore
-								.replace("%NAME%", name)
-								.replace("%AUTHOR%", author)
-								.replace("%DESCRIPTION%", finalDescription)
-								.split("\n")
-						)
-						.flatMap(Arrays::stream)
-						.filter(lore -> !ChatColor.stripColor(lore).isEmpty())
-						.toArray(String[]::new);
-				element = createJoinParkourElement(
-						completed,
-						internalName,
-						lores.get(0).replace("%NAME%", name)
-								.replace("%AUTHOR%", author),
-						material,
-						formattedLore
-				);
-				contents.add(element);
-			}
-		} catch(SQLException e) {
-			Log.severe("Cannot get courses to show selection UI.", e);
+			String[] formattedLore = loreStream
+					.skip(1)
+					.map(lore -> lore
+							.replace("%NAME%", name)
+							.replace("%AUTHOR%", author)
+							.replace("%DESCRIPTION%", finalDescription)
+							.split("\n")
+					)
+					.flatMap(Arrays::stream)
+					.filter(lore -> !ChatColor.stripColor(lore).isEmpty())
+					.toArray(String[]::new);
+			element = createJoinParkourElement(
+					completed,
+					internalName,
+					lores.get(0).replace("%NAME%", name)
+							.replace("%AUTHOR%", author),
+					material,
+					formattedLore
+			);
+			contents.add(element);
 		}
 
 		return contents;

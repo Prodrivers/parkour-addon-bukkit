@@ -1,14 +1,11 @@
 package fr.prodrivers.bukkit.parkouraddon.adaptation;
 
-import fr.prodrivers.bukkit.commons.storage.SQLProvider;
 import fr.prodrivers.bukkit.parkouraddon.Log;
 import fr.prodrivers.bukkit.parkouraddon.ParkourAddonPlugin;
 import fr.prodrivers.bukkit.parkouraddon.Utils;
+import io.ebean.SqlUpdate;
 import io.github.a5h73y.parkour.type.player.PlayerInfo;
 import org.bukkit.entity.Player;
-
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 public class ParkourLevel {
 	private static class ParkourLevelSetThread extends Thread {
@@ -22,13 +19,11 @@ public class ParkourLevel {
 
 		public void run() {
 			// Update the player's parkour level
-			try {
-				PreparedStatement query = ParkourAddonPlugin.plugin.getConnection().prepareStatement(Utils.SET_PLAYER_PARKOUR_LEVEL_QUERY);
-				query.setInt(1, level);
-				query.setBytes(2, Utils.getBytesFromUniqueId(player.getUniqueId()));
-				query.executeUpdate();
-			} catch(SQLException e) {
-				Log.severe("Cannot update player parkour level.", e);
+			SqlUpdate query = ParkourAddonPlugin.plugin.getDatabase().sqlUpdate(Utils.SET_PLAYER_PARKOUR_LEVEL_QUERY);
+			query.setParameter(1, level);
+			query.setParameter(2, Utils.getBytesFromUniqueId(player.getUniqueId()));
+			if(query.execute() == 0) {
+				Log.severe("Cannot update player parkour level.");
 			}
 		}
 	}

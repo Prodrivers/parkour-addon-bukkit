@@ -25,7 +25,7 @@ class Players {
 			byte[] playerUuid = Utils.getBytesFromUniqueId(player.getUniqueId());
 
 			// Search for an already present entry
-			ParkourPlayerCompletion present = ParkourPlayerCompletion.retrieve(ParkourAddonPlugin.database, playerUuid, course);
+			ParkourPlayerCompletion present = ParkourPlayerCompletion.retrieve(ParkourAddonPlugin.plugin.getDatabase(), playerUuid, course);
 
 			if(present == null) { // If no completion was registered for this course and this player
 				// Create a new completion in the database
@@ -35,7 +35,7 @@ class Players {
 				completion.setPlayerUniqueId(playerUuid);
 
 				// Insert it
-				ParkourAddonPlugin.database.save(completion);
+				ParkourAddonPlugin.plugin.getDatabase().save(completion);
 
 				System.out.println("[ParkourAddon] Player " + player.getName() + " completed course " + course.getName());
 
@@ -127,7 +127,7 @@ class Players {
 		// Run the whole thing asynchronously
 		Bukkit.getScheduler().runTaskAsynchronously(ParkourAddonPlugin.plugin, () -> {
 			// Get the associated course
-			ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.database, courseName);
+			ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.plugin.getDatabase(), courseName);
 
 			insertCompletion(player, course);
 			rankPlayer(player, course, playerLevel);
@@ -158,7 +158,7 @@ class Players {
 	public static boolean joinParkourAll(Player originator, String name) {
 		name = name.trim();
 
-		ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.database, name);
+		ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.plugin.getDatabase(), name);
 		if(course == null) {
 			ParkourAddonPlugin.chat.error(originator, ParkourAddonPlugin.messages.invalidcourse);
 			return false;

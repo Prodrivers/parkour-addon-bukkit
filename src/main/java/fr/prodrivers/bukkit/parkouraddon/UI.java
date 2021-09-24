@@ -31,7 +31,7 @@ class UI {
 
 	static void courseCompleted(final Player player, final ParkourCourse course) {
 		Bukkit.getScheduler().runTaskAsynchronously(ParkourAddonPlugin.plugin, () -> {
-			ParkourTimeRanked entry = ParkourTimeRanked.retrieve(ParkourAddonPlugin.database, player, course);
+			ParkourTimeRanked entry = ParkourTimeRanked.retrieve(ParkourAddonPlugin.plugin.getDatabase(), player, course);
 			Bukkit.getScheduler().runTask(ParkourAddonPlugin.plugin, () -> {
 				if(course.getDisplayName() == null) {
 					Log.warning("Tried to show completion of course '" + course.getName() + "' to player '" + player.getName() + "' but it has no display name.");

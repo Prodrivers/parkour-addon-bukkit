@@ -32,7 +32,7 @@ public class BlueMapParkourMarker implements Runnable {
 					set.setToggleable(true);
 					set.setDefaultHidden(true);
 
-					for(ParkourCourse course : ParkourCourse.retrieveAll(ParkourAddonPlugin.database)) {
+					for(ParkourCourse course : ParkourCourse.retrieveAll(ParkourAddonPlugin.plugin.getDatabase())) {
 						createMarker(api, set, course);
 					}
 

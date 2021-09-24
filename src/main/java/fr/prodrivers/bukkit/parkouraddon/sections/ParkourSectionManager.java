@@ -22,7 +22,7 @@ public class ParkourSectionManager {
 		for(String courseName : CourseInfo.getAllCourseNames()) {
 			if(this.sectionManager.getSection(ParkourSection.NAME_PREFIX + courseName) == null) {
 				Log.fine("Creating section for parkour : " + courseName);
-				this.sectionManager.register(new ParkourSection(this.partyManager, courseName, this.parkour.getPlayerManager()), true);
+				this.sectionManager.register(new ParkourSection(this.partyManager, this.parkour, courseName), true);
 			}
 		}
 		Log.info("Loaded parkour sections.");

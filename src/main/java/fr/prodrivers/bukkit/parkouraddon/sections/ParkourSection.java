@@ -11,6 +11,7 @@ import fr.prodrivers.bukkit.parkouraddon.ParkourAddonPlugin;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.ParkourLevel;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCourse;
+import io.github.a5h73y.parkour.Parkour;
 import io.github.a5h73y.parkour.other.ParkourValidation;
 import io.github.a5h73y.parkour.type.course.Course;
 import io.github.a5h73y.parkour.type.player.ParkourSession;
@@ -28,16 +29,18 @@ public class ParkourSection extends Section {
 
 	private final PartyManager partyManager;
 
+	private final Parkour parkour;
 	private final PlayerManager playerManager;
 	private final String courseName;
 	private Course pluginCourse;
 	private int baseLevel;
 	private int minimumProtocolVersion;
 
-	ParkourSection(PartyManager partyManager, String courseName, PlayerManager playerManager) {
+	ParkourSection(PartyManager partyManager, Parkour parkour, String courseName) {
 		super(NAME_PREFIX + courseName);
 		this.partyManager = partyManager;
-		this.playerManager = playerManager;
+		this.parkour = parkour;
+		this.playerManager = parkour.getPlayerManager();
 		this.courseName = courseName;
 
 		load();
@@ -47,7 +50,7 @@ public class ParkourSection extends Section {
 		this.minimumProtocolVersion = 0;
 		this.baseLevel = 0;
 
-		ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.database, this.courseName);
+		ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.plugin.getDatabase(), this.courseName);
 		if(course != null) {
 			this.minimumProtocolVersion = course.getMinimumProtocolVersion() != null ? course.getMinimumProtocolVersion() : 0;
 
@@ -57,7 +60,7 @@ public class ParkourSection extends Section {
 			}
 		}
 
-		pluginCourse = parkour.getCourseManager().findCourse(subSection);
+		pluginCourse = this.parkour.getCourseManager().findCourse(this.courseName);
 	}
 
 	@Override
@@ -103,8 +106,8 @@ public class ParkourSection extends Section {
 		}
 
 		// Check if player can join course
-		if(pluginCourse != null && !ParkourValidation.canJoinCourse(player, pluginCourse)) {
-			Log.warning("Parkour plugin refused player " + player.getName() + " to join parkour " + subSection);
+		if(this.pluginCourse != null && !ParkourValidation.canJoinCourse(player, pluginCourse)) {
+			Log.warning("Parkour plugin refused player " + player.getName() + " to join parkour " + this.courseName);
 			return false;
 		}
 
