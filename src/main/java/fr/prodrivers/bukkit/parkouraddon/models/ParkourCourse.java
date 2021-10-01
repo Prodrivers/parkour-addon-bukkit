@@ -2,8 +2,8 @@ package fr.prodrivers.bukkit.parkouraddon.models;
 
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Course;
 import io.ebean.Database;
-import io.ebean.annotation.CreatedTimestamp;
 import io.ebean.annotation.NotNull;
+import io.ebean.annotation.WhenCreated;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,7 +37,7 @@ public class ParkourCourse {
 	@Setter
 	String author;
 
-	@CreatedTimestamp
+	@WhenCreated
 	@Getter
 	@Setter
 	Timestamp created;
