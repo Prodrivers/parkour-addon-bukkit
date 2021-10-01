@@ -1,5 +1,7 @@
 package fr.prodrivers.bukkit.parkouraddon.commands;
 
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.ViaAPI;
 import fr.prodrivers.bukkit.parkouraddon.*;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Course;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Parkoins;
@@ -19,8 +21,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import us.myles.ViaVersion.api.Via;
-import us.myles.ViaVersion.api.ViaAPI;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -472,10 +472,10 @@ public class Commands implements CommandExecutor {
 								course.setMinimumProtocolVersion(version);
 							}
 						} else {
-							ViaAPI api = Via.getAPI();
+							@SuppressWarnings("unchecked") ViaAPI<Player> api = (ViaAPI<Player>) Via.getAPI();
 							if(api != null) {
 								if(sender instanceof Player) {
-									course.setMinimumProtocolVersion(api.getPlayerVersion(sender));
+									course.setMinimumProtocolVersion(api.getPlayerVersion((Player) sender));
 								} else {
 									this.chat.error(sender, this.messages.notaplayer);
 								}
