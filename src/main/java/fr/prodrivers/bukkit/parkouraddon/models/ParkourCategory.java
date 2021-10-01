@@ -1,6 +1,6 @@
 package fr.prodrivers.bukkit.parkouraddon.models;
 
-import fr.prodrivers.bukkit.parkouraddon.ParkourAddonPlugin;
+import fr.prodrivers.bukkit.parkouraddon.plugin.Main;
 import fr.prodrivers.bukkit.parkouraddon.Utils;
 import io.ebean.Database;
 import io.ebean.SqlRow;
@@ -84,8 +84,8 @@ public class ParkourCategory {
 	@Setter
 	List<ParkourCourse> courses;
 
-	public int getNumberOfCompletedCourses(UUID playerUniqueId) {
-		SqlRow row = ParkourAddonPlugin.plugin.getDatabase()
+	public int getNumberOfCompletedCourses(Database server, UUID playerUniqueId) {
+		SqlRow row = server
 				.sqlQuery("SELECT COUNT( courseId ) FROM `parkourplayercompletion` NATURAL JOIN `course` GROUP BY `playeruuid`, `categoryId` HAVING `playeruuid` = :playeruuid AND `categoryId` = :categoryid;")
 				.setParameter("playeruuid", Utils.getBytesFromUniqueId(playerUniqueId))
 				.setParameter("categoryid", getCategoryId())

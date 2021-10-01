@@ -1,35 +1,39 @@
 package fr.prodrivers.bukkit.parkouraddon.advancements;
 
-import fr.prodrivers.bukkit.parkouraddon.ParkourAddonPlugin;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
+import io.ebean.Database;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.entity.Player;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+@Singleton
 public class Criterions {
-	static Set<String> criterion;
+	private final Set<String> criterion;
 
-	static void init() {
+	@Inject
+	Criterions(Database database) {
 		HashSet<String> newCriterion = new HashSet<>();
-		ParkourCategory.retrieveAll(ParkourAddonPlugin.plugin.getDatabase())
+		ParkourCategory.retrieveAll(database)
 				.stream()
-				.map(Criterions::get)
+				.map(this::get)
 				.forEach(newCriterion::add);
 		criterion = Collections.unmodifiableSet(newCriterion);
 	}
 
-	static Set<String> all() {
+	Set<String> all() {
 		return criterion;
 	}
 
-	static String get(ParkourCategory category) {
+	String get(ParkourCategory category) {
 		return "parkourcategory." + category.getCategoryId();
 	}
 
-	static void grant(Advancement advancement, Player player, ParkourCategory category) {
+	void grant(Advancement advancement, Player player, ParkourCategory category) {
 		player.getAdvancementProgress(advancement).awardCriteria(get(category));
 	}
 }

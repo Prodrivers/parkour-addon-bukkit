@@ -1,4 +1,4 @@
-package fr.prodrivers.bukkit.parkouraddon;
+package fr.prodrivers.bukkit.parkouraddon.plugin;
 
 import fr.prodrivers.bukkit.commons.Chat;
 import fr.prodrivers.bukkit.commons.configuration.Configuration;
@@ -7,10 +7,13 @@ import me.eddie.inventoryguiapi.gui.elements.FormImage;
 import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+@Singleton
 public class EConfiguration extends Configuration {
 	public FormImage selection_image_check = new FormImage(FormImage.Type.PATH, "textures/ui/check.png");
 	public Material shops_close_material = Material.BARRIER;
@@ -31,7 +34,8 @@ public class EConfiguration extends Configuration {
 		shops_converters_amounts.put(String.valueOf(2000), 1000);
 	}
 
-	public EConfiguration(Plugin plugin, Chat chat, Messages messages) {
+	@Inject
+	public EConfiguration(Plugin plugin, Messages messages, Chat chat) {
 		super(plugin, chat, messages);
 		init();
 	}

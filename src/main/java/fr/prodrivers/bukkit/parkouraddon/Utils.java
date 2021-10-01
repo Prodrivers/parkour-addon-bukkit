@@ -1,5 +1,8 @@
 package fr.prodrivers.bukkit.parkouraddon;
 
+import fr.prodrivers.bukkit.parkouraddon.plugin.EConfiguration;
+import fr.prodrivers.bukkit.parkouraddon.plugin.EMessages;
+import fr.prodrivers.bukkit.parkouraddon.plugin.Main;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -70,7 +73,7 @@ public class Utils {
 			"order by `time`.`courseId`, `time`.`time`;\n" +
 			"\n";
 
-	public static String GET_PARKOURS_WITH_COMPLETION_QUERY = "SELECT *\n" +
+	public static String GET_PARKOURS_WITH_COMPLETION_QUERY = "SELECT course.name AS name, course.displayName AS displayName, course.author AS author, course.description AS description, parkourcategory.chatColor AS chatColor, parkourcategory.material AS material, parkourplayercompletion.playeruuid AS playeruuid\n" +
 			"FROM `parkourcategory`\n" +
 			"         JOIN `course` ON `parkourcategory`.`categoryId` = `course`.`categoryId`\n" +
 			"         LEFT JOIN `parkourplayercompletion`\n" +
@@ -104,10 +107,10 @@ public class Utils {
 		throw new IllegalArgumentException("Unknown color");
 	}
 
-	public static ItemStack getCloseItem() {
-		ItemStack item = new ItemStack(ParkourAddonPlugin.configuration.shops_close_material, 1);
+	public static ItemStack getCloseItem(EConfiguration configuration, EMessages messages) {
+		ItemStack item = new ItemStack(configuration.shops_close_material, 1);
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(ParkourAddonPlugin.messages.parkourshopui_close_title);
+		meta.setDisplayName(messages.parkourshopui_close_title);
 		item.setItemMeta(meta);
 		return item;
 	}

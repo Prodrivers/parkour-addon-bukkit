@@ -7,10 +7,12 @@ import fr.prodrivers.bukkit.commons.parties.PartyManager;
 import fr.prodrivers.bukkit.commons.sections.Section;
 import fr.prodrivers.bukkit.commons.sections.SectionCapabilities;
 import fr.prodrivers.bukkit.parkouraddon.Log;
-import fr.prodrivers.bukkit.parkouraddon.ParkourAddonPlugin;
+import fr.prodrivers.bukkit.parkouraddon.plugin.EChat;
+import fr.prodrivers.bukkit.parkouraddon.plugin.EMessages;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.ParkourLevel;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCourse;
+import io.ebean.Database;
 import io.github.a5h73y.parkour.Parkour;
 import io.github.a5h73y.parkour.other.ParkourValidation;
 import io.github.a5h73y.parkour.type.course.Course;
@@ -19,6 +21,7 @@ import io.github.a5h73y.parkour.type.player.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Collections;
 import java.util.Set;
@@ -28,29 +31,29 @@ public class ParkourSection extends Section {
 	public static final String NAME_PREFIX = "parkour.";
 
 	private final PartyManager partyManager;
-
-	private final Parkour parkour;
+	private final EMessages messages;
+	private final EChat chat;
 	private final PlayerManager playerManager;
+	private final ParkourLevel parkourLevel;
+
 	private final String courseName;
-	private Course pluginCourse;
+	private final Course pluginCourse;
 	private int baseLevel;
 	private int minimumProtocolVersion;
 
-	ParkourSection(PartyManager partyManager, Parkour parkour, String courseName) {
+	ParkourSection(PartyManager partyManager, Parkour parkour, String courseName, Database database, EMessages messages, EChat chat, ParkourLevel parkourLevel) {
 		super(NAME_PREFIX + courseName);
 		this.partyManager = partyManager;
-		this.parkour = parkour;
+		this.messages = messages;
+		this.chat = chat;
 		this.playerManager = parkour.getPlayerManager();
 		this.courseName = courseName;
+		this.parkourLevel = parkourLevel;
 
-		load();
-	}
-
-	void load() {
 		this.minimumProtocolVersion = 0;
 		this.baseLevel = 0;
 
-		ParkourCourse course = ParkourCourse.retrieveFromName(ParkourAddonPlugin.plugin.getDatabase(), this.courseName);
+		ParkourCourse course = ParkourCourse.retrieveFromName(database, this.courseName);
 		if(course != null) {
 			this.minimumProtocolVersion = course.getMinimumProtocolVersion() != null ? course.getMinimumProtocolVersion() : 0;
 
@@ -60,19 +63,19 @@ public class ParkourSection extends Section {
 			}
 		}
 
-		pluginCourse = this.parkour.getCourseManager().findCourse(this.courseName);
+		this.pluginCourse = parkour.getCourseManager().findCourse(this.courseName);
 	}
 
 	@Override
-	public Set<SectionCapabilities> getCapabilities() {
+	public @NonNull Set<SectionCapabilities> getCapabilities() {
 		return Collections.emptySet();
 	}
 
 	@Override
-	public boolean preJoin(Player player, Section targetSection, boolean fromParty) {
+	public boolean preJoin(@NonNull Player player, Section targetSection, boolean fromParty) {
 		Log.finest("Player wants to join " + this.courseName);
 
-		int level = ParkourLevel.getLevel(player);
+		int level = this.parkourLevel.getLevel(player);
 
 		@SuppressWarnings("unchecked") ViaAPI<Player> api = (ViaAPI<Player>) Via.getAPI();
 
@@ -82,11 +85,11 @@ public class ParkourSection extends Section {
 				Player partyPlayer = Bukkit.getPlayer(partyPlayerUUID);
 				if(partyPlayer != null) {
 					if(api != null && api.getPlayerVersion(player) < this.minimumProtocolVersion) {
-						party.broadcast(ParkourAddonPlugin.chat, ParkourAddonPlugin.messages.party_clienttooold);
+						party.broadcast(this.chat, this.messages.party_clienttooold);
 						return false;
 					}
 					if(level < this.baseLevel) {
-						party.broadcast(ParkourAddonPlugin.chat, ParkourAddonPlugin.messages.party_notenoughlevel);
+						party.broadcast(this.chat, this.messages.party_notenoughlevel);
 						return false;
 					}
 				}
@@ -95,13 +98,13 @@ public class ParkourSection extends Section {
 
 		// Check player protocol version
 		if(api != null && api.getPlayerVersion(player) < this.minimumProtocolVersion) {
-			ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.clienttooold);
+			this.chat.error(player, this.messages.clienttooold);
 			return false;
 		}
 
 		// Check player level
 		if(level < this.baseLevel) {
-			ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.notenoughlevel);
+			this.chat.error(player, this.messages.notenoughlevel);
 			return false;
 		}
 
@@ -114,7 +117,7 @@ public class ParkourSection extends Section {
 		return true;
 	}
 
-	public boolean join(Player player) {
+	public boolean join(@NonNull Player player) {
 		Log.finest("Proceeding with course join.");
 		this.playerManager.joinCourse(player, this.courseName);
 		ParkourSession session = this.playerManager.getParkourSession(player);
@@ -123,7 +126,7 @@ public class ParkourSection extends Section {
 	}
 
 	@Override
-	public boolean preLeave(OfflinePlayer offlinePlayer, Section targetSection, boolean fromParty) {
+	public boolean preLeave(@NonNull OfflinePlayer offlinePlayer, Section targetSection, boolean fromParty) {
 		return true;
 	}
 

@@ -1,38 +1,35 @@
 package fr.prodrivers.bukkit.parkouraddon.advancements;
 
+import com.google.inject.Injector;
 import fr.prodrivers.bukkit.parkouraddon.Log;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
 import org.bukkit.Bukkit;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Collection;
 import java.util.Iterator;
 
+@Singleton
 public class AdvancementManager {
-	private static Plugin plugin;
+	private final Advancements advancements;
 
-	public static void init(Plugin plugin) {
-		AdvancementManager.plugin = plugin;
-
-		Advancements.init();
-		Criterions.init();
+	@Inject
+	public AdvancementManager(Advancements advancements) {
+		this.advancements = advancements;
 
 		for(Iterator<Advancement> it = Bukkit.advancementIterator(); it.hasNext(); ) {
-			Advancements.load(it.next());
+			this.advancements.load(it.next());
 		}
 	}
 
-	public static void reload() {
-		init(plugin);
-	}
-
 	public interface CriterionGranter {
-		public void grant(Advancement advancement);
+		void grant(Advancement advancement);
 	}
 
-	private static void grant(Player player, Collection<Advancement> advancements, CriterionGranter criterionGranter) {
+	private void grant(Player player, Collection<Advancement> advancements, CriterionGranter criterionGranter) {
 		if(!advancements.isEmpty()) {
 			for(Advancement advancement : advancements) {
 				criterionGranter.grant(advancement);
@@ -40,12 +37,12 @@ public class AdvancementManager {
 		}
 	}
 
-	public static void grant(Player player, ParkourCategory category) {
-		Collection<Advancement> advancements = Advancements.get(category);
+	public void grant(Player player, ParkourCategory category) {
+		Collection<Advancement> advancements = this.advancements.get(category);
 		if(!advancements.isEmpty()) {
 			Log.info("Grant criterion for category " + category.getName() + "(" + category.getCategoryId() + ") to player \"" + player.getName() + "\".");
 
-			grant(player, advancements, advancement -> Criterions.grant(advancement, player, category));
+			grant(player, advancements, advancement -> this.advancements.grant(advancement, player, category));
 		} else {
 			Log.warning("Tried to grant criterion for category " + category.getName() + "(" + category.getCategoryId() + "), but no corresponding advancement exists.");
 		}

@@ -7,11 +7,11 @@ import java.util.logging.Logger;
 public class Log {
 	private static Logger logger;
 
-	public static void init() {
-		logger = ParkourAddonPlugin.plugin.getLogger();
-		logger.setLevel(ParkourAddonPlugin.configuration.logLevel);
-		for(Handler handler : logger.getHandlers()) {
-			handler.setLevel(ParkourAddonPlugin.configuration.logLevel);
+	public static void init(Logger logger, Level logLevel) {
+		Log.logger = logger;
+		Log.logger.setLevel(logLevel);
+		for(Handler handler : Log.logger.getHandlers()) {
+			handler.setLevel(logLevel);
 		}
 	}
 

@@ -1,11 +1,14 @@
-package fr.prodrivers.bukkit.parkouraddon;
+package fr.prodrivers.bukkit.parkouraddon.plugin;
 
 import fr.prodrivers.bukkit.commons.configuration.Messages;
 import org.bukkit.plugin.Plugin;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Arrays;
 import java.util.List;
 
+@Singleton
 public class EMessages extends Messages {
 	public String configurationreloaded = "Configuration reloaded!";
 	public String errorocurred = "An error occured while executing this command. Please report this to the server staff.";
@@ -75,6 +78,7 @@ public class EMessages extends Messages {
 	public String bluemap_parkours_markers_nocategory_id = "%s";
 	public String bluemap_parkours_markers_nocategory_html = "<span style='display:inline-block;background:#000;color:white;width:1em;height:1em'></span> <b style='color:#fff;text-shadow:0px 0px 5px #222'>%s</b>";
 
+	@Inject
 	public EMessages(Plugin plugin) {
 		super(plugin);
 	}

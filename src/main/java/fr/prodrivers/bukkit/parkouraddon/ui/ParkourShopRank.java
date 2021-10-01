@@ -1,8 +1,14 @@
-package fr.prodrivers.bukkit.parkouraddon;
+package fr.prodrivers.bukkit.parkouraddon.ui;
 
+import fr.prodrivers.bukkit.parkouraddon.Log;
+import fr.prodrivers.bukkit.parkouraddon.Utils;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Parkoins;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.ParkourLevel;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
+import fr.prodrivers.bukkit.parkouraddon.plugin.EChat;
+import fr.prodrivers.bukkit.parkouraddon.plugin.EConfiguration;
+import fr.prodrivers.bukkit.parkouraddon.plugin.EMessages;
+import io.ebean.Database;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -14,21 +20,29 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class ParkourShopRankUI implements Listener {
-	private static ParkourShopRankUI instance;
+@Singleton
+public class ParkourShopRank implements Listener {
+	private final Database database;
+	private final EConfiguration configuration;
+	private final EMessages messages;
+	private final EChat chat;
 
-	static ParkourShopRankUI getInstance() {
-		if(instance == null)
-			instance = new ParkourShopRankUI();
-		return instance;
-	}
+	private final ParkourShop parkourShop;
+	private final ParkourLevel parkourLevel;
+	private final Parkoins parkoins;
 
-	private class RankItem implements Cloneable {
+	private final ArrayList<RankItem> rankItems = new ArrayList<>(), boughtRankItems = new ArrayList<>(), notBuyableRankItems = new ArrayList<>();
+
+	private int lines, closeSlot;
+
+	private static class RankItem implements Cloneable {
 		String name;
 		int price;
 		int minLevel;
@@ -60,11 +74,15 @@ class ParkourShopRankUI implements Listener {
 		}
 	}
 
-	private ArrayList<RankItem> rankItems = new ArrayList<>(), boughtRankItems = new ArrayList<>(), notBuyableRankItems = new ArrayList<>();
-
-	private int lines, closeSlot;
-
-	private ParkourShopRankUI() {
+	@Inject
+	private ParkourShopRank(Database database, EConfiguration configuration, EMessages messages, EChat chat, ParkourShop parkourShop, ParkourLevel parkourLevel, Parkoins parkoins) {
+		this.database = database;
+		this.configuration = configuration;
+		this.messages = messages;
+		this.chat = chat;
+		this.parkourShop = parkourShop;
+		this.parkourLevel = parkourLevel;
+		this.parkoins = parkoins;
 		prepare();
 	}
 
@@ -99,26 +117,26 @@ class ParkourShopRankUI implements Listener {
 		return prepareItem(
 				rankItem,
 				rankItem.material,
-				ParkourAddonPlugin.messages.parkourshopui_ranks_rankitemname,
-				ParkourAddonPlugin.messages.parkourshopui_ranks_rankitemlore.stream().toArray(String[]::new)
+				this.messages.parkourshopui_ranks_rankitemname,
+				this.messages.parkourshopui_ranks_rankitemlore.stream().toArray(String[]::new)
 		);
 	}
 
 	private RankItem prepareBoughtItem(RankItem rankItem) {
 		return prepareItem(
 				rankItem,
-				ParkourAddonPlugin.configuration.shops_ranks_alreadyBought_material,
-				ParkourAddonPlugin.messages.parkourshopui_ranks_boughtrankitemname,
-				ParkourAddonPlugin.messages.parkourshopui_ranks_boughtrankitemlore.stream().toArray(String[]::new)
+				this.configuration.shops_ranks_alreadyBought_material,
+				this.messages.parkourshopui_ranks_boughtrankitemname,
+				this.messages.parkourshopui_ranks_boughtrankitemlore.stream().toArray(String[]::new)
 		);
 	}
 
 	private RankItem prepareNotBuyableItem(RankItem rankItem) {
 		return prepareItem(
 				rankItem,
-				ParkourAddonPlugin.configuration.shops_ranks_notBuyable_material,
-				ParkourAddonPlugin.messages.parkourshopui_ranks_notbuyablerankitemname,
-				ParkourAddonPlugin.messages.parkourshopui_ranks_notbuyablerankitemlore.stream().toArray(String[]::new)
+				this.configuration.shops_ranks_notBuyable_material,
+				this.messages.parkourshopui_ranks_notbuyablerankitemname,
+				this.messages.parkourshopui_ranks_notbuyablerankitemlore.stream().toArray(String[]::new)
 		);
 	}
 
@@ -130,14 +148,14 @@ class ParkourShopRankUI implements Listener {
 		boughtRankItems.clear();
 		notBuyableRankItems.clear();
 
-		List<ParkourCategory> categories = ParkourCategory.retrieveAll(ParkourAddonPlugin.plugin.getDatabase());
+		List<ParkourCategory> categories = ParkourCategory.retrieveAll(this.database);
 
 		for(ParkourCategory category : categories) {
 			try {
 				if(count < 45 && category.getBaseLevel() > 0 && category.getPrice() > 0) {
 					ParkourCategory prevCat = null;
 					if(category.getPreviousCategory() != null)
-						prevCat = category.forceGetPreviousCategory(ParkourAddonPlugin.plugin.getDatabase());
+						prevCat = category.forceGetPreviousCategory(this.database);
 					item = new RankItem(
 							category.getName(),
 							category.getPrice(),
@@ -195,20 +213,20 @@ class ParkourShopRankUI implements Listener {
 		prepareSlots();
 	}
 
-	void reload() {
+	public void reload() {
 		prepare();
 	}
 
-	private static boolean isBought(Player player, RankItem item) {
-		return (ParkourLevel.getLevel(player) >= item.targetLevel);
+	private boolean isBought(Player player, RankItem item) {
+		return (this.parkourLevel.getLevel(player) >= item.targetLevel);
 	}
 
-	private static boolean isBuyable(Player player, RankItem item) {
-		return (Parkoins.get(player) >= item.price && ParkourLevel.getLevel(player) >= item.minLevel);
+	private boolean isBuyable(Player player, RankItem item) {
+		return (this.parkoins.get(player) >= item.price && this.parkourLevel.getLevel(player) >= item.minLevel);
 	}
 
 	void open(Player player) {
-		Inventory inv = Bukkit.createInventory(null, lines * 9, ParkourAddonPlugin.messages.parkourshopui_ranks_title);
+		Inventory inv = Bukkit.createInventory(null, lines * 9, this.messages.parkourshopui_ranks_title);
 		RankItem item, boughtItem, notBuyableItem;
 
 		for(int i = 0; i < rankItems.size(); i++) {
@@ -227,7 +245,7 @@ class ParkourShopRankUI implements Listener {
 
 		inv.setItem(
 				closeSlot,
-				Utils.getCloseItem()
+				Utils.getCloseItem(this.configuration, this.messages)
 		);
 
 		player.openInventory(inv);
@@ -242,12 +260,12 @@ class ParkourShopRankUI implements Listener {
 		ItemStack clicked = event.getCurrentItem();
 		Inventory inventory = event.getInventory();
 
-		if(event.getView().getTitle().equals(ParkourAddonPlugin.messages.parkourshopui_ranks_title)) {
+		if(event.getView().getTitle().equals(this.messages.parkourshopui_ranks_title)) {
 			event.setCancelled(true);
 
 			if(event.getSlot() == closeSlot) {
 				player.closeInventory();
-				ParkourShopUI.getInstance().open(player);
+				this.parkourShop.open(player);
 			} else if(clicked != null && clicked.getItemMeta() != null) {
 				for(RankItem item : rankItems) {
 					if(clicked.getItemMeta().getDisplayName().equals(item.item.getItemMeta().getDisplayName())) {
@@ -260,29 +278,33 @@ class ParkourShopRankUI implements Listener {
 		}
 	}
 
-	private static boolean buyRank(Player player, RankItem item) {
-		int lvl = ParkourLevel.getLevel(player);
+	private boolean buyRank(Player player, RankItem item) {
+		int lvl = this.parkourLevel.getLevel(player);
 
 		if(lvl >= item.minLevel) {
 			if(lvl < item.targetLevel) {
-				if(Parkoins.get(player) >= item.price) {
+				if(this.parkoins.get(player) >= item.price) {
 
-					Parkoins.remove(player, item.price);
-					ParkourLevel.setLevel(player, item.targetLevel);
+					this.parkoins.remove(player, item.price);
+					this.parkourLevel.setLevel(player, item.targetLevel);
 
-					ParkourAddonPlugin.chat.success(player, ParkourAddonPlugin.messages.parkourshopui_ranks_bought.replace("%CATEGORY%", item.name).replace("%BASELEVEL%", String.valueOf(item.targetLevel)));
+					this.chat.success(player, this.messages.parkourshopui_ranks_bought.replace("%CATEGORY%", item.name).replace("%BASELEVEL%", String.valueOf(item.targetLevel)));
 
 					return true;
 				} else {
-					ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.parkourshopui_ranks_notenoughbalance);
+					this.chat.error(player, this.messages.parkourshopui_ranks_notenoughbalance);
 				}
 			} else {
-				ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.parkourshopui_ranks_alreadyhave);
+				this.chat.error(player, this.messages.parkourshopui_ranks_alreadyhave);
 			}
 		} else {
-			ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.parkourshopui_ranks_notenoughlevel);
+			this.chat.error(player, this.messages.parkourshopui_ranks_notenoughlevel);
 		}
 
 		return false;
+	}
+
+	public void unregister() {
+		InventoryClickEvent.getHandlerList().unregister(this);
 	}
 }

@@ -1,6 +1,12 @@
-package fr.prodrivers.bukkit.parkouraddon;
+package fr.prodrivers.bukkit.parkouraddon.ui;
 
+import fr.prodrivers.bukkit.parkouraddon.Log;
+import fr.prodrivers.bukkit.parkouraddon.Utils;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Parkoins;
+import fr.prodrivers.bukkit.parkouraddon.plugin.EChat;
+import fr.prodrivers.bukkit.parkouraddon.plugin.EConfiguration;
+import fr.prodrivers.bukkit.parkouraddon.plugin.EMessages;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,27 +17,38 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-class ParkourShopConverterUI implements Listener {
-	private static ParkourShopConverterUI instance;
+@Singleton
+public class ParkourShopConverter implements Listener {
+	private final Economy economy;
+	private final EConfiguration configuration;
+	private final EMessages messages;
+	private final EChat chat;
+
+	private final ParkourShop parkourShop;
+	private final Parkoins parkoins;
 
 	private Inventory inv;
 
 	private List<Integer> amounts = new ArrayList<>();
 	private List<Integer> prices = new ArrayList<>();
 
-	static ParkourShopConverterUI getInstance() {
-		if(instance == null)
-			instance = new ParkourShopConverterUI();
-		return instance;
-	}
-
-	private ParkourShopConverterUI() {
+	@Inject
+	private ParkourShopConverter(@Nullable Economy economy, EConfiguration configuration, EMessages messages, EChat chat, ParkourShop parkourShop, Parkoins parkoins) {
+		this.economy = economy;
+		this.configuration = configuration;
+		this.messages = messages;
+		this.chat = chat;
+		this.parkourShop = parkourShop;
+		this.parkoins = parkoins;
 		prepare();
 	}
 
@@ -59,7 +76,7 @@ class ParkourShopConverterUI implements Listener {
 		prices.clear();
 
 		int count = 0;
-		for(Map.Entry<String, Integer> amountStr : ParkourAddonPlugin.configuration.shops_converters_amounts.entrySet()) {
+		for(Map.Entry<String, Integer> amountStr : this.configuration.shops_converters_amounts.entrySet()) {
 			try {
 				if(count < 5) {
 					amounts.add(Integer.valueOf(amountStr.getKey()));
@@ -73,7 +90,7 @@ class ParkourShopConverterUI implements Listener {
 	}
 
 	private void prepare() {
-		inv = Bukkit.createInventory(null, 6 * 9, ParkourAddonPlugin.messages.parkourshopui_converters_title);
+		inv = Bukkit.createInventory(null, 6 * 9, this.messages.parkourshopui_converters_title);
 
 		prepareAmountsPrices();
 
@@ -83,9 +100,9 @@ class ParkourShopConverterUI implements Listener {
 					prepareItem(
 							amounts.get(i),
 							prices.get(i),
-							ParkourAddonPlugin.configuration.shops_converters_to_material,
-							ParkourAddonPlugin.messages.parkourshopui_converters_to_name,
-							ParkourAddonPlugin.messages.parkourshopui_converters_to_lore.stream().toArray(String[]::new)
+							this.configuration.shops_converters_to_material,
+							this.messages.parkourshopui_converters_to_name,
+							this.messages.parkourshopui_converters_to_lore.stream().toArray(String[]::new)
 					)
 			);
 
@@ -94,28 +111,28 @@ class ParkourShopConverterUI implements Listener {
 					prepareItem(
 							prices.get(i),
 							amounts.get(i),
-							ParkourAddonPlugin.configuration.shops_converters_from_material,
-							ParkourAddonPlugin.messages.parkourshopui_converters_from_name,
-							ParkourAddonPlugin.messages.parkourshopui_converters_from_lore.stream().toArray(String[]::new)
+							this.configuration.shops_converters_from_material,
+							this.messages.parkourshopui_converters_from_name,
+							this.messages.parkourshopui_converters_from_lore.stream().toArray(String[]::new)
 					)
 			);
 		}
 
 		inv.setItem(
 				49,
-				Utils.getCloseItem()
+				Utils.getCloseItem(this.configuration, this.messages)
 		);
 	}
 
-	void reload() {
+	public void reload() {
 		prepare();
 	}
 
 	void open(Player player) {
-		if(ParkourAddonPlugin.econ != null) {
+		if(this.economy != null) {
 			player.openInventory(inv);
 		} else {
-			ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.parkourshopui_converters_unavailable);
+			this.chat.error(player, this.messages.parkourshopui_converters_unavailable);
 			Log.severe("Player " + player.getName() + " tried to access currency conversion UI, but no compatible economy plugin was found.");
 		}
 	}
@@ -129,7 +146,7 @@ class ParkourShopConverterUI implements Listener {
 		int slot = event.getSlot();
 		Inventory inventory = event.getInventory();
 
-		if(event.getView().getTitle().equals(ParkourAddonPlugin.messages.parkourshopui_converters_title)) {
+		if(event.getView().getTitle().equals(this.messages.parkourshopui_converters_title)) {
 			event.setCancelled(true);
 
 			if(slot >= 11 && slot <= 15) {
@@ -140,40 +157,44 @@ class ParkourShopConverterUI implements Listener {
 					player.closeInventory();
 			} else if(slot == 49) {
 				player.closeInventory();
-				ParkourShopUI.getInstance().open(player);
+				this.parkourShop.open(player);
 			}
 		}
 	}
 
 	private boolean convertCoinsToParkoins(Player player, int amount, int price) {
-		if(ParkourAddonPlugin.econ.getBalance(player) >= price) {
+		if(this.economy.getBalance(player) >= price) {
 
-			ParkourAddonPlugin.econ.withdrawPlayer(player, price);
-			Parkoins.add(player, amount);
+			this.economy.withdrawPlayer(player, price);
+			this.parkoins.add(player, amount);
 
-			ParkourAddonPlugin.chat.success(player, ParkourAddonPlugin.messages.parkourshopui_converters_to_bought.replace("%AMOUNT%", String.valueOf(amount)).replace("%PRICE%", String.valueOf(price)));
+			this.chat.success(player, this.messages.parkourshopui_converters_to_bought.replace("%AMOUNT%", String.valueOf(amount)).replace("%PRICE%", String.valueOf(price)));
 
 			return true;
 		} else {
-			ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.parkourshopui_converters_to_notenoughbalance);
+			this.chat.error(player, this.messages.parkourshopui_converters_to_notenoughbalance);
 		}
 
 		return false;
 	}
 
 	private boolean convertCoinsFromParkoins(Player player, int amount, int price) {
-		if(Parkoins.get(player) >= price) {
+		if(this.parkoins.get(player) >= price) {
 
-			Parkoins.remove(player, price);
-			ParkourAddonPlugin.econ.depositPlayer(player, amount);
+			this.parkoins.remove(player, price);
+			this.economy.depositPlayer(player, amount);
 
-			ParkourAddonPlugin.chat.success(player, ParkourAddonPlugin.messages.parkourshopui_converters_from_bought.replace("%AMOUNT%", String.valueOf(amount)).replace("%PRICE%", String.valueOf(price)));
+			this.chat.success(player, this.messages.parkourshopui_converters_from_bought.replace("%AMOUNT%", String.valueOf(amount)).replace("%PRICE%", String.valueOf(price)));
 
 			return true;
 		} else {
-			ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.parkourshopui_converters_from_notenoughbalance);
+			this.chat.error(player, this.messages.parkourshopui_converters_from_notenoughbalance);
 		}
 
 		return false;
+	}
+
+	public void unregister() {
+		InventoryClickEvent.getHandlerList().unregister(this);
 	}
 }

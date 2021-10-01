@@ -1,7 +1,15 @@
-package fr.prodrivers.bukkit.parkouraddon;
+package fr.prodrivers.bukkit.parkouraddon.ui;
 
+import fr.prodrivers.bukkit.parkouraddon.Log;
+import fr.prodrivers.bukkit.parkouraddon.Players;
+import fr.prodrivers.bukkit.parkouraddon.Utils;
+import fr.prodrivers.bukkit.parkouraddon.adaptation.Course;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.ParkourLevel;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
+import fr.prodrivers.bukkit.parkouraddon.plugin.EChat;
+import fr.prodrivers.bukkit.parkouraddon.plugin.EConfiguration;
+import fr.prodrivers.bukkit.parkouraddon.plugin.EMessages;
+import io.ebean.Database;
 import io.ebean.SqlQuery;
 import io.ebean.SqlRow;
 import me.eddie.inventoryguiapi.gui.contents.UnlimitedGUIPopulator;
@@ -24,48 +32,68 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.*;
 import java.util.stream.Stream;
 
-class ParkourSelectionUI {
-	private static Map<UUID, Map<Integer, InventoryGUI>> uis = new HashMap<>();
+@Singleton
+public class ParkourSelection {
+	private final Database database;
+	private final EChat chat;
+	private final EMessages messages;
+	private final EConfiguration configuration;
+	private final ParkourLevel parkourLevel;
+	private final Course course;
 
-	static void reload() {
+	private Map<UUID, Map<Integer, InventoryGUI>> uis = new HashMap<>();
+
+	@Inject
+	public ParkourSelection(Database database, EChat chat, EMessages messages, EConfiguration configuration, ParkourLevel parkourLevel, Course course) {
+		this.database = database;
+		this.chat = chat;
+		this.messages = messages;
+		this.configuration = configuration;
+		this.parkourLevel = parkourLevel;
+		this.course = course;
+	}
+
+	public void reload() {
 		uis.clear();
 	}
 
-	public static void reload(Player player) {
+	public void reload(Player player) {
 		uis.remove(player.getUniqueId());
 	}
 
-	public static void reload(Player player, Integer categoryId) {
+	public void reload(Player player, Integer categoryId) {
 		Map<Integer, InventoryGUI> playerUis = uis.computeIfAbsent(player.getUniqueId(), k -> new HashMap<>());
 		playerUis.remove(categoryId);
 	}
 
-	static void open(Player player, ParkourCategory category) {
+	public void open(Player player, ParkourCategory category) {
 		try {
 			if(!category.isHidden() || category.isHidden() && player.hasPermission("Parkour.Admin.Bypass")) {
-				if(ParkourLevel.getLevel(player) >= category.getBaseLevel() || player.hasPermission("Parkour.Admin.Bypass")) {
+				if(this.parkourLevel.getLevel(player) >= category.getBaseLevel() || player.hasPermission("Parkour.Admin.Bypass")) {
 					Map<Integer, InventoryGUI> playerUis = uis.computeIfAbsent(player.getUniqueId(), k -> new HashMap<>());
 					if(!playerUis.containsKey(category.getCategoryId())) {
 						playerUis.put(category.getCategoryId(), generate(player, category));
 					}
 					playerUis.get(category.getCategoryId()).open(player);
 				} else {
-					ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.notenoughlevel);
+					this.chat.error(player, this.messages.notenoughlevel);
 				}
 			} else {
-				ParkourAddonPlugin.chat.error(player, ParkourAddonPlugin.messages.invalidcategory);
+				this.chat.error(player, this.messages.invalidcategory);
 			}
 		} catch(NullPointerException e) {
-			ParkourAddonPlugin.chat.internalError(player);
+			this.chat.internalError(player);
 			Log.severe("Cannot show selection UI to player " + player.getName() + " .", e);
 		}
 	}
 
-	private static InventoryGUI generate(Player player, ParkourCategory category) throws NullPointerException {
-		String title = ParkourAddonPlugin.messages.parkourselectionui_title_normal
+	private InventoryGUI generate(Player player, ParkourCategory category) throws NullPointerException {
+		String title = this.messages.parkourselectionui_title_normal
 				.replace("%CAT%", category.getName())
 				.replace("%CATCOLOR%", ChatColor.valueOf(category.getChatColor()).toString())
 				+ ChatColor.RESET;
@@ -89,7 +117,7 @@ class ParkourSelectionUI {
 		}
 
 		if(category.getName().length() > 8) {
-			title = ParkourAddonPlugin.messages.parkourselectionui_title_reduced
+			title = this.messages.parkourselectionui_title_reduced
 					.replace("%CAT%", category.getName())
 					.replace("%CATCOLOR%", ChatColor.valueOf(category.getChatColor()).toString())
 					+ ChatColor.RESET;
@@ -110,28 +138,28 @@ class ParkourSelectionUI {
 				.build();
 	}
 
-	private static List<GUIElement> genContent(boolean isBedrockContent, Player player, ParkourCategory category) throws NullPointerException {
-		List<String> lores = ParkourAddonPlugin.messages.parkourselectionui_item_lore_normal;
-		List<String> lores_completed = ParkourAddonPlugin.messages.parkourselectionui_item_lore_completed;
+	private List<GUIElement> genContent(boolean isBedrockContent, Player player, ParkourCategory category) throws NullPointerException {
+		List<String> lores = this.messages.parkourselectionui_item_lore_normal;
+		List<String> lores_completed = this.messages.parkourselectionui_item_lore_completed;
 		List<GUIElement> contents = new ArrayList<>();
 
 		if(isBedrockContent) {
-			lores = ParkourAddonPlugin.messages.parkourselectionui_item_lore_bedrock;
+			lores = this.messages.parkourselectionui_item_lore_bedrock;
 		}
 
-		SqlQuery query = ParkourAddonPlugin.plugin.getDatabase().sqlQuery(Utils.GET_PARKOURS_WITH_COMPLETION_QUERY);
+		SqlQuery query = this.database.sqlQuery(Utils.GET_PARKOURS_WITH_COMPLETION_QUERY);
 		query.setParameter(1, Utils.getBytesFromUniqueId(player.getUniqueId()));
 		query.setParameter(2, category.getCategoryId());
 		List<SqlRow> results = query.findList();
 
 		for(SqlRow row : results) {
-			String internalName = row.getString("course.name");
-			String author = row.getString("course.author");
-			String description = row.getString("course.description");
+			String internalName = row.getString("name");
+			String author = row.getString("author");
+			String description = row.getString("description");
 			final String finalDescription = (description == null ? "" : description);
-			String name = ChatColor.valueOf(row.getString("parkourcategory.chatColor")) + row.getString("course.displayName");
+			String name = ChatColor.valueOf(row.getString("chatColor")) + row.getString("displayName");
 			boolean completed = row.get("playeruuid") != null;
-			Material material = Material.valueOf(row.getString("parkourcategory.material"));
+			Material material = Material.valueOf(row.getString("material"));
 			GUIElement element;
 
 			Stream<String> loreStream = completed ? Stream.concat(lores.stream(), lores_completed.stream()) : lores.stream();
@@ -161,7 +189,7 @@ class ParkourSelectionUI {
 		return contents;
 	}
 
-	private static GUIElement createJoinParkourElement(boolean completed, final String name, String displayName, Material material, String... lore) {
+	private GUIElement createJoinParkourElement(boolean completed, final String name, String displayName, Material material, String... lore) {
 		ItemStack item = new ItemStack(material, 1);
 		if(completed) {
 			ItemMeta meta = item.getItemMeta();
@@ -180,9 +208,9 @@ class ParkourSelectionUI {
 				(Callback<Player>) player -> Bukkit.getScheduler().runTaskLater(InventoryGUIAPI.getInstance(),
 						() -> {
 							player.closeInventory();
-							Players.joinParkour(player, name);
+							this.course.join(player, name);
 						}, 1L),
-				completed ? ParkourAddonPlugin.configuration.selection_image_check : FormImage.NONE
+				completed ? this.configuration.selection_image_check : FormImage.NONE
 		);
 	}
 }

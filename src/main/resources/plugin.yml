@@ -1,5 +1,5 @@
 name: ParkourAddon
-main: fr.prodrivers.bukkit.parkouraddon.ParkourAddonPlugin
+main: fr.prodrivers.bukkit.parkouraddon.plugin.Main
 version: ${project.version}
 description: ${project.description}
 depend: [ProdriversCommons,Parkour,InventoryGUIAPI]

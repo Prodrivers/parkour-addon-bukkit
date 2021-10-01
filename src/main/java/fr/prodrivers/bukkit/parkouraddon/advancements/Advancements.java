@@ -4,25 +4,36 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
 import org.bukkit.advancement.Advancement;
+import org.bukkit.entity.Player;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Collection;
 
+@Singleton
 public class Advancements {
-	private static Multimap<String, Advancement> advancements;
+	private final Multimap<String, Advancement> advancements;
+	private final Criterions criterions;
 
-	static void init() {
+	@Inject
+	Advancements(Criterions criterions) {
+		this.criterions = criterions;
 		advancements = HashMultimap.create();
 	}
 
-	static Collection<Advancement> get(ParkourCategory category) {
-		return advancements.get(Criterions.get(category));
+	Collection<Advancement> get(ParkourCategory category) {
+		return advancements.get(this.criterions.get(category));
 	}
 
-	static void load(Advancement advancement) {
+	void load(Advancement advancement) {
 		for(String criterion : advancement.getCriteria()) {
-			if(Criterions.all().contains(criterion)) {
+			if(this.criterions.all().contains(criterion)) {
 				advancements.put(criterion, advancement);
 			}
 		}
+	}
+
+	void grant(Advancement advancement, Player player, ParkourCategory category) {
+		this.criterions.grant(advancement, player, category);
 	}
 }

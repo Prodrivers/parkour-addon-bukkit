@@ -82,11 +82,11 @@ public class ParkourCourse {
 	@Setter
 	List<ParkourPlayerCompletion> completions;
 
-	public void setCategory(ParkourCategory category) {
+	public void setCategory(Course course, ParkourCategory category) {
 		if(category == null) {
-			Course.setMinimumLevel(getName(), -1);
+			course.setMinimumLevel(getName(), -1);
 		} else {
-			Course.setMinimumLevel(getName(), category.getBaseLevel());
+			course.setMinimumLevel(getName(), category.getBaseLevel());
 		}
 		this.category = category;
 	}

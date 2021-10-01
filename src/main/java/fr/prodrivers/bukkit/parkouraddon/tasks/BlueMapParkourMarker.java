@@ -5,17 +5,28 @@ import de.bluecolored.bluemap.api.BlueMapMap;
 import de.bluecolored.bluemap.api.marker.MarkerAPI;
 import de.bluecolored.bluemap.api.marker.MarkerSet;
 import fr.prodrivers.bukkit.parkouraddon.Log;
-import fr.prodrivers.bukkit.parkouraddon.ParkourAddonPlugin;
+import fr.prodrivers.bukkit.parkouraddon.plugin.EMessages;
 import fr.prodrivers.bukkit.parkouraddon.Utils;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Course;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCourse;
+import io.ebean.Database;
 import org.bukkit.Location;
 
 import java.util.Optional;
 
 public class BlueMapParkourMarker implements Runnable {
 	public static final String PARKOUR_MARKER_SET = "parkours";
+
+	private final EMessages messages;
+	private final Database database;
+	private final Course course;
+
+	public BlueMapParkourMarker(EMessages messages, Database database, Course course) {
+		this.messages = messages;
+		this.database = database;
+		this.course = course;
+	}
 
 	public void run() {
 		try {
@@ -28,11 +39,11 @@ public class BlueMapParkourMarker implements Runnable {
 					markerApi.removeMarkerSet(PARKOUR_MARKER_SET);
 					MarkerSet set = markerApi.createMarkerSet(PARKOUR_MARKER_SET);
 
-					set.setLabel(ParkourAddonPlugin.messages.bluemap_parkours_label);
+					set.setLabel(this.messages.bluemap_parkours_label);
 					set.setToggleable(true);
 					set.setDefaultHidden(true);
 
-					for(ParkourCourse course : ParkourCourse.retrieveAll(ParkourAddonPlugin.plugin.getDatabase())) {
+					for(ParkourCourse course : ParkourCourse.retrieveAll(this.database)) {
 						createMarker(api, set, course);
 					}
 
@@ -51,7 +62,7 @@ public class BlueMapParkourMarker implements Runnable {
 	public void createMarker(BlueMapAPI api, MarkerSet set, ParkourCourse course) {
 		ParkourCategory category = course.getCategory();
 
-		Location location = Course.getLocation(course.getName());
+		Location location = this.course.getLocation(course.getName());
 		if(location == null || location.getWorld() == null) {
 			Log.warning("Course " + course.getName() + " has no checkpoint, hence cannot get its location and update its marker.");
 			return;
@@ -68,12 +79,12 @@ public class BlueMapParkourMarker implements Runnable {
 					return;
 				}
 				id = String.format(
-						ParkourAddonPlugin.messages.bluemap_parkours_markers_withcategory_id,
+						this.messages.bluemap_parkours_markers_withcategory_id,
 						category.getName(),
 						course.getDisplayName()
 				);
 				html = String.format(
-						ParkourAddonPlugin.messages.bluemap_parkours_markers_withcategory_html,
+						this.messages.bluemap_parkours_markers_withcategory_html,
 						Integer.toHexString(category.getHexColor()),
 						(Utils.isColorLight(category.getHexColor()) ? "#000" : "#fff"),
 						category.getBaseLevel(),
@@ -81,11 +92,11 @@ public class BlueMapParkourMarker implements Runnable {
 				);
 			} else {
 				id = String.format(
-						ParkourAddonPlugin.messages.bluemap_parkours_markers_nocategory_id,
+						this.messages.bluemap_parkours_markers_nocategory_id,
 						course.getDisplayName()
 				);
 				html = String.format(
-						ParkourAddonPlugin.messages.bluemap_parkours_markers_nocategory_html,
+						this.messages.bluemap_parkours_markers_nocategory_html,
 						course.getDisplayName()
 				);
 			}
