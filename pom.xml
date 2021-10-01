@@ -15,9 +15,9 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>8</maven.compiler.source>
-		<maven.compiler.target>8</maven.compiler.target>
-		<maven.compiler.release>8</maven.compiler.release>
+		<maven.compiler.source>16</maven.compiler.source>
+		<maven.compiler.target>16</maven.compiler.target>
+		<maven.compiler.release>16</maven.compiler.release>
 	</properties>
 
 	<repositories>
@@ -184,7 +184,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>fr.prodrivers.bukkit.parkouraddon.ParkourAddonPlugin</mainClass>
+							<mainClass>fr.prodrivers.bukkit.parkouraddon.plugin.Main</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
