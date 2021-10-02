@@ -5,6 +5,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import javax.annotation.Nonnull;
+
 /**
  * An Event that fires when a player completes a parkour course
  *
@@ -12,8 +14,8 @@ import org.bukkit.event.HandlerList;
  */
 public class PlayerCompleteCourseEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
-	private Player player;
-	private ParkourCourse course;
+	private final Player player;
+	private final ParkourCourse course;
 
 	/**
 	 * Construct a new player complete course event
@@ -46,7 +48,8 @@ public class PlayerCompleteCourseEvent extends Event {
 	}
 
 	@Override
-	public HandlerList getHandlers() {
+	public @Nonnull
+	HandlerList getHandlers() {
 		return handlers;
 	}
 

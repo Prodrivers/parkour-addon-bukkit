@@ -2,7 +2,8 @@ package fr.prodrivers.bukkit.parkouraddon.commands;
 
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
-import fr.prodrivers.bukkit.parkouraddon.*;
+import fr.prodrivers.bukkit.parkouraddon.Log;
+import fr.prodrivers.bukkit.parkouraddon.Utils;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Course;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Parkoins;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.ParkourLevel;
@@ -22,6 +23,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
@@ -53,7 +55,7 @@ public class Commands implements CommandExecutor {
 		this.parkoins = parkoins;
 	}
 
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command command, String label, @Nonnull String[] args) {
 		if(label.equalsIgnoreCase("paddon")) {
 			if(args.length > 0) {
 				switch(args[0]) {
@@ -222,7 +224,7 @@ public class Commands implements CommandExecutor {
 				try {
 					ParkourCategory cat = new ParkourCategory();
 					cat.setName(args[1]);
-					cat.setBaseLevel(Integer.valueOf(args[2]));
+					cat.setBaseLevel(Integer.parseInt(args[2]));
 					cat.setMaterial(Material.valueOf(args[3]).toString());
 					cat.setChatColor(ChatColor.valueOf(args[5]).toString());
 					cat.setHexColor(Utils.parseColor(args[6]));
@@ -310,7 +312,7 @@ public class Commands implements CommandExecutor {
 				try {
 					ParkourCategory cat = this.database.find(ParkourCategory.class, Integer.valueOf(args[1]));
 					if(cat != null) {
-						cat.setParkoinsReward(Integer.valueOf(args[2]));
+						cat.setParkoinsReward(Integer.parseInt(args[2]));
 						this.database.save(cat);
 						this.chat.success(sender, this.messages.parkoinsrewardcategoryset.replace("%CAT%", cat.getName()).replace("%REWARD%", args[2]));
 					} else {
@@ -503,7 +505,7 @@ public class Commands implements CommandExecutor {
 				Player player = Bukkit.getPlayer(args[1]);
 				if(player != null) {
 					try {
-						this.parkourLevel.setLevel(player, Integer.valueOf(args[2]));
+						this.parkourLevel.setLevel(player, Integer.parseInt(args[2]));
 						this.chat.success(sender, this.messages.parkourlevelset.replace("%PLAYER%", player.getName()).replace("%LEVEL%", args[2]));
 					} catch(NumberFormatException e) {
 						this.chat.error(sender, this.messages.invalidnumber);
@@ -527,7 +529,7 @@ public class Commands implements CommandExecutor {
 				Player player = Bukkit.getPlayer(args[1]);
 				if(player != null) {
 					try {
-						this.parkoins.add(player, Integer.valueOf(args[2]));
+						this.parkoins.add(player, Integer.parseInt(args[2]));
 						Log.info("Player " + sender.getName() + " added " + args[2] + " parkoins to player " + player.getName());
 						this.chat.success(sender, this.messages.parkoinsadd.replace("%PLAYER%", player.getName()).replace("%PARKOINS%", args[2]));
 						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mail send Colasix " + sender.getName() + " a ajouté " + args[2] + " parkoins à " + player.getName());
@@ -553,7 +555,7 @@ public class Commands implements CommandExecutor {
 				Player player = Bukkit.getPlayer(args[1]);
 				if(player != null) {
 					try {
-						this.parkoins.remove(player, Integer.valueOf(args[2]));
+						this.parkoins.remove(player, Integer.parseInt(args[2]));
 						Log.info("Player " + sender.getName() + " deducted " + args[2] + " parkoins to player " + player.getName());
 						this.chat.success(sender, this.messages.parkoinsremove.replace("%PLAYER%", player.getName()).replace("%PARKOINS%", args[2]));
 						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mail send Colasix " + sender.getName() + " a retiré " + args[2] + " parkoins à " + player.getName());

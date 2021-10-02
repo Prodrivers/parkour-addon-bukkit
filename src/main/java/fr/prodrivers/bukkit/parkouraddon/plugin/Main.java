@@ -1,9 +1,11 @@
 package fr.prodrivers.bukkit.parkouraddon.plugin;
 
-import com.google.inject.*;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import fr.prodrivers.bukkit.commons.ProdriversCommons;
-import fr.prodrivers.bukkit.parkouraddon.*;
+import fr.prodrivers.bukkit.parkouraddon.Log;
+import fr.prodrivers.bukkit.parkouraddon.Utils;
 import fr.prodrivers.bukkit.parkouraddon.advancements.AdvancementManager;
 import fr.prodrivers.bukkit.parkouraddon.commands.Commands;
 import fr.prodrivers.bukkit.parkouraddon.models.Models;

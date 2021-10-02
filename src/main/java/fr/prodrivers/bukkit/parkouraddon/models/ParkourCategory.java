@@ -1,6 +1,5 @@
 package fr.prodrivers.bukkit.parkouraddon.models;
 
-import fr.prodrivers.bukkit.parkouraddon.plugin.Main;
 import fr.prodrivers.bukkit.parkouraddon.Utils;
 import io.ebean.Database;
 import io.ebean.SqlRow;

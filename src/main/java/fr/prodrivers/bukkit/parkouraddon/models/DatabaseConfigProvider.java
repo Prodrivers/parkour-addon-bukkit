@@ -1,9 +1,9 @@
 package fr.prodrivers.bukkit.parkouraddon.models;
 
+import io.ebean.config.DatabaseConfig;
+
 import javax.inject.Provider;
 import javax.inject.Singleton;
-
-import io.ebean.config.DatabaseConfig;
 
 @Singleton
 public class DatabaseConfigProvider implements Provider<DatabaseConfig> {

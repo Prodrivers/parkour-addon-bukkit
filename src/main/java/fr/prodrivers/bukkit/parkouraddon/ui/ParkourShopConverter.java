@@ -38,8 +38,8 @@ public class ParkourShopConverter implements Listener {
 
 	private Inventory inv;
 
-	private List<Integer> amounts = new ArrayList<>();
-	private List<Integer> prices = new ArrayList<>();
+	private final List<Integer> amounts = new ArrayList<>();
+	private final List<Integer> prices = new ArrayList<>();
 
 	@Inject
 	private ParkourShopConverter(@Nullable Economy economy, EConfiguration configuration, EMessages messages, EChat chat, ParkourShop parkourShop, Parkoins parkoins) {
@@ -56,15 +56,17 @@ public class ParkourShopConverter implements Listener {
 		ItemStack item = new ItemStack(material, 1);
 		ItemMeta meta = item.getItemMeta();
 
-		meta.setDisplayName(name.replace("%AMOUNT%", String.valueOf(amount)).replace("%PRICE%", String.valueOf(price)));
+		if(meta != null) {
+			meta.setDisplayName(name.replace("%AMOUNT%", String.valueOf(amount)).replace("%PRICE%", String.valueOf(price)));
 
-		List<String> loreList = Arrays
-				.stream(lores)
-				.map(lore -> lore
-						.replace("%AMOUNT%", String.valueOf(amount))
-						.replace("%PRICE%", String.valueOf(price)))
-				.collect(Collectors.toList());
-		meta.setLore(loreList);
+			List<String> loreList = Arrays
+					.stream(lores)
+					.map(lore -> lore
+							.replace("%AMOUNT%", String.valueOf(amount))
+							.replace("%PRICE%", String.valueOf(price)))
+					.collect(Collectors.toList());
+			meta.setLore(loreList);
+		}
 
 		item.setItemMeta(meta);
 
@@ -102,7 +104,7 @@ public class ParkourShopConverter implements Listener {
 							prices.get(i),
 							this.configuration.shops_converters_to_material,
 							this.messages.parkourshopui_converters_to_name,
-							this.messages.parkourshopui_converters_to_lore.stream().toArray(String[]::new)
+							this.messages.parkourshopui_converters_to_lore.toArray(String[]::new)
 					)
 			);
 
@@ -113,7 +115,7 @@ public class ParkourShopConverter implements Listener {
 							amounts.get(i),
 							this.configuration.shops_converters_from_material,
 							this.messages.parkourshopui_converters_from_name,
-							this.messages.parkourshopui_converters_from_lore.stream().toArray(String[]::new)
+							this.messages.parkourshopui_converters_from_lore.toArray(String[]::new)
 					)
 			);
 		}
@@ -139,10 +141,9 @@ public class ParkourShopConverter implements Listener {
 
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
-		if(!(event.getWhoClicked() instanceof Player)) return;
+		if(!(event.getWhoClicked() instanceof Player player)) return;
 		if(event.isCancelled()) return;
 
-		Player player = (Player) event.getWhoClicked();
 		int slot = event.getSlot();
 		Inventory inventory = event.getInventory();
 

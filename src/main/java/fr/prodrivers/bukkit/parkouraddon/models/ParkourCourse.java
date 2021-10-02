@@ -26,7 +26,7 @@ public class ParkourCourse {
 	@Setter
 	String name;
 
-	@Column(length = 255, nullable = true)
+	@Column()
 	@Getter
 	@Setter
 	String description;

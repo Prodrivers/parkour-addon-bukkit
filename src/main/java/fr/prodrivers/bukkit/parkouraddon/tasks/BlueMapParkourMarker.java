@@ -5,11 +5,11 @@ import de.bluecolored.bluemap.api.BlueMapMap;
 import de.bluecolored.bluemap.api.marker.MarkerAPI;
 import de.bluecolored.bluemap.api.marker.MarkerSet;
 import fr.prodrivers.bukkit.parkouraddon.Log;
-import fr.prodrivers.bukkit.parkouraddon.plugin.EMessages;
 import fr.prodrivers.bukkit.parkouraddon.Utils;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Course;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCourse;
+import fr.prodrivers.bukkit.parkouraddon.plugin.EMessages;
 import io.ebean.Database;
 import org.bukkit.Location;
 

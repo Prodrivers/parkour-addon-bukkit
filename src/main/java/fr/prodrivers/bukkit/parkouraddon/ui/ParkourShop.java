@@ -42,7 +42,9 @@ public class ParkourShop implements Listener {
 	private ItemStack prepareItem(Material material, String shopName) {
 		ItemStack item = new ItemStack(material, 1);
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(shopName);
+		if(meta != null) {
+			meta.setDisplayName(shopName);
+		}
 		item.setItemMeta(meta);
 		return item;
 	}
@@ -92,10 +94,9 @@ public class ParkourShop implements Listener {
 
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
-		if(!(event.getWhoClicked() instanceof Player)) return;
+		if(!(event.getWhoClicked() instanceof Player player)) return;
 		if(event.isCancelled()) return;
 
-		Player player = (Player) event.getWhoClicked();
 		int slot = event.getSlot();
 		Inventory inventory = event.getInventory();
 

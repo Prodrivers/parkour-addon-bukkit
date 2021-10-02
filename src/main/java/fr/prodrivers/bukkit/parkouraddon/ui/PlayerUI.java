@@ -6,10 +6,7 @@ import fr.prodrivers.bukkit.parkouraddon.models.ParkourTimeRanked;
 import fr.prodrivers.bukkit.parkouraddon.plugin.EChat;
 import fr.prodrivers.bukkit.parkouraddon.plugin.EMessages;
 import io.ebean.Database;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -35,13 +32,16 @@ public class PlayerUI {
 
 	private void spawnFirework(Location loc, Color color, Color fadeColor, float yOffset) {
 		FireworkEffect effect = FireworkEffect.builder().trail(false).flicker(false).withColor(color).withFade(fadeColor).with(FireworkEffect.Type.BALL).build();
-		final Firework fw = loc.getWorld().spawn(loc.clone().add(0, yOffset, 0), Firework.class);
-		FireworkMeta meta = fw.getFireworkMeta();
-		meta.addEffect(effect);
-		meta.setPower(0);
-		fw.setFireworkMeta(meta);
+		final World world = loc.getWorld();
+		if(world != null) {
+			final Firework fw = world.spawn(loc.clone().add(0, yOffset, 0), Firework.class);
+			FireworkMeta meta = fw.getFireworkMeta();
+			meta.addEffect(effect);
+			meta.setPower(0);
+			fw.setFireworkMeta(meta);
 
-		Bukkit.getScheduler().runTaskLater(this.plugin, fw::detonate, 2L);
+			Bukkit.getScheduler().runTaskLater(this.plugin, fw::detonate, 2L);
+		}
 	}
 
 	public void rankUp(Player player, int level) {

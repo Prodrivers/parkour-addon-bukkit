@@ -2,7 +2,6 @@ package fr.prodrivers.bukkit.parkouraddon;
 
 import fr.prodrivers.bukkit.parkouraddon.plugin.EConfiguration;
 import fr.prodrivers.bukkit.parkouraddon.plugin.EMessages;
-import fr.prodrivers.bukkit.parkouraddon.plugin.Main;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,76 +12,78 @@ import java.nio.ByteBuffer;
 import java.util.UUID;
 
 public class Utils {
-	public static String INIT_TABLES_SCRIPT = "alter table course add displayName varchar(180);\n" +
-			"alter table course add categoryId integer;\n" +
-			"alter table course add description varchar(255) null;\n" +
-			"alter table course add minimumProtocolVersion integer null;\n" +
-			"alter table course add positionX double null;\n" +
-			"alter table course add positionY double null;\n" +
-			"alter table course add positionZ double null;\n" +
-			"alter table course add positionWorld varchar(24) null;" +
-			"\n" +
-			"create table parkourcategory (\n" +
-			"  categoryId                                        integer auto_increment not null,\n" +
-			"  name                                              varchar(180) not null,\n" +
-			"  baseLevel                                         integer default 0 not null,\n" +
-			"  previousCategoryId                                integer,\n" +
-			"  parkoinsReward                                    integer default 0 not null,\n" +
-			"  requiredCoursesNumberInPreviousCategoryForRankup  integer default 0 not null,\n" +
-			"  material                                          varchar(180) not null,\n" +
-			"  materialData                                      integer default 0 not null,\n" +
-			"  chatColor                                         varchar(180) not null,\n" +
-			"  hexColor                                          integer default 0 not null,\n" +
-			"  price                                             integer default 0 not null,\n" +
-			"  hidden                                            tinyint(1) default 0 not null,\n" +
-			"  constraint pk_parkourcategory primary key (categoryId))\n" +
-			";\n" +
-			"\n" +
-			"create table parkourplayercompletion (\n" +
-			"  playeruuid                varbinary(16) not null,\n" +
-			"  courseId                  integer not null)\n" +
-			";\n" +
-			"\n" +
-			"alter table parkourcategory add constraint fk_parkourcategory_nextCategory_1 foreign key (nextCategoryId) references parkourcategory (categoryId) on delete restrict on update restrict;\n" +
-			"alter table parkourcategory add constraint fk_parkourcategory_prevCategory_1 foreign key (previousCategoryId) references parkourcategory (categoryId) on delete restrict on update restrict;\n" +
-			"create index ix_parkourcategory_nextCategory_1 on parkourcategory (nextCategoryId);\n" +
-			"create index ix_parkourcategory_previousCategory_1 on parkourcategory (previousCategoryId);\n" +
-			"alter table course add constraint fk_course_category_2 foreign key (categoryId) references parkourcategory (categoryId) on delete restrict on update restrict;\n" +
-			"create index ix_course_category_2 on course (categoryId);\n" +
-			"alter table parkourplayercompletion add constraint fk_parkourplayercompletion_course_3 foreign key (courseId) references course (courseId) on delete restrict on update restrict;\n" +
-			"alter table parkourplayercompletion add constraint pk_parkourplayercompletion primary key (playeruuid, courseId);\n" +
-			"alter table `course` add index `course_idx_categoryid_courseid` (`categoryId`,`courseId`);\n" +
-			"alter table `parkourcategory` add index `parkourcategory_idx_hidden` (`hidden`);\n" +
-			"alter table `time` add index `time_idx_courseid_time` (`courseId`,`time`);\n" +
-			"create view time_ranked as select `time`.`courseId`                      AS `courseId`,\n" +
-			"       `time`.`player`                                AS `player`,\n" +
-			"       `time`.`time`                                  AS `time`,\n" +
-			"       `time`.`deaths`                                AS `deaths`,\n" +
-			"       `time`.`playeruuid`                            AS `playeruuid`,\n" +
-			"       (select count(`b`.`timeId`)\n" +
-			"        from `time` `b`\n" +
-			"        where ((`time`.`time` >= `b`.`time`) and\n" +
-			"               (`time`.`courseId` = `b`.`courseId`))) AS `rank`\n" +
-			"from `time`\n" +
-			"order by `time`.`courseId`, `time`.`time`;\n" +
-			"create view time_sorted as select `time`.`courseId` AS `courseId`,\n" +
-			"       `time`.`player`   AS `player`,\n" +
-			"       `time`.`time`     AS `time`,\n" +
-			"       `time`.`deaths`   AS `deaths`\n" +
-			"from `time`\n" +
-			"order by `time`.`courseId`, `time`.`time`;\n" +
-			"\n";
+	public static final String INIT_TABLES_SCRIPT = """
+			alter table course add displayName varchar(180);
+			alter table course add categoryId integer;
+			alter table course add description varchar(255) null;
+			alter table course add minimumProtocolVersion integer null;
+			alter table course add positionX double null;
+			alter table course add positionY double null;
+			alter table course add positionZ double null;
+			alter table course add positionWorld varchar(24) null;
+			create table parkourcategory (
+			  categoryId                                        integer auto_increment not null,
+			  name                                              varchar(180) not null,
+			  baseLevel                                         integer default 0 not null,
+			  previousCategoryId                                integer,
+			  parkoinsReward                                    integer default 0 not null,
+			  requiredCoursesNumberInPreviousCategoryForRankup  integer default 0 not null,
+			  material                                          varchar(180) not null,
+			  materialData                                      integer default 0 not null,
+			  chatColor                                         varchar(180) not null,
+			  hexColor                                          integer default 0 not null,
+			  price                                             integer default 0 not null,
+			  hidden                                            tinyint(1) default 0 not null,
+			  constraint pk_parkourcategory primary key (categoryId))
+			;
 
-	public static String GET_PARKOURS_WITH_COMPLETION_QUERY = "SELECT course.name AS name, course.displayName AS displayName, course.author AS author, course.description AS description, parkourcategory.chatColor AS chatColor, parkourcategory.material AS material, parkourplayercompletion.playeruuid AS playeruuid\n" +
-			"FROM `parkourcategory`\n" +
-			"         JOIN `course` ON `parkourcategory`.`categoryId` = `course`.`categoryId`\n" +
-			"         LEFT JOIN `parkourplayercompletion`\n" +
-			"                   on `course`.`courseId` = `parkourplayercompletion`.`courseId` AND `parkourplayercompletion`.`playeruuid` = ?\n" +
-			"WHERE `parkourcategory`.`categoryId` = ?\n" +
-			"ORDER BY `course`.`name`";
+			create table parkourplayercompletion (
+			  playeruuid                varbinary(16) not null,
+			  courseId                  integer not null)
+			;
 
-	public static String SET_PLAYER_PARKOINS_QUERY = "UPDATE `players` SET `parkoins` = ? WHERE `playeruuid` = ?";
-	public static String SET_PLAYER_PARKOUR_LEVEL_QUERY = "UPDATE `players` SET `parkourLevel` = ? WHERE `playeruuid` = ?";
+			alter table parkourcategory add constraint fk_parkourcategory_nextCategory_1 foreign key (nextCategoryId) references parkourcategory (categoryId) on delete restrict on update restrict;
+			alter table parkourcategory add constraint fk_parkourcategory_prevCategory_1 foreign key (previousCategoryId) references parkourcategory (categoryId) on delete restrict on update restrict;
+			create index ix_parkourcategory_nextCategory_1 on parkourcategory (nextCategoryId);
+			create index ix_parkourcategory_previousCategory_1 on parkourcategory (previousCategoryId);
+			alter table course add constraint fk_course_category_2 foreign key (categoryId) references parkourcategory (categoryId) on delete restrict on update restrict;
+			create index ix_course_category_2 on course (categoryId);
+			alter table parkourplayercompletion add constraint fk_parkourplayercompletion_course_3 foreign key (courseId) references course (courseId) on delete restrict on update restrict;
+			alter table parkourplayercompletion add constraint pk_parkourplayercompletion primary key (playeruuid, courseId);
+			alter table `course` add index `course_idx_categoryid_courseid` (`categoryId`,`courseId`);
+			alter table `parkourcategory` add index `parkourcategory_idx_hidden` (`hidden`);
+			alter table `time` add index `time_idx_courseid_time` (`courseId`,`time`);
+			create view time_ranked as select `time`.`courseId`                      AS `courseId`,
+			       `time`.`player`                                AS `player`,
+			       `time`.`time`                                  AS `time`,
+			       `time`.`deaths`                                AS `deaths`,
+			       `time`.`playeruuid`                            AS `playeruuid`,
+			       (select count(`b`.`timeId`)
+			        from `time` `b`
+			        where ((`time`.`time` >= `b`.`time`) and
+			               (`time`.`courseId` = `b`.`courseId`))) AS `rank`
+			from `time`
+			order by `time`.`courseId`, `time`.`time`;
+			create view time_sorted as select `time`.`courseId` AS `courseId`,
+			       `time`.`player`   AS `player`,
+			       `time`.`time`     AS `time`,
+			       `time`.`deaths`   AS `deaths`
+			from `time`
+			order by `time`.`courseId`, `time`.`time`;
+
+			""";
+
+	public static final String GET_PARKOURS_WITH_COMPLETION_QUERY = """
+			SELECT course.name AS name, course.displayName AS displayName, course.author AS author, course.description AS description, parkourcategory.chatColor AS chatColor, parkourcategory.material AS material, parkourplayercompletion.playeruuid AS playeruuid
+			FROM `parkourcategory`
+			         JOIN `course` ON `parkourcategory`.`categoryId` = `course`.`categoryId`
+			         LEFT JOIN `parkourplayercompletion`
+			                   on `course`.`courseId` = `parkourplayercompletion`.`courseId` AND `parkourplayercompletion`.`playeruuid` = ?
+			WHERE `parkourcategory`.`categoryId` = ?
+			ORDER BY `course`.`name`""";
+
+	public static final String SET_PLAYER_PARKOINS_QUERY = "UPDATE `players` SET `parkoins` = ? WHERE `playeruuid` = ?";
+	public static final String SET_PLAYER_PARKOUR_LEVEL_QUERY = "UPDATE `players` SET `parkourLevel` = ? WHERE `playeruuid` = ?";
 
 	public static byte[] getBytesFromUniqueId(UUID uniqueId) {
 		ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
@@ -110,7 +111,9 @@ public class Utils {
 	public static ItemStack getCloseItem(EConfiguration configuration, EMessages messages) {
 		ItemStack item = new ItemStack(configuration.shops_close_material, 1);
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(messages.parkourshopui_close_title);
+		if(meta != null) {
+			meta.setDisplayName(messages.parkourshopui_close_title);
+		}
 		item.setItemMeta(meta);
 		return item;
 	}

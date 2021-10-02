@@ -1,6 +1,5 @@
 package fr.prodrivers.bukkit.parkouraddon.advancements;
 
-import com.google.inject.Injector;
 import fr.prodrivers.bukkit.parkouraddon.Log;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
 import org.bukkit.Bukkit;

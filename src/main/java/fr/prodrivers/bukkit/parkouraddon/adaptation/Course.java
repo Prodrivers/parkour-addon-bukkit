@@ -10,17 +10,17 @@ import fr.prodrivers.bukkit.parkouraddon.models.ParkourCourse;
 import fr.prodrivers.bukkit.parkouraddon.plugin.EChat;
 import fr.prodrivers.bukkit.parkouraddon.plugin.EMessages;
 import fr.prodrivers.bukkit.parkouraddon.sections.ParkourSection;
+import io.ebean.Database;
 import io.github.a5h73y.parkour.Parkour;
 import io.github.a5h73y.parkour.type.course.CourseInfo;
 import io.github.a5h73y.parkour.type.player.ParkourSession;
 import io.github.a5h73y.parkour.type.player.PlayerManager;
-import io.ebean.Database;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import javax.inject.Singleton;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 @Singleton
 public class Course {

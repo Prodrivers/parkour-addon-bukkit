@@ -1,7 +1,6 @@
 package fr.prodrivers.bukkit.parkouraddon.ui;
 
 import fr.prodrivers.bukkit.parkouraddon.Log;
-import fr.prodrivers.bukkit.parkouraddon.Players;
 import fr.prodrivers.bukkit.parkouraddon.Utils;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Course;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.ParkourLevel;
@@ -46,7 +45,7 @@ public class ParkourSelection {
 	private final ParkourLevel parkourLevel;
 	private final Course course;
 
-	private Map<UUID, Map<Integer, InventoryGUI>> uis = new HashMap<>();
+	private final Map<UUID, Map<Integer, InventoryGUI>> uis = new HashMap<>();
 
 	@Inject
 	public ParkourSelection(Database database, EChat chat, EMessages messages, EConfiguration configuration, ParkourLevel parkourLevel, Course course) {
@@ -193,8 +192,10 @@ public class ParkourSelection {
 		ItemStack item = new ItemStack(material, 1);
 		if(completed) {
 			ItemMeta meta = item.getItemMeta();
-			meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
-			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+			if(meta != null) {
+				meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+				meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+			}
 			item.setItemMeta(meta);
 		}
 

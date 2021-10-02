@@ -43,14 +43,14 @@ public class ParkourShopRank implements Listener {
 	private int lines, closeSlot;
 
 	private static class RankItem implements Cloneable {
-		String name;
-		int price;
-		int minLevel;
-		int targetLevel;
-		Material material;
+		final String name;
+		final int price;
+		final int minLevel;
+		final int targetLevel;
+		final Material material;
 		ItemStack item;
 		int slot;
-		ChatColor chatColor;
+		final ChatColor chatColor;
 
 		RankItem(String name, int price, int minLevel, int targetLevel, ChatColor chatColor, Material material) {
 			this.name = name;
@@ -94,19 +94,21 @@ public class ParkourShopRank implements Listener {
 		rankItem.item = new ItemStack(material, 1);
 		ItemMeta meta = rankItem.item.getItemMeta();
 
-		meta.setDisplayName(rankName.replace("%CATEGORYCOLOR%", rankItem.chatColor.toString()).replace("%CATEGORY%", rankItem.name).replace("%PRICE%", String.valueOf(rankItem.price)).replace("%TARGETLEVEL%", String.valueOf(rankItem.targetLevel)));
+		if(meta != null) {
+			meta.setDisplayName(rankName.replace("%CATEGORYCOLOR%", rankItem.chatColor.toString()).replace("%CATEGORY%", rankItem.name).replace("%PRICE%", String.valueOf(rankItem.price)).replace("%TARGETLEVEL%", String.valueOf(rankItem.targetLevel)));
 
-		List<String> loreList = Arrays
-				.stream(lores)
-				.map(lore -> lore
-						.replace("%CATEGORYCOLOR%", rankItem.chatColor.toString())
-						.replace("%CATEGORY%", rankItem.name)
-						.replace("%PRICE%", String.valueOf(rankItem.price))
-						.replace("%TARGETLEVEL%", String.valueOf(rankItem.targetLevel))
-						.replace("%MINLEVEL%", String.valueOf(rankItem.minLevel)))
-				.collect(Collectors.toList());
+			List<String> loreList = Arrays
+					.stream(lores)
+					.map(lore -> lore
+							.replace("%CATEGORYCOLOR%", rankItem.chatColor.toString())
+							.replace("%CATEGORY%", rankItem.name)
+							.replace("%PRICE%", String.valueOf(rankItem.price))
+							.replace("%TARGETLEVEL%", String.valueOf(rankItem.targetLevel))
+							.replace("%MINLEVEL%", String.valueOf(rankItem.minLevel)))
+					.collect(Collectors.toList());
 
-		meta.setLore(loreList);
+			meta.setLore(loreList);
+		}
 
 		rankItem.item.setItemMeta(meta);
 
@@ -118,7 +120,7 @@ public class ParkourShopRank implements Listener {
 				rankItem,
 				rankItem.material,
 				this.messages.parkourshopui_ranks_rankitemname,
-				this.messages.parkourshopui_ranks_rankitemlore.stream().toArray(String[]::new)
+				this.messages.parkourshopui_ranks_rankitemlore.toArray(String[]::new)
 		);
 	}
 
@@ -127,7 +129,7 @@ public class ParkourShopRank implements Listener {
 				rankItem,
 				this.configuration.shops_ranks_alreadyBought_material,
 				this.messages.parkourshopui_ranks_boughtrankitemname,
-				this.messages.parkourshopui_ranks_boughtrankitemlore.stream().toArray(String[]::new)
+				this.messages.parkourshopui_ranks_boughtrankitemlore.toArray(String[]::new)
 		);
 	}
 
@@ -136,7 +138,7 @@ public class ParkourShopRank implements Listener {
 				rankItem,
 				this.configuration.shops_ranks_notBuyable_material,
 				this.messages.parkourshopui_ranks_notbuyablerankitemname,
-				this.messages.parkourshopui_ranks_notbuyablerankitemlore.stream().toArray(String[]::new)
+				this.messages.parkourshopui_ranks_notbuyablerankitemlore.toArray(String[]::new)
 		);
 	}
 
@@ -187,8 +189,6 @@ public class ParkourShopRank implements Listener {
 				if(!ending) {
 					slotOffset = currentSlot;
 					currentSlot = (9 - remainder) / 2;
-					if(currentSlot < 0)
-						currentSlot = 0;
 					ending = true;
 				}
 			}
@@ -253,12 +253,10 @@ public class ParkourShopRank implements Listener {
 
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
-		if(!(event.getWhoClicked() instanceof Player)) return;
+		if(!(event.getWhoClicked() instanceof Player player)) return;
 		if(event.isCancelled()) return;
 
-		Player player = (Player) event.getWhoClicked();
 		ItemStack clicked = event.getCurrentItem();
-		Inventory inventory = event.getInventory();
 
 		if(event.getView().getTitle().equals(this.messages.parkourshopui_ranks_title)) {
 			event.setCancelled(true);
@@ -268,10 +266,13 @@ public class ParkourShopRank implements Listener {
 				this.parkourShop.open(player);
 			} else if(clicked != null && clicked.getItemMeta() != null) {
 				for(RankItem item : rankItems) {
-					if(clicked.getItemMeta().getDisplayName().equals(item.item.getItemMeta().getDisplayName())) {
-						if(buyRank(player, item))
-							player.closeInventory();
-						break;
+					ItemMeta currentRankItemMeta = item.item.getItemMeta();
+					if(currentRankItemMeta != null) {
+						if(clicked.getItemMeta().getDisplayName().equals(currentRankItemMeta.getDisplayName())) {
+							if(buyRank(player, item))
+								player.closeInventory();
+							break;
+						}
 					}
 				}
 			}
