@@ -35,7 +35,7 @@ public class EConfiguration extends Configuration {
 	}
 
 	@Inject
-	public EConfiguration(Plugin plugin, Messages messages, Chat chat) {
+	public EConfiguration(Plugin plugin, Chat chat, Messages messages) {
 		super(plugin, chat, messages);
 		init();
 	}
