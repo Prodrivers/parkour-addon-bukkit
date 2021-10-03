@@ -100,7 +100,15 @@ public class ParkourCategory {
 		return server.find(ParkourCategory.class).where().ieq("previousCategoryId", String.valueOf(this.getCategoryId())).findList();
 	}
 
+	public static ParkourCategory retrieveFromName(Database server, String categoryName) {
+		return server.find(ParkourCategory.class).where().ieq("name", categoryName).findOne();
+	}
+
 	public static List<ParkourCategory> retrieveAll(Database server) {
 		return server.find(ParkourCategory.class).select("*").findList();
+	}
+
+	public static List<ParkourCategory> retrieveAllNames(Database server) {
+		return server.find(ParkourCategory.class).select("name").findList();
 	}
 }
