@@ -10,6 +10,8 @@ import org.geysermc.floodgate.api.FloodgateApi;
 import java.awt.*;
 import java.nio.ByteBuffer;
 import java.util.UUID;
+import java.util.regex.MatchResult;
+import java.util.regex.Pattern;
 
 public class Utils {
 	public static final String INIT_TABLES_SCRIPT = """
@@ -85,6 +87,8 @@ public class Utils {
 	public static final String SET_PLAYER_PARKOINS_QUERY = "UPDATE `players` SET `parkoins` = ? WHERE `playeruuid` = ?";
 	public static final String SET_PLAYER_PARKOUR_LEVEL_QUERY = "UPDATE `players` SET `parkourLevel` = ? WHERE `playeruuid` = ?";
 
+	private static final Pattern ARGUMENT_PATTERN = Pattern.compile("\"[^\"]+\"|\\S+");
+
 	public static byte[] getBytesFromUniqueId(UUID uniqueId) {
 		ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
 		bb.putLong(uniqueId.getMostSignificantBits());
@@ -147,5 +151,12 @@ public class Utils {
 		} catch(ClassNotFoundException e) {
 			return false;
 		}
+	}
+
+	public static String[] parseArgumentsWithQuotes(String message) {
+		return ARGUMENT_PATTERN.matcher(message)
+				.results()
+				.map(MatchResult::group)
+				.toArray(String[]::new);
 	}
 }

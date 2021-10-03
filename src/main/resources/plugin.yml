@@ -11,9 +11,6 @@ commands:
     paddon:
         description: Base command for ParkourAddonPlugin.
 
-    paddon reload:
-        description: Reload ParkourAddonPlugin's configuration.
-
 permissions:
     parkouraddon.help:
         description: Allows to get the help message
@@ -71,10 +68,10 @@ permissions:
         description: Allows to set a player's level
         default: op
 
-    parkouraddon.parkoins.add:
+    parkouraddon.player.addparkoins:
         description: Allows to add parkoins to a player
         default: op
 
-    parkouraddon.parkoins.deduct:
+    parkouraddon.player.deductparkoins:
         description: Allows to deduct parkoins to a player
         default: op

@@ -1,5 +1,6 @@
 package fr.prodrivers.bukkit.parkouraddon.plugin;
 
+import co.aikar.commands.BukkitCommandManager;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import de.bluecolored.bluemap.api.BlueMapAPI;
@@ -8,6 +9,7 @@ import fr.prodrivers.bukkit.parkouraddon.Log;
 import fr.prodrivers.bukkit.parkouraddon.Utils;
 import fr.prodrivers.bukkit.parkouraddon.advancements.AdvancementManager;
 import fr.prodrivers.bukkit.parkouraddon.commands.Commands;
+import fr.prodrivers.bukkit.parkouraddon.commands.ParkourAddonCommand;
 import fr.prodrivers.bukkit.parkouraddon.models.Models;
 import fr.prodrivers.bukkit.parkouraddon.sections.ParkourSectionManager;
 import fr.prodrivers.bukkit.parkouraddon.tasks.TasksRunner;
@@ -17,6 +19,10 @@ import fr.prodrivers.bukkit.parkouraddon.ui.ParkourShopRank;
 import io.ebean.Database;
 import io.github.a5h73y.parkour.Parkour;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -110,8 +116,8 @@ public class Main extends JavaPlugin {
 		ParkourSectionManager parkourSectionManager = this.injector.getInstance(ParkourSectionManager.class);
 		parkourSectionManager.load();
 
-		// Register command executor
-		getCommand("paddon").setExecutor(this.injector.getInstance(Commands.class));
+		// Load command manager
+		this.injector.getInstance(Commands.class);
 
 		// Run tasks
 		TasksRunner tasksRunner = this.injector.getInstance(TasksRunner.class);
@@ -125,10 +131,17 @@ public class Main extends JavaPlugin {
 			this.injector.getInstance(ParkourShop.class).unregister();
 			this.injector.getInstance(ParkourShopRank.class).unregister();
 			this.injector.getInstance(ParkourShopConverter.class).unregister();
+			this.injector.getInstance(BukkitCommandManager.class).unregisterCommands();
 		}
+		PlayerJoinEvent.getHandlerList().unregister(this);
+		PlayerQuitEvent.getHandlerList().unregister(this);
+		PluginDisableEvent.getHandlerList().unregister(this);
 
 		// Unregister command executor
-		getCommand("paddon").setExecutor(null);
+		PluginCommand executor = getCommand("paddon");
+		if(executor != null) {
+			executor.setExecutor(null);
+		}
 	}
 
 	public void reload() {
