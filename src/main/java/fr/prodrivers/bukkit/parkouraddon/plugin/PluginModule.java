@@ -8,6 +8,7 @@ import fr.prodrivers.bukkit.commons.configuration.Messages;
 import fr.prodrivers.bukkit.parkouraddon.models.DatabaseConfigProvider;
 import io.ebean.config.DatabaseConfig;
 import io.github.a5h73y.parkour.Parkour;
+import io.github.a5h73y.parkour.type.course.CourseManager;
 import io.github.a5h73y.parkour.type.player.PlayerManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.Plugin;
@@ -36,6 +37,8 @@ public class PluginModule extends AbstractModule {
 
 		bind(Parkour.class).toInstance(this.parkour);
 		bind(PlayerManager.class).toInstance(this.parkour.getPlayerManager());
+		bind(CourseManager.class).toInstance(this.parkour.getCourseManager());
+
 		if(this.economy != null) {
 			bind(Economy.class).toInstance(this.economy);
 		} else {

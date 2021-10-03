@@ -11,8 +11,8 @@ import fr.prodrivers.bukkit.parkouraddon.plugin.EChat;
 import fr.prodrivers.bukkit.parkouraddon.plugin.EMessages;
 import fr.prodrivers.bukkit.parkouraddon.sections.ParkourSection;
 import io.ebean.Database;
-import io.github.a5h73y.parkour.Parkour;
 import io.github.a5h73y.parkour.type.course.CourseInfo;
+import io.github.a5h73y.parkour.type.course.CourseManager;
 import io.github.a5h73y.parkour.type.player.ParkourSession;
 import io.github.a5h73y.parkour.type.player.PlayerManager;
 import org.bukkit.Bukkit;
@@ -26,14 +26,16 @@ import javax.inject.Singleton;
 public class Course {
 	private final Database database;
 	private final PlayerManager playerManager;
+	private final CourseManager courseManager;
 	private final EMessages messages;
 	private final EChat chat;
 	private final SectionManager sectionManager;
 
 	@Inject
-	public Course(Database database, PlayerManager playerManager, EMessages messages, EChat chat, SectionManager sectionManager) {
+	public Course(Database database, PlayerManager playerManager, CourseManager courseManager, EMessages messages, EChat chat, SectionManager sectionManager) {
 		this.database = database;
 		this.playerManager = playerManager;
+		this.courseManager = courseManager;
 		this.messages = messages;
 		this.chat = chat;
 		this.sectionManager = sectionManager;
@@ -44,7 +46,7 @@ public class Course {
 	}
 
 	public Location getLocation(String courseName) {
-		io.github.a5h73y.parkour.type.course.Course course = Parkour.getInstance().getCourseManager().findCourse(courseName);
+		io.github.a5h73y.parkour.type.course.Course course = this.courseManager.findCourse(courseName);
 		if(course == null) {
 			return null;
 		}

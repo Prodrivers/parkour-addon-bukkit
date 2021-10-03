@@ -16,6 +16,7 @@ import io.ebean.Database;
 import io.github.a5h73y.parkour.Parkour;
 import io.github.a5h73y.parkour.other.ParkourValidation;
 import io.github.a5h73y.parkour.type.course.Course;
+import io.github.a5h73y.parkour.type.course.CourseManager;
 import io.github.a5h73y.parkour.type.player.ParkourSession;
 import io.github.a5h73y.parkour.type.player.PlayerManager;
 import org.bukkit.Bukkit;
@@ -41,12 +42,12 @@ public class ParkourSection extends Section {
 	private int baseLevel;
 	private int minimumProtocolVersion;
 
-	ParkourSection(PartyManager partyManager, Parkour parkour, String courseName, Database database, EMessages messages, EChat chat, ParkourLevel parkourLevel) {
+	ParkourSection(PartyManager partyManager, PlayerManager playerManager, CourseManager courseManager, String courseName, Database database, EMessages messages, EChat chat, ParkourLevel parkourLevel) {
 		super(NAME_PREFIX + courseName);
 		this.partyManager = partyManager;
 		this.messages = messages;
 		this.chat = chat;
-		this.playerManager = parkour.getPlayerManager();
+		this.playerManager = playerManager;
 		this.courseName = courseName;
 		this.parkourLevel = parkourLevel;
 
@@ -63,7 +64,7 @@ public class ParkourSection extends Section {
 			}
 		}
 
-		this.pluginCourse = parkour.getCourseManager().findCourse(this.courseName);
+		this.pluginCourse = courseManager.findCourse(this.courseName);
 	}
 
 	@Override
