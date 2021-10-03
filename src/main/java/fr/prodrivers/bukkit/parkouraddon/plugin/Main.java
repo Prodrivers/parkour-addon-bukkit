@@ -132,8 +132,8 @@ public class Main extends JavaPlugin {
 	}
 
 	public void reload() {
-		this.setup();
 		this.teardown();
+		this.setup();
 	}
 
 	private boolean setupDatabase() {
