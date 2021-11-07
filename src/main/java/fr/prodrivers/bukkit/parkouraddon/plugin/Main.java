@@ -5,6 +5,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import fr.prodrivers.bukkit.commons.ProdriversCommons;
+import fr.prodrivers.bukkit.commons.chat.Chat;
 import fr.prodrivers.bukkit.parkouraddon.Log;
 import fr.prodrivers.bukkit.parkouraddon.Utils;
 import fr.prodrivers.bukkit.parkouraddon.advancements.AdvancementManager;
@@ -86,8 +87,10 @@ public class Main extends JavaPlugin {
 
 		// Preload configuration and messages
 		this.injector.getInstance(EMessages.class);
-		this.injector.getInstance(EChat.class);
+		Chat chat = this.injector.getInstance(EChat.class);
 		this.configuration = this.injector.getInstance(EConfiguration.class);
+		chat.setName(this.getDescription().getName());
+		configuration.setChat(chat);
 
 		// Setup logging
 		Log.init(getLogger(), configuration.logLevel);

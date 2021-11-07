@@ -1,6 +1,6 @@
 package fr.prodrivers.bukkit.parkouraddon.plugin;
 
-import fr.prodrivers.bukkit.commons.Chat;
+import fr.prodrivers.bukkit.commons.chat.Chat;
 import fr.prodrivers.bukkit.commons.configuration.Configuration;
 import fr.prodrivers.bukkit.commons.configuration.Messages;
 import me.eddie.inventoryguiapi.gui.elements.FormImage;
@@ -35,8 +35,8 @@ public class EConfiguration extends Configuration {
 	}
 
 	@Inject
-	public EConfiguration(Plugin plugin, Chat chat, Messages messages) {
-		super(plugin, chat, messages);
+	public EConfiguration(Plugin plugin, Messages messages) {
+		super(plugin, messages);
 		init();
 	}
 }

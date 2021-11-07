@@ -2,7 +2,7 @@ package fr.prodrivers.bukkit.parkouraddon.plugin;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.util.Providers;
-import fr.prodrivers.bukkit.commons.Chat;
+import fr.prodrivers.bukkit.commons.chat.Chat;
 import fr.prodrivers.bukkit.commons.configuration.Configuration;
 import fr.prodrivers.bukkit.commons.configuration.Messages;
 import fr.prodrivers.bukkit.parkouraddon.models.DatabaseConfigProvider;

@@ -86,11 +86,15 @@ public class ParkourSection extends Section {
 				Player partyPlayer = Bukkit.getPlayer(partyPlayerUUID);
 				if(partyPlayer != null) {
 					if(api != null && api.getPlayerVersion(player) < this.minimumProtocolVersion) {
-						party.broadcast(this.chat, this.messages.party_clienttooold);
+						for(UUID playerUniqueId : party.getPlayers()) {
+							this.chat.error(playerUniqueId, this.messages.party_clienttooold);
+						}
 						return false;
 					}
 					if(level < this.baseLevel) {
-						party.broadcast(this.chat, this.messages.party_notenoughlevel);
+						for(UUID playerUniqueId : party.getPlayers()) {
+							this.chat.error(playerUniqueId, this.messages.party_notenoughlevel);
+						}
 						return false;
 					}
 				}
