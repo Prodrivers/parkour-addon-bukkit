@@ -19,6 +19,6 @@ public class EChat extends Chat {
 	}
 
 	public void internalError(CommandSender receiver) {
-		error(receiver, this.messages.errorocurred);
+		error(receiver, this.messages.error_occurred);
 	}
 }

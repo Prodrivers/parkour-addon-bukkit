@@ -355,14 +355,14 @@ public class ParkourAddonCommand extends BaseCommand {
 						if(sender instanceof Player) {
 							course.setMinimumProtocolVersion(api.getPlayerVersion((Player) sender));
 						} else {
-							this.chat.error(sender, this.messages.notaplayer);
+							this.chat.error(sender, this.messages.not_a_player);
 						}
 					}
 				}
 				this.database.save(course);
 				this.chat.success(sender, this.messages.parkourminimumprotocolversionset.replace("%COURSENAME%", course.getName()).replace("%PROTOCOLVERSION%", String.valueOf(course.getMinimumProtocolVersion())));
 			} catch(NumberFormatException e) {
-				this.chat.error(sender, this.messages.invalidnumber);
+				this.chat.error(sender, this.messages.invalid_number);
 			}
 		} else {
 			this.chat.error(sender, this.messages.invalidcourse);
@@ -394,7 +394,7 @@ public class ParkourAddonCommand extends BaseCommand {
 			this.chat.success(sender, this.messages.parkoinsadd.replace("%PLAYER%", player.getName()).replace("%PARKOINS%", parkoins.toString()));
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mail send Colasix " + sender.getName() + " a ajouté " + parkoins + " parkoins à " + player.getName());
 		} catch(NumberFormatException e) {
-			this.chat.error(sender, this.messages.invalidnumber);
+			this.chat.error(sender, this.messages.invalid_number);
 		} catch(Exception e) {
 			this.chat.internalError(sender);
 			Log.severe("Cannot add parkoins to player.", e);
@@ -412,7 +412,7 @@ public class ParkourAddonCommand extends BaseCommand {
 			this.chat.success(sender, this.messages.parkoinsremove.replace("%PLAYER%", player.getName()).replace("%PARKOINS%", parkoins.toString()));
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mail send Colasix " + sender.getName() + " a retiré " + parkoins + " parkoins à " + player.getName());
 		} catch(NumberFormatException e) {
-			this.chat.error(sender, this.messages.invalidnumber);
+			this.chat.error(sender, this.messages.invalid_number);
 		} catch(Exception e) {
 			this.chat.internalError(sender);
 			Log.severe("Cannot deduct parkoins from player.", e);

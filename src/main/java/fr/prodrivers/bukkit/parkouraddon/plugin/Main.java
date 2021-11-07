@@ -10,7 +10,6 @@ import fr.prodrivers.bukkit.parkouraddon.Log;
 import fr.prodrivers.bukkit.parkouraddon.Utils;
 import fr.prodrivers.bukkit.parkouraddon.advancements.AdvancementManager;
 import fr.prodrivers.bukkit.parkouraddon.commands.Commands;
-import fr.prodrivers.bukkit.parkouraddon.commands.ParkourAddonCommand;
 import fr.prodrivers.bukkit.parkouraddon.models.Models;
 import fr.prodrivers.bukkit.parkouraddon.sections.ParkourSectionManager;
 import fr.prodrivers.bukkit.parkouraddon.tasks.TasksRunner;

@@ -69,7 +69,7 @@ public class Course {
 		} catch(NotPartyOwnerException e) {
 			this.chat.error(player, this.messages.cannotjoinnotpartyowner);
 		} catch(IllegalSectionEnteringException e) {
-			this.chat.error(player, this.messages.errorocurred);
+			this.chat.error(player, this.messages.error_occurred);
 		}
 		return false;
 	}
@@ -97,7 +97,7 @@ public class Course {
 			}
 			return true;
 		} catch(Exception e) {
-			this.chat.error(player, this.messages.errorocurred);
+			this.chat.error(player, this.messages.error_occurred);
 			Log.severe("Error when leaving parkour.", e);
 		}
 		return false;

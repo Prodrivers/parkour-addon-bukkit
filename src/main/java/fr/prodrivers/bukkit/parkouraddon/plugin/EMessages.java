@@ -11,9 +11,9 @@ import java.util.List;
 @Singleton
 public class EMessages extends Messages {
 	public String configurationreloaded = "Configuration reloaded!";
-	public String errorocurred = "An error occured while executing this command. Please report this to the server staff.";
+	public String error_occurred = "An error occured while executing this command. Please report this to the server staff.";
 	public String notenougharguments = "Not enough arguments.";
-	public String notaplayer = "This command can only be executed by players.";
+	public String not_a_player = "This command can only be executed by players.";
 	public String categoryentryheader = "ID. NAME, lvl BASE, MATERIAL, CHAT COLOR/HEX COLOR -> NEXT CATEGORY.";
 	public String categoryentry = "%ID%. %NAME%, lvl %BASELEVEL%, %MATERIAL%, %CHATCOLOR%/%HEXCOLOR% -> %NEXTID%.";
 	public String nocategoryentries = "No categories.";
@@ -28,10 +28,11 @@ public class EMessages extends Messages {
 	public String categorysettohidden = "Category %CAT% is now hidden.";
 	public String categorysettoshown = "Category %CAT% is now shown.";
 	public String categorybaselevelset = "Category %CAT%'s level set to %LEVEL%.";
+	public String permission_denied = "Permission denied.";
 	public String invalidcategory = "Invalid category.";
 	public String invalidcourse = "Invalid course.";
-	public String invalidnumber = "Invalid number.";
-	public String invalidplayer = "Invalid player.";
+	public String invalid_number = "Invalid number.";
+	public String invalid_player = "Invalid player.";
 	public String invalidargument = "Invalid argument.";
 	public String rankup = "Well done %PLAYER%! You rank up to level %LEVEL%!";
 	public String notenoughlevel = "You do not have the required level to access thoses parkours !";
