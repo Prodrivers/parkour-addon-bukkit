@@ -18,12 +18,14 @@ import io.github.a5h73y.parkour.type.player.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
 public class Course {
+	private final Plugin plugin;
 	private final Database database;
 	private final PlayerManager playerManager;
 	private final CourseManager courseManager;
@@ -31,8 +33,11 @@ public class Course {
 	private final EChat chat;
 	private final SectionManager sectionManager;
 
+	private int finishWaitIterations = 0;
+
 	@Inject
-	public Course(Database database, PlayerManager playerManager, CourseManager courseManager, EMessages messages, EChat chat, SectionManager sectionManager) {
+	public Course(Plugin plugin, Database database, PlayerManager playerManager, CourseManager courseManager, EMessages messages, EChat chat, SectionManager sectionManager) {
+		this.plugin = plugin;
 		this.database = database;
 		this.playerManager = playerManager;
 		this.courseManager = courseManager;
@@ -95,6 +100,31 @@ public class Course {
 			if(section != null && section.getFullName().startsWith(ParkourSection.NAME_PREFIX)) {
 				this.sectionManager.enter(player);
 			}
+			return true;
+		} catch(Exception e) {
+			this.chat.error(player, this.messages.error_occurred);
+			Log.severe("Error when leaving parkour.", e);
+		}
+		return false;
+	}
+
+	public boolean finishWait(Player player) {
+		try {
+			finishWaitIterations = 0;
+			Bukkit.getScheduler().runTaskTimer(this.plugin, (bukkitTask) -> {
+				Log.fine("Waiting for parkour to finish session...");
+				if(this.playerManager.getParkourSession(player) == null) {
+					Log.fine("Parkour session finished.");
+					this.leave(player);
+					bukkitTask.cancel();
+				}
+				if(finishWaitIterations > 50) {
+					finishWaitIterations = 0;
+					Log.severe("Waiting for parkour session to be cleaned took too long, cancelling.");
+					bukkitTask.cancel();
+				}
+				finishWaitIterations++;
+			}, 0, 1);
 			return true;
 		} catch(Exception e) {
 			this.chat.error(player, this.messages.error_occurred);

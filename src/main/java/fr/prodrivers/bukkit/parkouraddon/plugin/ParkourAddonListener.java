@@ -47,7 +47,9 @@ public class ParkourAddonListener implements Listener {
 
 	@EventHandler
 	public void onPlayerFinishParkour(PlayerFinishCourseEvent event) {
-		this.course.leave(event.getPlayer());
+		if(!this.course.finishWait(event.getPlayer())) {
+			event.setCancelled(true);
+		}
 
 		this.players.insertCompletionAndRankAsync(event.getPlayer(), event.getCourseName());
 	}
