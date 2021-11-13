@@ -73,6 +73,24 @@ public class ParkourAddonListener implements Listener {
 
 				Bukkit.getScheduler().runTask(this.plugin, () -> this.course.joinAll(event.getPlayer(), command.substring(11)));
 			}
+		} else if(command.startsWith("/parkour ")) {
+			if(command.startsWith("/parkour join ")) {
+				event.setCancelled(true);
+
+				Bukkit.getScheduler().runTask(this.plugin, () -> this.course.join(event.getPlayer(), command.substring(14)));
+			} else if(command.startsWith("/parkour leave")) {
+				event.setCancelled(true);
+
+				Bukkit.getScheduler().runTask(this.plugin, () -> this.course.leave(event.getPlayer()));
+			} else if(command.startsWith("/parkour lobby")) {
+				event.setCancelled(true);
+
+				Bukkit.getScheduler().runTask(this.plugin, () -> this.course.leave(event.getPlayer()));
+			} else if(command.startsWith("/parkour joinall")) {
+				event.setCancelled(true);
+
+				Bukkit.getScheduler().runTask(this.plugin, () -> this.course.joinAll(event.getPlayer(), command.substring(16)));
+			}
 		}
 	}
 
