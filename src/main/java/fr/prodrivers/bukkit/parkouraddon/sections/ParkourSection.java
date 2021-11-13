@@ -13,7 +13,6 @@ import fr.prodrivers.bukkit.parkouraddon.models.ParkourCourse;
 import fr.prodrivers.bukkit.parkouraddon.plugin.EChat;
 import fr.prodrivers.bukkit.parkouraddon.plugin.EMessages;
 import io.ebean.Database;
-import io.github.a5h73y.parkour.Parkour;
 import io.github.a5h73y.parkour.other.ParkourValidation;
 import io.github.a5h73y.parkour.type.course.Course;
 import io.github.a5h73y.parkour.type.course.CourseManager;

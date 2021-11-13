@@ -73,7 +73,7 @@ public class ParkourAddonCommand extends BaseCommand {
 		try {
 			this.plugin.reload();
 			this.chat.success(sender, this.messages.configurationreloaded);
-		} catch (Exception e) {
+		} catch(Exception e) {
 			this.chat.internalError(sender);
 			Log.severe("Error while reloading ParkourAddon.", e);
 		}
@@ -252,11 +252,11 @@ public class ParkourAddonCommand extends BaseCommand {
 		try {
 			ParkourCategory category = ParkourCategory.retrieveFromName(this.database, categoryName);
 			if(category != null) {
-					category.setBaseLevel(baseLevel);
-					for(ParkourCourse course : category.getCourses()) {
-						this.course.setMinimumLevel(course.getName(), baseLevel);
-					}
-					this.chat.success(sender, this.messages.categorybaselevelset.replace("%CAT%", category.getName()).replace("%LEVEL%", baseLevel.toString()));
+				category.setBaseLevel(baseLevel);
+				for(ParkourCourse course : category.getCourses()) {
+					this.course.setMinimumLevel(course.getName(), baseLevel);
+				}
+				this.chat.success(sender, this.messages.categorybaselevelset.replace("%CAT%", category.getName()).replace("%LEVEL%", baseLevel.toString()));
 			} else {
 				this.chat.error(sender, this.messages.invalidcategory);
 			}

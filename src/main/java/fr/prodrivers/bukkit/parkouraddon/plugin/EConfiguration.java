@@ -1,6 +1,5 @@
 package fr.prodrivers.bukkit.parkouraddon.plugin;
 
-import fr.prodrivers.bukkit.commons.chat.Chat;
 import fr.prodrivers.bukkit.commons.configuration.Configuration;
 import fr.prodrivers.bukkit.commons.configuration.Messages;
 import me.eddie.inventoryguiapi.gui.elements.FormImage;
