@@ -3,7 +3,7 @@ main: fr.prodrivers.bukkit.parkouraddon.plugin.Main
 version: ${project.version}
 description: ${project.description}
 depend: [ProdriversCommons,Parkour,InventoryGUIAPI]
-softdepend: [BlueMap]
+softdepend: [BlueMap,floodgate]
 database: true
 api-version: '1.16'
 
