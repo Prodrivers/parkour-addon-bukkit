@@ -70,7 +70,13 @@ public class ParkourAddonCommand extends BaseCommand {
 	@Subcommand("reload")
 	@CommandPermission("parkouraddon.reload")
 	public void reload(CommandSender sender) {
-		this.plugin.reload();
+		try {
+			this.plugin.reload();
+			this.chat.success(sender, this.messages.configurationreloaded);
+		} catch (Exception e) {
+			this.chat.internalError(sender);
+			Log.severe("Error while reloading ParkourAddon.", e);
+		}
 	}
 
 	@Subcommand("shop")
