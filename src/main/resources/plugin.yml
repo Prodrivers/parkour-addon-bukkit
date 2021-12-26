@@ -5,7 +5,7 @@ description: ${project.description}
 depend: [ProdriversCommons,Parkour,InventoryGUIAPI]
 softdepend: [BlueMap,floodgate]
 database: true
-api-version: '1.16'
+api-version: ${spigot.api.version}
 
 commands:
     paddon:
