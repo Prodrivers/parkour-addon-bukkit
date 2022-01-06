@@ -5,16 +5,20 @@ import fr.prodrivers.bukkit.parkouraddon.adaptation.ParkourLevel;
 import fr.prodrivers.bukkit.parkouraddon.advancements.AdvancementManager;
 import fr.prodrivers.bukkit.parkouraddon.events.PlayerCompleteCourseEvent;
 import fr.prodrivers.bukkit.parkouraddon.events.PlayerRankUpEvent;
+import fr.prodrivers.bukkit.parkouraddon.models.EStoredPlayer;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCourse;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourPlayerCompletion;
+import fr.prodrivers.bukkit.parkouraddon.plugin.EConfiguration;
 import fr.prodrivers.bukkit.parkouraddon.ui.ParkourSelection;
 import fr.prodrivers.bukkit.parkouraddon.ui.PlayerUI;
 import io.ebean.Database;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 public class Players {
@@ -25,9 +29,11 @@ public class Players {
 	private final ParkourLevel parkourLevel;
 	private final Parkoins parkoins;
 	private final AdvancementManager advancementManager;
+	private final boolean parkoinsSyncToVault;
+	private final Economy economy;
 
 	@Inject
-	public Players(JavaPlugin plugin, Database database, PlayerUI playerUI, ParkourSelection parkourSelection, ParkourLevel parkourLevel, Parkoins parkoins, AdvancementManager advancementManager) {
+	public Players(JavaPlugin plugin, EConfiguration configuration, Database database, PlayerUI playerUI, ParkourSelection parkourSelection, ParkourLevel parkourLevel, Parkoins parkoins, AdvancementManager advancementManager, @Nullable Economy economy) {
 		this.plugin = plugin;
 		this.database = database;
 		this.playerUI = playerUI;
@@ -35,6 +41,8 @@ public class Players {
 		this.parkourLevel = parkourLevel;
 		this.parkoins = parkoins;
 		this.advancementManager = advancementManager;
+		this.parkoinsSyncToVault = configuration.parkoins_syncToVault;
+		this.economy = economy;
 	}
 
 	public void insertCompletion(final Player player, final ParkourCourse course) {
@@ -62,12 +70,30 @@ public class Players {
 					this.parkourSelection.reload(player, course.getCategory().getCategoryId());
 				}
 
+				// Get parkoins reward
+				final int parkoinsReward = course.getCategory() != null ? course.getCategory().getParkoinsReward() : 0;
+
+				// Adjust parkoins in database
+				if(parkoinsReward != 0) {
+					new Thread(() -> {
+						EStoredPlayer storedPlayer = EStoredPlayer.get(this.database, player);
+						if(storedPlayer != null) {
+							storedPlayer.addParkoins(parkoinsReward);
+							this.database.update(storedPlayer);
+						}
+					}).start();
+				}
+
 				// Reward the player if necessary and trigger event
 				Bukkit.getScheduler().runTask(this.plugin, () -> {
-					// Add the category parkoins reward to the player, if possible
-					if(course.getCategory() != null) {
-						int parkoinsReward = course.getCategory().getParkoinsReward();
+					if(parkoinsReward != 0) {
+						// Add the category parkoins reward to the player
 						this.parkoins.add(player, parkoinsReward);
+
+						// Sync with economy if activated
+						if(parkoinsSyncToVault && this.economy != null) {
+							this.economy.depositPlayer(player, parkoinsReward);
+						}
 					}
 
 					// Do some stuff to inform him
@@ -106,6 +132,16 @@ public class Players {
 
 							// Locally set new level to be considered for other iterations with other next categories
 							playerLevel = nextLevel;
+
+							// Adjust level in database
+							final int newPlayerLevel = playerLevel;
+							new Thread(() -> {
+								EStoredPlayer storedPlayer = EStoredPlayer.get(this.database, player);
+								if(storedPlayer != null) {
+									storedPlayer.setParkourLevel(newPlayerLevel);
+									this.database.update(storedPlayer);
+								}
+							}).start();
 
 							Bukkit.getScheduler().runTask(this.plugin, () -> {
 								// Set the player's new level

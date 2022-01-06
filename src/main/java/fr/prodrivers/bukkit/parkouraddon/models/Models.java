@@ -8,6 +8,7 @@ public class Models {
 
 	public static void populate() {
 		ModelsList.clear();
+		ModelsList.add(EStoredPlayer.class);
 		ModelsList.add(ParkourCourse.class);
 		ModelsList.add(ParkourCategory.class);
 		ModelsList.add(ParkourPlayerCompletion.class);

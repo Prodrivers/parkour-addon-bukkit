@@ -2,6 +2,7 @@ package fr.prodrivers.bukkit.parkouraddon.plugin;
 
 import fr.prodrivers.bukkit.commons.configuration.Configuration;
 import fr.prodrivers.bukkit.commons.configuration.Messages;
+import fr.prodrivers.bukkit.parkouraddon.models.EStoredPlayer;
 import me.eddie.inventoryguiapi.gui.elements.FormImage;
 import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
@@ -15,6 +16,8 @@ import java.util.logging.Level;
 @Singleton
 public class EConfiguration extends Configuration {
 	public FormImage selection_image_check = new FormImage(FormImage.Type.PATH, "textures/ui/check.png");
+	public boolean parkoins_syncToVault = false;
+	public EStoredPlayer.ParkoinsSyncWay parkoins_syncWay = EStoredPlayer.ParkoinsSyncWay.PLUGIN_TO_DB;
 	public Material shops_close_material = Material.BARRIER;
 	public Material shops_ranks_material = Material.EMERALD;
 	public Material shops_ranks_alreadyBought_material = Material.EMERALD_BLOCK;
