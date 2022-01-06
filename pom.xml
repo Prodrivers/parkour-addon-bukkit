@@ -18,8 +18,12 @@
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 		<maven.compiler.release>17</maven.compiler.release>
+
 		<spigot.api.version>1.17</spigot.api.version>
 		<spigot.artifact.version>1.17.1-R0.1-SNAPSHOT</spigot.artifact.version>
+
+		<project.plugin.name>ParkourAddon</project.plugin.name>
+		<project.plugin.mainClass>fr.prodrivers.bukkit.parkouraddon.plugin.Main</project.plugin.mainClass>
 	</properties>
 
 	<repositories>
@@ -179,7 +183,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>fr.prodrivers.bukkit.parkouraddon.plugin.Main</mainClass>
+							<mainClass>${project.plugin.mainClass}</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
