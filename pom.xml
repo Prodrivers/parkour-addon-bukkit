@@ -66,7 +66,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.20</version>
+			<version>1.18.22</version>
 			<scope>provided</scope>
 		</dependency>
 		<!--Spigot API-->
@@ -159,7 +159,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<tiles>
-						<tile>io.ebean.tile:enhancement:12.9.2</tile>
+						<tile>io.ebean.tile:enhancement:12.14.0</tile>
 					</tiles>
 				</configuration>
 			</plugin>
