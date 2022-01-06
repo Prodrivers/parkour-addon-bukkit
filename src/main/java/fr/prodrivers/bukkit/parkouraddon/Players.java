@@ -55,7 +55,7 @@ public class Players {
 				// Insert it
 				this.database.save(completion);
 
-				System.out.println("[ParkourAddon] Player " + player.getName() + " completed course " + course.getName());
+				Log.info("Player " + player.getName() + " completed course " + course.getName());
 
 				// Clear UI if necessary
 				if(course.getCategory() != null) {
@@ -102,7 +102,7 @@ public class Players {
 
 							hasRankedUp = true;
 
-							System.out.println("[ParkourAddon] Player " + player.getName() + " ranked up to level " + nextLevel);
+							Log.info("Player " + player.getName() + " ranked up to level " + nextLevel);
 
 							// Locally set new level to be considered for other iterations with other next categories
 							playerLevel = nextLevel;
