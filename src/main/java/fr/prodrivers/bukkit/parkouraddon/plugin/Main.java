@@ -45,12 +45,15 @@ public class Main extends JavaPlugin {
 	public void onDisable() {
 		PluginDescriptionFile plugindescription = this.getDescription();
 
-		teardown();
-
 		if(this.configuration != null) {
 			configuration.save();
 			getLogger().info("Saved configuration.");
 		}
+
+		teardown();
+
+		this.parkour = null;
+		this.economy = null;
 
 		getLogger().info(plugindescription.getName() + " has been disabled!");
 	}
@@ -144,6 +147,12 @@ public class Main extends JavaPlugin {
 		if(executor != null) {
 			executor.setExecutor(null);
 		}
+
+		if(this.database != null) {
+			this.database.shutdown();
+		}
+		this.configuration = null;
+		this.injector = null;
 	}
 
 	public void reload() {
@@ -152,8 +161,9 @@ public class Main extends JavaPlugin {
 	}
 
 	private boolean setupDatabase() {
-		if(this.database == null)
+		if(this.database == null) {
 			return false;
+		}
 		try {
 			for(Class<?> modelClass : Models.ModelsList) {
 				this.database.find(modelClass).findCount();
