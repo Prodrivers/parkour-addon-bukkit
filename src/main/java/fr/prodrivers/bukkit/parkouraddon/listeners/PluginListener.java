@@ -1,4 +1,4 @@
-package fr.prodrivers.bukkit.parkouraddon.plugin;
+package fr.prodrivers.bukkit.parkouraddon.listeners;
 
 import fr.prodrivers.bukkit.parkouraddon.Players;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Course;
@@ -17,14 +17,14 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class ParkourAddonListener implements Listener {
+public class PluginListener implements Listener {
 	private final JavaPlugin plugin;
 	private final ParkourSelection parkourSelectionUi;
 	private final Players players;
 	private final Course course;
 
 	@Inject
-	public ParkourAddonListener(JavaPlugin plugin, ParkourSelection parkourSelectionUi, Players players, Course course) {
+	public PluginListener(JavaPlugin plugin, ParkourSelection parkourSelectionUi, Players players, Course course) {
 		this.plugin = plugin;
 		this.parkourSelectionUi = parkourSelectionUi;
 		this.players = players;

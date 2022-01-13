@@ -7,9 +7,9 @@ import de.bluecolored.bluemap.api.BlueMapAPI;
 import fr.prodrivers.bukkit.commons.ProdriversCommons;
 import fr.prodrivers.bukkit.commons.chat.Chat;
 import fr.prodrivers.bukkit.parkouraddon.Log;
-import fr.prodrivers.bukkit.parkouraddon.Utils;
 import fr.prodrivers.bukkit.parkouraddon.advancements.AdvancementManager;
 import fr.prodrivers.bukkit.parkouraddon.commands.Commands;
+import fr.prodrivers.bukkit.parkouraddon.listeners.PluginListener;
 import fr.prodrivers.bukkit.parkouraddon.models.Models;
 import fr.prodrivers.bukkit.parkouraddon.sections.ParkourSectionManager;
 import fr.prodrivers.bukkit.parkouraddon.tasks.TasksRunner;
@@ -112,7 +112,7 @@ public class Main extends JavaPlugin {
 		this.injector.getInstance(AdvancementManager.class);
 
 		// Register listeners
-		getServer().getPluginManager().registerEvents(this.injector.getInstance(ParkourAddonListener.class), this);
+		getServer().getPluginManager().registerEvents(this.injector.getInstance(PluginListener.class), this);
 		getServer().getPluginManager().registerEvents(this.injector.getInstance(ParkourShop.class), this);
 		getServer().getPluginManager().registerEvents(this.injector.getInstance(ParkourShopRank.class), this);
 		getServer().getPluginManager().registerEvents(this.injector.getInstance(ParkourShopConverter.class), this);
@@ -132,7 +132,7 @@ public class Main extends JavaPlugin {
 	private void teardown() {
 		// Unregister listeners
 		if(this.injector != null) {
-			this.injector.getInstance(ParkourAddonListener.class).unregister();
+			this.injector.getInstance(PluginListener.class).unregister();
 			this.injector.getInstance(ParkourShop.class).unregister();
 			this.injector.getInstance(ParkourShopRank.class).unregister();
 			this.injector.getInstance(ParkourShopConverter.class).unregister();
