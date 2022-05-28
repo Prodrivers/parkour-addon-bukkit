@@ -73,17 +73,6 @@ public class Players {
 				// Get parkoins reward
 				final int parkoinsReward = course.getCategory() != null ? course.getCategory().getParkoinsReward() : 0;
 
-				// Adjust parkoins in database
-				if(parkoinsReward != 0) {
-					new Thread(() -> {
-						EStoredPlayer storedPlayer = EStoredPlayer.get(this.database, player);
-						if(storedPlayer != null) {
-							storedPlayer.addParkoins(parkoinsReward);
-							this.database.update(storedPlayer);
-						}
-					}).start();
-				}
-
 				// Reward the player if necessary and trigger event
 				Bukkit.getScheduler().runTask(this.plugin, () -> {
 					if(parkoinsReward != 0) {

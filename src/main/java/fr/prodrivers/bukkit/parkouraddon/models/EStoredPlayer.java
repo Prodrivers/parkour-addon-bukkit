@@ -78,5 +78,9 @@ public class EStoredPlayer extends StoredPlayer {
 	public void addParkoins(int amount) {
 		this.parkoins += amount;
 	}
+
+	public void removeParkoins(int amount) {
+		this.parkoins -= amount;
+	}
 }
 
