@@ -24,6 +24,7 @@ public class HotBarActionsListener implements Listener {
 	public HotBarActionsListener(Parkour parkour) {
 		this.parkour = parkour;
 	}
+
 	private void handleItemHeld(Cancellable event, Player player, ItemStack itemInHand) {
 		if(itemInHand == null || !itemInHand.hasItemMeta()) {
 			return;
@@ -31,15 +32,15 @@ public class HotBarActionsListener implements Listener {
 
 		Material materialInHand = itemInHand.getType();
 
-		if (materialInHand == parkour.getConfig().getLastCheckpointTool()) {
-			if (parkour.getPlayerManager().delayPlayer(player, 1)) {
+		if(materialInHand == parkour.getConfig().getLastCheckpointTool()) {
+			if(parkour.getPlayerManager().delayPlayer(player, 1)) {
 				event.setCancelled(true);
 				Bukkit.getScheduler().runTask(parkour, () -> parkour.getPlayerManager().playerDie(player));
 			}
 
-		} else if (materialInHand == parkour.getConfig().getHideAllDisabledTool()
+		} else if(materialInHand == parkour.getConfig().getHideAllDisabledTool()
 				|| materialInHand == parkour.getConfig().getHideAllEnabledTool()) {
-			if (parkour.getPlayerManager().delayPlayer(player, 1)) {
+			if(parkour.getPlayerManager().delayPlayer(player, 1)) {
 				event.setCancelled(true);
 				parkour.getPlayerManager().toggleVisibility(player);
 				player.getInventory().remove(materialInHand);
@@ -48,18 +49,18 @@ public class HotBarActionsListener implements Listener {
 				parkour.getPlayerManager().giveParkourTool(player, configPath, configPath);
 			}
 
-		} else if (materialInHand == parkour.getConfig().getLeaveTool()) {
-			if (parkour.getPlayerManager().delayPlayer(player, 1)) {
+		} else if(materialInHand == parkour.getConfig().getLeaveTool()) {
+			if(parkour.getPlayerManager().delayPlayer(player, 1)) {
 				event.setCancelled(true);
 				parkour.getPlayerManager().leaveCourse(player);
 			}
 
-		} else if (materialInHand == parkour.getConfig().getRestartTool()) {
-			if (parkour.getPlayerManager().delayPlayer(player,
+		} else if(materialInHand == parkour.getConfig().getRestartTool()) {
+			if(parkour.getPlayerManager().delayPlayer(player,
 					parkour.getConfig().getInt("ParkourTool.Restart.SecondCooldown"))) {
 
-				if (parkour.getConfig().getBoolean("OnRestart.RequireConfirmation")) {
-					if (!parkour.getQuestionManager().hasBeenAskedQuestion(player, QuestionType.RESTART_COURSE)) {
+				if(parkour.getConfig().getBoolean("OnRestart.RequireConfirmation")) {
+					if(!parkour.getQuestionManager().hasBeenAskedQuestion(player, QuestionType.RESTART_COURSE)) {
 						//noinspection ConstantConditions
 						String courseName = parkour.getPlayerManager().getParkourSession(player).getCourseName();
 						parkour.getQuestionManager().askRestartProgressQuestion(player, courseName);

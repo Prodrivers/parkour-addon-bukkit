@@ -2,7 +2,6 @@ package fr.prodrivers.bukkit.parkouraddon.listeners;
 
 import fr.prodrivers.bukkit.parkouraddon.Players;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Course;
-import fr.prodrivers.bukkit.parkouraddon.ui.ParkourSelection;
 import io.github.a5h73y.parkour.event.PlayerFinishCourseEvent;
 import io.github.a5h73y.parkour.event.PlayerJoinCourseEvent;
 import io.github.a5h73y.parkour.event.PlayerLeaveCourseEvent;

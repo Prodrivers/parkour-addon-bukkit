@@ -66,7 +66,7 @@ public class EStoredPlayer extends StoredPlayer {
 					if(this.parkoins > parkoinsAmount) {
 						parkoinsManager.add(player, (int) (this.parkoins - parkoinsAmount));
 					} else {
-							parkoinsManager.remove(player, (int) (parkoinsAmount - this.parkoins));
+						parkoinsManager.remove(player, (int) (parkoinsAmount - this.parkoins));
 					}
 				}
 				case PLUGIN_TO_DB -> this.parkoins = (int) parkoinsAmount;
