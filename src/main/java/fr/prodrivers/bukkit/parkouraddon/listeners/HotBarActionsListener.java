@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -100,21 +99,7 @@ public class HotBarActionsListener implements Listener {
 		handleItemHeld(event, player, itemInHand);
 	}
 
-	@EventHandler
-	public void onPlayerDropItem(PlayerDropItemEvent event) {
-		Player player = event.getPlayer();
-
-		if(parkour.getPlayerManager().getParkourSession(player) == null) {
-			return;
-		}
-
-		event.setCancelled(true);
-
-		handleItemHeld(event, player, event.getItemDrop().getItemStack());
-	}
-
 	public void unregister() {
 		PlayerItemHeldEvent.getHandlerList().unregister(this);
-		PlayerDropItemEvent.getHandlerList().unregister(this);
 	}
 }
