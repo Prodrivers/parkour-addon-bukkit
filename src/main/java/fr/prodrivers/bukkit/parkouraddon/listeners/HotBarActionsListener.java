@@ -17,7 +17,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-@SuppressWarnings("ClassCanBeRecord")
 public class HotBarActionsListener implements Listener {
 	private final Parkour parkour;
 
