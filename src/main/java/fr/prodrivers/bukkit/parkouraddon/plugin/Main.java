@@ -10,6 +10,7 @@ import fr.prodrivers.bukkit.parkouraddon.Log;
 import fr.prodrivers.bukkit.parkouraddon.advancements.AdvancementManager;
 import fr.prodrivers.bukkit.parkouraddon.commands.Commands;
 import fr.prodrivers.bukkit.parkouraddon.listeners.HotBarActionsListener;
+import fr.prodrivers.bukkit.parkouraddon.listeners.PlayerLoginLogoutListener;
 import fr.prodrivers.bukkit.parkouraddon.listeners.PluginListener;
 import fr.prodrivers.bukkit.parkouraddon.models.Models;
 import fr.prodrivers.bukkit.parkouraddon.sections.ParkourSectionManager;
@@ -115,6 +116,7 @@ public class Main extends JavaPlugin {
 		// Register listeners
 		getServer().getPluginManager().registerEvents(this.injector.getInstance(PluginListener.class), this);
 		getServer().getPluginManager().registerEvents(this.injector.getInstance(HotBarActionsListener.class), this);
+		getServer().getPluginManager().registerEvents(this.injector.getInstance(PlayerLoginLogoutListener.class), this);
 		getServer().getPluginManager().registerEvents(this.injector.getInstance(ParkourShop.class), this);
 		getServer().getPluginManager().registerEvents(this.injector.getInstance(ParkourShopRank.class), this);
 		getServer().getPluginManager().registerEvents(this.injector.getInstance(ParkourShopConverter.class), this);
@@ -136,6 +138,7 @@ public class Main extends JavaPlugin {
 		if(this.injector != null) {
 			this.injector.getInstance(PluginListener.class).unregister();
 			this.injector.getInstance(HotBarActionsListener.class).unregister();
+			this.injector.getInstance(PlayerLoginLogoutListener.class).unregister();
 			this.injector.getInstance(ParkourShop.class).unregister();
 			this.injector.getInstance(ParkourShopRank.class).unregister();
 			this.injector.getInstance(ParkourShopConverter.class).unregister();

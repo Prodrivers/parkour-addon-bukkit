@@ -10,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.inject.Inject;
@@ -19,14 +18,12 @@ import javax.inject.Singleton;
 @Singleton
 public class PluginListener implements Listener {
 	private final JavaPlugin plugin;
-	private final ParkourSelection parkourSelectionUi;
 	private final Players players;
 	private final Course course;
 
 	@Inject
-	public PluginListener(JavaPlugin plugin, ParkourSelection parkourSelectionUi, Players players, Course course) {
+	public PluginListener(JavaPlugin plugin, Players players, Course course) {
 		this.plugin = plugin;
-		this.parkourSelectionUi = parkourSelectionUi;
 		this.players = players;
 		this.course = course;
 	}
@@ -96,16 +93,10 @@ public class PluginListener implements Listener {
 		}
 	}
 
-	@EventHandler
-	public void onPlayerQuit(PlayerQuitEvent event) {
-		this.parkourSelectionUi.reload(event.getPlayer());
-	}
-
 	public void unregister() {
 		PlayerJoinCourseEvent.getHandlerList().unregister(this);
 		PlayerLeaveCourseEvent.getHandlerList().unregister(this);
 		PlayerFinishCourseEvent.getHandlerList().unregister(this);
 		PlayerCommandPreprocessEvent.getHandlerList().unregister(this);
-		PlayerQuitEvent.getHandlerList().unregister(this);
 	}
 }
