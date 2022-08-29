@@ -2,10 +2,13 @@ name: ${project.plugin.name}
 main: ${project.plugin.mainClass}
 version: ${project.version}
 description: ${project.description}
+author: ${project.plugin.author}
+website: ${project.url}
+api-version: ${spigot.api.version}
+
 depend: [ProdriversCommons,Parkour,InventoryGUIAPI]
 softdepend: [BlueMap,floodgate]
 database: true
-api-version: ${spigot.api.version}
 
 commands:
     paddon:

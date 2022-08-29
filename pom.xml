@@ -22,6 +22,7 @@
 		<spigot.api.version>1.17</spigot.api.version>
 		<spigot.artifact.version>1.17.1-R0.1-SNAPSHOT</spigot.artifact.version>
 
+		<project.plugin.author>Prodrivers</project.plugin.author>
 		<project.plugin.name>ParkourAddon</project.plugin.name>
 		<project.plugin.mainClass>fr.prodrivers.bukkit.parkouraddon.plugin.Main</project.plugin.mainClass>
 	</properties>
