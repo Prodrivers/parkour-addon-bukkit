@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -26,7 +27,7 @@ public class PlayerLoginLogoutListener implements Listener {
 	private final ParkourSelection parkourSelectionUi;
 
 	@Inject
-	public PlayerLoginLogoutListener(Database database, EConfiguration configuration, Economy economy, Parkoins parkoinsManager, ParkourLevel parkourLevelManager, ParkourSelection parkourSelectionUi) {
+	public PlayerLoginLogoutListener(Database database, EConfiguration configuration, @Nullable Economy economy, Parkoins parkoinsManager, ParkourLevel parkourLevelManager, ParkourSelection parkourSelectionUi) {
 		this.database = database;
 		this.configuration = configuration;
 		this.economy = economy;
