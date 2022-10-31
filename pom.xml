@@ -67,6 +67,7 @@
 			<scope>provided</scope>
 		</dependency>
 		<!--Spigot API-->
+		<!--suppress VulnerableLibrariesLocal -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
