@@ -98,4 +98,8 @@ public class ParkourCourse {
 	public static List<ParkourCourse> retrieveAll(Database server) {
 		return server.find(ParkourCourse.class).select("*").findList();
 	}
+
+	public static List<ParkourCourse> retrieveForWorld(Database server, String positionWorld) {
+		return server.find(ParkourCourse.class).where().ieq("positionWorld", positionWorld).findList();
+	}
 }

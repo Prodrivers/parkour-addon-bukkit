@@ -2,8 +2,8 @@ package fr.prodrivers.bukkit.parkouraddon.tasks;
 
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
-import de.bluecolored.bluemap.api.marker.MarkerAPI;
-import de.bluecolored.bluemap.api.marker.MarkerSet;
+import de.bluecolored.bluemap.api.markers.HtmlMarker;
+import de.bluecolored.bluemap.api.markers.MarkerSet;
 import fr.prodrivers.bukkit.parkouraddon.Log;
 import fr.prodrivers.bukkit.parkouraddon.Utils;
 import fr.prodrivers.bukkit.parkouraddon.adaptation.Course;
@@ -11,8 +11,11 @@ import fr.prodrivers.bukkit.parkouraddon.models.ParkourCategory;
 import fr.prodrivers.bukkit.parkouraddon.models.ParkourCourse;
 import fr.prodrivers.bukkit.parkouraddon.plugin.EMessages;
 import io.ebean.Database;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 
+import java.util.Map;
 import java.util.Optional;
 
 public class BlueMapParkourMarker implements Runnable {
@@ -30,36 +33,41 @@ public class BlueMapParkourMarker implements Runnable {
 
 	public void run() {
 		try {
-			BlueMapAPI.getInstance().ifPresent(api -> {
-				try {
-					MarkerAPI markerApi = api.getMarkerAPI();
-
-					markerApi.load();
-
-					markerApi.removeMarkerSet(PARKOUR_MARKER_SET);
-					MarkerSet set = markerApi.createMarkerSet(PARKOUR_MARKER_SET);
-
-					set.setLabel(this.messages.bluemap_parkours_label);
-					set.setToggleable(true);
-					set.setDefaultHidden(true);
-
-					for(ParkourCourse course : ParkourCourse.retrieveAll(this.database)) {
-						createMarker(api, set, course);
-					}
-
-					markerApi.save();
-
-					Log.info(set.getMarkers().size() + " markers generated for BlueMap.");
-				} catch(Exception e) {
-					Log.severe("Could not generate markers for BlueMap.", e);
-				}
-			});
+			BlueMapAPI.onEnable(this::load);
 		} catch(NoClassDefFoundError e) {
 			Log.warning("Cannot create BlueMap markers as plugin is not installed.");
 		}
 	}
 
-	public void createMarker(BlueMapAPI api, MarkerSet set, ParkourCourse course) {
+	public void load(BlueMapAPI api) {
+		try {
+			for(World world: Bukkit.getWorlds()) {
+				MarkerSet set = MarkerSet.builder()
+						.label(this.messages.bluemap_parkours_label)
+						.toggleable(true)
+						.defaultHidden(true)
+						.build();
+
+				api.getWorld(world).ifPresent(blueMapWorld -> {
+					for(ParkourCourse course : ParkourCourse.retrieveForWorld(this.database, world.getName())) {
+						createMarker(set, course);
+					}
+
+					if(!set.getMarkers().isEmpty()) {
+						for(BlueMapMap map : blueMapWorld.getMaps()) {
+							map.getMarkerSets().put("parkours-" + world.getName(), set);
+						}
+					}
+
+					Log.info("Created " + set.getMarkers().size() + " BlueMap markers for world " + world.getName());
+				});
+			}
+		} catch(Exception e) {
+			Log.severe("Could not generate markers for BlueMap.", e);
+		}
+	}
+
+	public void createMarker(MarkerSet set, ParkourCourse course) {
 		ParkourCategory category = course.getCategory();
 
 		Location location = this.course.getLocation(course.getName());
@@ -68,10 +76,8 @@ public class BlueMapParkourMarker implements Runnable {
 			return;
 		}
 
-		Optional<BlueMapMap> map = api.getMap(location.getWorld().getName());
-
-		// Do not show maps that do not have a display name
-		if(map.isPresent() && course.getDisplayName() != null) {
+		// Do not show courses that do not have a display name
+		if(course.getDisplayName() != null) {
 			String id;
 			String html;
 			if(category != null) {
@@ -100,16 +106,17 @@ public class BlueMapParkourMarker implements Runnable {
 						course.getDisplayName()
 				);
 			}
-			set.createHtmlMarker(
-					id,
-					map.get(),
-					location.getX(),
-					location.getY(),
-					location.getZ(),
-					html
-			);
+			HtmlMarker marker = HtmlMarker.builder()
+					.label(id)
+					.position((int) Math.round(location.getX()), (int) Math.round(location.getY()),  (int) Math.round(location.getZ()))
+					.html(html)
+					.build();
+
+			set.getMarkers().put(course.getName(), marker);
+
+			Log.fine("Created BlueMap marker for course " + course);
 		} else {
-			Log.warning("BlueMap map " + location.getWorld().getName() + " does not exists.");
+			Log.warning("Course " + course + " does not have a display name, ignoring.");
 		}
 	}
 }

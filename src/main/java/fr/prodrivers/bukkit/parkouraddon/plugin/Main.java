@@ -190,7 +190,11 @@ public class Main extends JavaPlugin {
 
 	private boolean setupBluemap() {
 		try {
-			return BlueMapAPI.getInstance().isPresent();
+			// Only try to call BlueMapAPI as it may not be ready when calling here, for some reason.
+			// As we use onEnable, it is not a problem for us.
+			//noinspection ResultOfMethodCallIgnored
+			BlueMapAPI.getInstance();
+			return true;
 		} catch(Exception | NoClassDefFoundError e) {
 			return false;
 		}

@@ -18,12 +18,14 @@ public class ParkourPositionUpdater implements Runnable {
 	}
 
 	public void run() {
+		int total = 0;
 		List<ParkourCourse> courses = ParkourCourse.retrieveAll(this.database);
 
 		for(ParkourCourse course : courses) {
 			Location location = this.course.getLocation(course.getName());
 
 			if(location != null && location.getWorld() != null) {
+				total++;
 				course.setPositionX(location.getX());
 				course.setPositionY(location.getY());
 				course.setPositionZ(location.getZ());
@@ -34,5 +36,7 @@ public class ParkourPositionUpdater implements Runnable {
 		}
 
 		this.database.saveAll(courses);
+
+		Log.warning("Updated position of " + total + " courses.");
 	}
 }
