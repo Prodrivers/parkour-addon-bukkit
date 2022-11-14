@@ -7,6 +7,7 @@ import de.bluecolored.bluemap.api.BlueMapAPI;
 import fr.prodrivers.bukkit.commons.ProdriversCommons;
 import fr.prodrivers.bukkit.commons.chat.Chat;
 import fr.prodrivers.bukkit.parkouraddon.Log;
+import fr.prodrivers.bukkit.parkouraddon.Utils;
 import fr.prodrivers.bukkit.parkouraddon.advancements.AdvancementManager;
 import fr.prodrivers.bukkit.parkouraddon.commands.Commands;
 import fr.prodrivers.bukkit.parkouraddon.listeners.HotBarActionsListener;
@@ -176,14 +177,8 @@ public class Main extends JavaPlugin {
 			}
 			return true;
 		} catch(RuntimeException ex) {
-			Log.info("Installing database for " + getDescription().getName() + " due to first time usage");
-			try {
-				this.database.sqlUpdate(Utils.INIT_TABLES_SCRIPT).execute();
-				return true;
-			} catch(RuntimeException rex) {
-				Log.severe("Cannot install the database.", rex);
-				Log.severe("Please manually execute the installation SQL script:\n" + Utils.INIT_TABLES_SCRIPT);
-			}
+			Log.severe("Cannot verify that database schema is valid.", ex);
+			Log.severe("Please manually execute the installation SQL script:\n" + Utils.INIT_TABLES_SCRIPT);
 		}
 		return false;
 	}
