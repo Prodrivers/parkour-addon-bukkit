@@ -19,8 +19,8 @@
 		<maven.compiler.target>21</maven.compiler.target>
 		<maven.compiler.release>21</maven.compiler.release>
 
-		<spigot.api.version>1.18</spigot.api.version>
-		<spigot.artifact.version>1.18.2-R0.1-SNAPSHOT</spigot.artifact.version>
+		<spigot.api.version>1.21.4</spigot.api.version>
+		<spigot.artifact.version>1.21.4-R0.1-SNAPSHOT</spigot.artifact.version>
 
 		<project.plugin.author>Prodrivers</project.plugin.author>
 		<project.plugin.name>ParkourAddon</project.plugin.name>

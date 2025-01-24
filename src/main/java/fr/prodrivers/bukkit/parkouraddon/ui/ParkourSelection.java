@@ -193,7 +193,7 @@ public class ParkourSelection {
 		if(completed) {
 			ItemMeta meta = item.getItemMeta();
 			if(meta != null) {
-				meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+				meta.addEnchant(Enchantment.FORTUNE, 1, true);
 				meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 			}
 			item.setItemMeta(meta);
