@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Singleton
 public class EMessages extends Messages {
@@ -81,7 +82,7 @@ public class EMessages extends Messages {
 	public String bluemap_parkours_markers_nocategory_html = "<span style='display:inline-block;background:#000;color:white;width:1em;height:1em'></span> <b style='color:#fff;text-shadow:0px 0px 5px #222'>%s</b>";
 
 	@Inject
-	public EMessages(Plugin plugin) {
-		super(plugin);
+	public EMessages(Logger logger, Plugin plugin) {
+		super(logger, plugin);
 	}
 }

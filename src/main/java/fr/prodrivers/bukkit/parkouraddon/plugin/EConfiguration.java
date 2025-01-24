@@ -12,6 +12,7 @@ import javax.inject.Singleton;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Singleton
 public class EConfiguration extends Configuration {
@@ -37,8 +38,8 @@ public class EConfiguration extends Configuration {
 	}
 
 	@Inject
-	public EConfiguration(Plugin plugin, Messages messages) {
-		super(plugin, messages);
+	public EConfiguration(Logger logger, Plugin plugin, Messages messages) {
+		super(logger, plugin, messages);
 		init();
 	}
 }
