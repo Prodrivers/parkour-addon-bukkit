@@ -41,10 +41,6 @@
 			<url>https://repo.prodrivers.fr/</url>
 		</repository>
 		<repository>
-			<id>horgeon-repo</id>
-			<url>https://repo.horgeon.fr/repository/maven-all/</url>
-		</repository>
-		<repository>
 			<id>viaversion-repo</id>
 			<url>https://repo.viaversion.com</url>
 		</repository>
