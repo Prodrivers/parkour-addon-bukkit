@@ -108,8 +108,8 @@
 		<!--ViaVersion-->
 		<dependency>
 			<groupId>com.viaversion</groupId>
-			<artifactId>viaversion</artifactId>
-			<version>4.4.2</version>
+			<artifactId>viaversion-api</artifactId>
+			<version>5.2.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<!--BlueMapAPI-->
